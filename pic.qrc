@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>μ's.jpeg</file>
+        <file>缪斯 (μ's) - Snow halation.lrc</file>
+        <file>缪斯 (μ's) - Snow halation.mp3</file>
+        <file>LLhead.png</file>
+        <file>icon.png</file>
+        <file>player-pause-circle.png</file>
+        <file>player-play-circle.png</file>
+        <file>player-skip-backward.png</file>
+        <file>player-skip-forward.png</file>
+        <file>currentitemloop.png</file>
+        <file>loop.png</file>
+        <file>randomplay.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,73 @@
+﻿#include "mainwindow.h"
+#include "ui_mainwindow.h"
+
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+    ui->pushButton->setDefault(false);
+
+    player=new QMediaPlayer(this);
+    playlist=new QMediaPlaylist(this);
+    player->setMedia(QUrl("C:/Users/li_ha_ixm3hrx/Music/缪斯 (μ's) - Snow halation.mp3"));
+    playlist->setPlaybackMode(QMediaPlaylist::Loop);
+    connect(player,SIGNAL(positionChanged(qint64)),this,SLOT(time_change(qint64)));
+    player->setNotifyInterval(1);//1ms一刷新
+    connect(player,SIGNAL(durationChanged(qint64)),this,SLOT(get_duration(qint64)));
+
+    QFile lrc("C:/Users/li_ha_ixm3hrx/Music/缪斯 (μ's) - Snow halation.lrc");
+    if(lrc.open(QIODevice::ReadOnly)){
+        QString all=lrc.readAll();
+        QStringList list=all.split("\n");
+        QRegularExpression re("\\[(ar)?(ti)?(al)?(by)?(offset)?(\\d+)?:(\\d+)?(\\.\\d+)?(\\S+)?\\]");
+        int lyric_seq=0;
+        for(int i=0;i<list.count();i++){
+            QString text;
+            qint64 lrc_time;
+
+            qDebug()<<list[i];
+            QRegularExpressionMatch mat=re.match(list[i]);
+            for(int ii=0;ii<mat.capturedLength();ii++){
+                qDebug()<<mat.captured(ii+1);
+            }
+            lrc_time=mat.captured(6).toInt()*60000+mat.captured(7).toInt()*1000+mat.captured(8).mid(1).toInt()*10;
+            text=QString(list[i]).right(QString(list[i]).length()-mat.capturedLength());
+            qDebug()<<"lrc_time:"<<lrc_time;
+            qDebug()<<"text:"<<text;
+            if(text!=""){
+                lyric[lyric_seq].time=lrc_time;
+                lyric[lyric_seq].text=text;
+                lyric_seq++;
+            }
+        }
+
+    }
+
+    player->play();
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+void MainWindow::time_change(qint64 time){
+    QString temp=tr("%1").arg(time);
+    ui->label->setText(temp);
+    ui->horizontalSlider->setSliderPosition(temp.toInt());
+    for(int i=0;i<100;i++){
+        if(temp.toInt()==lyric[i].time){
+            ui->pushButton->setText(lyric[0].text);
+        }
+    }
+
+}
+
+void MainWindow::get_duration(qint64 time){
+    qDebug()<<"time:"<<time;
+    duration=time;
+    qDebug()<<"duration:"<<duration;
+    ui->horizontalSlider->setMaximum(duration);
+    ui->horizontalSlider->setMinimum(0);
+}
