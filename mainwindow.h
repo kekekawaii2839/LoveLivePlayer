@@ -24,6 +24,7 @@
 #include <QMouseEvent>
 #include <QPushButton>
 #include <QTextDocument>
+#include <QGraphicsDropShadowEffect>
 
 namespace Ui {
 class MainWindow;

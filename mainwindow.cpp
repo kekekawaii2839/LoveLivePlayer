@@ -15,9 +15,17 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    this->setAttribute(Qt::WA_TranslucentBackground,true);
     ui->setupUi(this);
     hwnd=(HWND)this->window()->winId();
     setWindowFlags(Qt::FramelessWindowHint);//删除主窗口标题
+
+    QGraphicsDropShadowEffect* shadow=new QGraphicsDropShadowEffect(this);
+    shadow->setOffset(0, 0);
+    shadow->setColor(Qt::black);
+    shadow->setBlurRadius(15);//设置阴影圆角
+    ui->widget_shadow->setGraphicsEffect(shadow);//QGraphicsDropShadowEffect只能安装一次 再次调用setGraphicsEffect时 之前安装的效果将被卸载
+
     empty_icon=new QIcon;
     ui->widget_title->setStyleSheet("background-color: rgb(228, 0, 127);");
     ui->pushButton_lyric->setDefault(false);
@@ -719,7 +727,36 @@ void MainWindow::change_song(QMediaPlayer::MediaStatus status){
                 playlist_buttons.at(i)->show();
             }
         }
+        else if(playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==true){
+            qsrand(QTime::currentTime().msec());
+            int index=qrand()%name_list.count();
+            while(index==play_progress){
+                qsrand(QTime::currentTime().msec());
+                index=qrand()%name_list.count();
+            }
+            play_progress=index;
+            for(int i=0;i<200;i++){
+                lyric[i].time=-1;
+                lyric[i].text="";
+                lyric[i].color_num=0;
+                for(int u=0;u<9;u++){
+                    lyric[i].color[u]=false;
+                }
+            }
+            play_progress=index;
+            ui->label_singers->setText("");
+            ui->label_singers->hide();
+            load_single_song(name_list[play_progress]);
+            for(int i=0;i<playlist_buttons.count();i++){
+                playlist_buttons.at(i)->setStyleSheet("border-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
+            }
+            playlist_buttons.at(play_progress)->setStyleSheet("color:#ee5dae;\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
+            for(int i=0;i<playlist_buttons.count();i++){
+                playlist_buttons.at(i)->show();
+            }
+            playlist->setCurrentIndex(index);
         }
+    }
 }
 
 void MainWindow::on_Slider_volume_valueChanged(int value)
@@ -735,11 +772,23 @@ void MainWindow::SliderVolumeClicked(){
 
 void MainWindow::on_pushButton_next_clicked()
 {
-    if(play_progress+1==name_list.length()){
-        play_progress=0;
+    if(playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==false){
+        if(play_progress+1==name_list.length()){
+            play_progress=0;
+        }
+        else if(play_progress+1<name_list.length()){
+            play_progress++;
+        }
+
     }
-    else if(play_progress+1<name_list.length()){
-        play_progress++;
+    else if(playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==true){
+        qsrand(QTime::currentTime().msec());
+        int index=qrand()%name_list.count();
+        while(index==play_progress){
+            qsrand(QTime::currentTime().msec());
+            index=qrand()%name_list.count();
+        }
+        play_progress=index;
     }
     playlist->setCurrentIndex(play_progress);
     ui->pushButton_lyric->setText("");
@@ -753,7 +802,6 @@ void MainWindow::on_pushButton_next_clicked()
     playlist_buttons.at(play_progress)->setStyleSheet("color:#ee5dae;\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
     for(int i=0;i<playlist_buttons.count();i++){
         playlist_buttons.at(i)->show();
-        qDebug()<<playlist_buttons.at(i)->styleSheet();
     }
 }
 
@@ -841,11 +889,22 @@ QString MainWindow::adjust_text_overlength(QString text,QPushButton* obj,int mod
 
 void MainWindow::on_pushButton_last_clicked()
 {
-    if(play_progress==0){
-        play_progress=name_list.length()-1;
+    if(playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==false){
+        if(play_progress==0){
+            play_progress=name_list.length()-1;
+        }
+        else if(play_progress<name_list.length()&&play_progress>0){
+            play_progress--;
+        }
     }
-    else if(play_progress<name_list.length()&&play_progress>0){
-        play_progress--;
+    else if(playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==true){
+        qsrand(QTime::currentTime().msec());
+        int index=qrand()%name_list.count();
+        while(index==play_progress){
+            qsrand(QTime::currentTime().msec());
+            index=qrand()%name_list.count();
+        }
+        play_progress=index;
     }
     playlist->setCurrentIndex(play_progress);
     ui->pushButton_lyric->setText("");

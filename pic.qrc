@@ -1,8 +1,6 @@
 <RCC>
     <qresource prefix="/new/prefix1">
         <file>μ's.jpeg</file>
-        <file>缪斯 (μ's) - Snow halation.lrc</file>
-        <file>缪斯 (μ's) - Snow halation.mp3</file>
         <file>LLhead.png</file>
         <file>icon.png</file>
         <file>player-pause-circle.png</file>
