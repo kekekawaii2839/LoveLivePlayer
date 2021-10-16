@@ -1,9 +1,9 @@
 ﻿#include "qsliderpro.h"
 #include <QMouseEvent>
 
-QSliderPro::QSliderPro(QWidget* partent)
+QSliderPro::QSliderPro(QWidget* parent)
 {
-    this->setParent(partent);
+    this->setParent(parent);
     isHorizontal=true;
 }
 

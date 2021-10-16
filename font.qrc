@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/new/fonts">
+        <file>DroidSansChinese.ttf</file>
+    </qresource>
+</RCC>

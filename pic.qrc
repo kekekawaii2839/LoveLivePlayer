@@ -3,12 +3,19 @@
         <file>μ's.jpeg</file>
         <file>LLhead.png</file>
         <file>icon.png</file>
-        <file>player-pause-circle.png</file>
-        <file>player-play-circle.png</file>
         <file>player-skip-backward.png</file>
         <file>player-skip-forward.png</file>
         <file>currentitemloop.png</file>
         <file>loop.png</file>
         <file>randomplay.png</file>
+        <file>refresh.png</file>
+        <file>player-pause-circle.png</file>
+        <file>player-play-circle.png</file>
+        <file>settings.png</file>
+        <file>return.png</file>
+        <file>exit.png</file>
+        <file>locked.png</file>
+        <file>unlocked.png</file>
+        <file>icon.ico</file>
     </qresource>
 </RCC>

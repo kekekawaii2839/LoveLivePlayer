@@ -28,20 +28,32 @@ SOURCES += \
     lrc.cpp \
     qsliderpro.cpp \
     qlistpushbutton.cpp \
-    qtitlewidget.cpp
+    qtitlewidget.cpp \
+    config.cpp \
+    scrolllabel.cpp \
+    desktoplyricwindow.cpp \
+    quickselect.cpp
 
 HEADERS += \
         mainwindow.h \
     lrc.h \
     qsliderpro.h \
     qlistpushbutton.h \
-    qtitlewidget.h
+    qtitlewidget.h \
+    config.h \
+    scrolllabel.h \
+    desktoplyricwindow.h \
+    globalvariable.h \
+    quickselect.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    desktoplyricwindow.ui \
+    quickselect.ui
 
 RESOURCES += \
-    pic.qrc
+    pic.qrc \
+    font.qrc
 
 win32: LIBS += -L$$PWD/../../Qt/libzplay-2.02-sdk/libzplay-2.02-sdk/C++/ -lzplay
 
@@ -53,4 +65,11 @@ else:win32-g++: PRE_TARGETDEPS += $$PWD/../../Qt/libzplay-2.02-sdk/libzplay-2.02
 
 LIBS += C:/Windows/System32/GdiPlus.dll
 LIBS += -lgdi32
+LIBS += -luser32
 
+ICON = icon.ico
+
+DISTFILES += \
+    logo.rc
+
+RC_FILE += logo.rc
