@@ -18,6 +18,7 @@ QPoint ori_pos;
 QList<int> random_seq;
 int randomplay_progress;
 QStringList themes;
+QStringList songlist;//歌单文件名列表
 
 QMediaPlayer* player;
 QMediaPlaylist* playlist;
@@ -73,12 +74,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(player,SIGNAL(stateChanged(QMediaPlayer::State)),this,SLOT(player_state_change(QMediaPlayer::State)));
 
     QString path=QApplication::applicationDirPath()+"/songs/";
-    QDirIterator iter(path,QStringList()<<"*.mp3",
+    QDirIterator iter_song(path,QStringList()<<"*.mp3",
                       QDir::Files|QDir::NoSymLinks,
                       QDirIterator::Subdirectories);
-    while(iter.hasNext()){
-        iter.next();
-        name_list.append(iter.fileName());
+    while(iter_song.hasNext()){
+        iter_song.next();
+        name_list.append(iter_song.fileName());
     }
 
     QFont font1,font2;
@@ -88,8 +89,8 @@ MainWindow::MainWindow(QWidget *parent) :
         playlist->addMedia(QUrl(QApplication::applicationDirPath()+"/songs/"+name_list.at(i)));
         QListPushButton* pb_temp=new QListPushButton(ui->scrollAreaWidgetContents);
         QListPushButton* pb_temp2=new QListPushButton(ui->scrollAreaWidgetContents);
-        pb_temp->setGeometry(QRect(0,i*80+5,190,80));
-        pb_temp2->setGeometry(QRect(0,i*80+50,190,30));
+        pb_temp->setGeometry(QRect(0,i*80+5,210,80));
+        pb_temp2->setGeometry(QRect(0,i*80+50,210,30));
         get_meta(path+name_list.at(i),false);
         pb_temp->setDefault(false);
         pb_temp->setVisible(true);
@@ -140,13 +141,27 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     QString pathh=QApplication::applicationDirPath()+"/resources/";
-    QDirIterator iterr(pathh,QStringList()<<"*.config",
+    QDirIterator iter_config(pathh,QStringList()<<"*.config",
                       QDir::Files|QDir::NoSymLinks,
                       QDirIterator::Subdirectories);
-    while(iterr.hasNext()){
-        iterr.next();
-        if(iterr.fileName()!="default.config") themes.append(iterr.fileName());
+    while(iter_config.hasNext()){
+        iter_config.next();
+        if(iter_config.fileName()!="default.config") themes.append(iter_config.fileName());
         //qDebug()<<themes.last();
+    }
+
+    ui->widget_playlist->hide();
+
+    QString path_songlist=QApplication::applicationDirPath()+"/songlists/";
+    QDirIterator iter_songlist(path_songlist,QStringList()<<"*.llist",
+                      QDir::Files|QDir::NoSymLinks,
+                      QDirIterator::Subdirectories);
+    while(iter_songlist.hasNext()){
+        iter_songlist.next();
+        songlist.append(iter_songlist.fileName());
+    }
+    if(songlist.isEmpty()==true){
+        qDebug()<<"no songlist!";
     }
 }
 
@@ -191,7 +206,7 @@ void MainWindow::time_change(qint64 time){
                     QString dda=lyric[i].text;
                     dda.replace("color:#000000","color:#7f7f7f");
                     dda.replace("font-size:14pt;","font-size:13pt;");
-                    qDebug()<<dda;//e.g.<span style=" font-size:14pt; font-weight:600; color:#55aaff;">aaaaa</span><span style=" font-size:14pt; font-weight:600; color:#ffaaff;">aaaaaaa</span>
+                    //qDebug()<<dda; e.g.<span style=" font-size:14pt; font-weight:600; color:#55aaff;">aaaaa</span><span style=" font-size:14pt; font-weight:600; color:#ffaaff;">aaaaaaa</span>
                     QTextDocument htmll;
                     htmll.setHtml(dda);
                     QPixmap pixmapp(htmll.size().width(),htmll.size().height());
@@ -322,7 +337,7 @@ void MainWindow::time_change(qint64 time){
                     QString dda=lyric[valid_lyric-1].text;
                     dda.replace("color:#000000","color:#7f7f7f");
                     dda.replace("font-size:14pt;","font-size:13pt;");
-                    qDebug()<<dda;//e.g.<span style=" font-size:14pt; font-weight:600; color:#55aaff;">aaaaa</span><span style=" font-size:14pt; font-weight:600; color:#ffaaff;">aaaaaaa</span>
+                    //qDebug()<<dda; e.g.<span style=" font-size:14pt; font-weight:600; color:#55aaff;">aaaaa</span><span style=" font-size:14pt; font-weight:600; color:#ffaaff;">aaaaaaa</span>
                     QTextDocument htmll;
                     htmll.setHtml(dda);
                     QPixmap pixmapp(htmll.size().width(),htmll.size().height());
@@ -478,7 +493,7 @@ void MainWindow::time_change(int time){
                     QString dda=lyric[i].text;
                     dda.replace("color:#000000","color:#7f7f7f");
                     dda.replace("font-size:14pt;","font-size:13pt;");
-                    qDebug()<<dda;//e.g.<span style=" font-size:14pt; font-weight:600; color:#55aaff;">aaaaa</span><span style=" font-size:14pt; font-weight:600; color:#ffaaff;">aaaaaaa</span>
+                    //qDebug()<<dda; e.g.<span style=" font-size:14pt; font-weight:600; color:#55aaff;">aaaaa</span><span style=" font-size:14pt; font-weight:600; color:#ffaaff;">aaaaaaa</span>
                     QTextDocument htmll;
                     htmll.setHtml(dda);
                     QPixmap pixmapp(htmll.size().width(),htmll.size().height());
@@ -614,7 +629,7 @@ void MainWindow::time_change(int time){
                     QString dda=lyric[valid_lyric-1].text;
                     dda.replace("color:#000000","color:#7f7f7f");
                     dda.replace("font-size:14pt;","font-size:13pt;");
-                    qDebug()<<dda;//e.g.<span style=" font-size:14pt; font-weight:600; color:#55aaff;">aaaaa</span><span style=" font-size:14pt; font-weight:600; color:#ffaaff;">aaaaaaa</span>
+                    //qDebug()<<dda; e.g.<span style=" font-size:14pt; font-weight:600; color:#55aaff;">aaaaa</span><span style=" font-size:14pt; font-weight:600; color:#ffaaff;">aaaaaaa</span>
                     QTextDocument htmll;
                     htmll.setHtml(dda);
                     QPixmap pixmapp(htmll.size().width(),htmll.size().height());
@@ -980,9 +995,18 @@ void MainWindow::time_change_manual(int time){
 }
 
 void MainWindow::get_meta(QString path,bool isNeedAlbumCover){
+    title="unknown";
+    artist="unknown";
+    album="unknown";
     zplayer=libZPlay::CreateZPlay();
     libZPlay::TID3InfoExW id3_info;
-    if(zplayer->OpenFile(path.toLocal8Bit(),libZPlay::sfAutodetect)){
+    //const wchar_t* wstr=reinterpret_cast<const wchar_t>(path.utf16());
+    wchar_t* wstr=new wchar_t[1024];
+    for(int i=0;i<1024;++i){
+        wstr[i]=0;
+    }
+    path.toWCharArray(wstr);
+    if(zplayer->OpenFileW(wstr,libZPlay::sfAutodetect)){
         if(zplayer->LoadID3ExW(&id3_info,1)){
             if(isNeedAlbumCover==true) SaveHDCToFile(id3_info);
             title=QString::fromWCharArray(id3_info.Title);
@@ -1013,9 +1037,21 @@ void MainWindow::get_meta(QString path,bool isNeedAlbumCover){
 void MainWindow::load_single_song(QString name){
     QString path_audio=QApplication::applicationDirPath()+"/songs/"+name;
     QStringList list_temp=name.split(".");
-    QString path_lyric=QApplication::applicationDirPath()+"/songs/"+list_temp.at(0)+".ll";
-    QString path_lyric_backup=QApplication::applicationDirPath()+"/songs/"+list_temp.at(0)+".lrc";
-    QString path_lyric_translate=QApplication::applicationDirPath()+"/songs/"+list_temp.at(0)+".trans";
+    QString list_temp_name;
+    if(list_temp.count()>=2){
+        for(int i=0;i<list_temp.count()-1;++i){
+            list_temp_name+=list_temp.at(i)+".";
+        }
+        list_temp_name=list_temp_name.left(list_temp_name.count()-1);
+        //qDebug()<<"list_temp_name:"<<list_temp_name;
+    }
+    else{
+        qDebug()<<"an error in name_list has been found!";
+    }
+
+    QString path_lyric=QApplication::applicationDirPath()+"/songs/"+list_temp_name+".ll";
+    QString path_lyric_backup=QApplication::applicationDirPath()+"/songs/"+list_temp_name+".lrc";
+    QString path_lyric_translate=QApplication::applicationDirPath()+"/songs/"+list_temp_name+".trans";
 
     //以下是读取主题
     QFile temp(path_lyric);
@@ -1108,7 +1144,7 @@ void MainWindow::QSliderProClicked(){
 }
 
 void MainWindow::change_song(QMediaPlayer::MediaStatus status){
-    qDebug()<<"MediaStatus:"<<status;
+    //qDebug()<<"MediaStatus:"<<status;
     if(status==QMediaPlayer::EndOfMedia){
         if(playlist->playbackMode()==QMediaPlaylist::CurrentItemInLoop){
 
@@ -1295,7 +1331,6 @@ QString MainWindow::adjust_text_overlength(QString text,QPushButton* obj,int mod
                 int ooowidth=obj->fontMetrics().width("...");
                 if(tempwidth+ooowidth>buttonwidth){
                     QString res=temp.left(temp.length()-1)+"...";
-                    qDebug()<<res;
                     return res;
                 }
             }
@@ -1368,7 +1403,6 @@ QString MainWindow::adjust_text_overlength(QString text,QLabel* obj,int mode){
                 int ooowidth=obj->fontMetrics().width("...");
                 if(tempwidth+ooowidth>buttonwidth){
                     QString res=temp.left(temp.length()-1)+"...";
-                    qDebug()<<res;
                     return res;
                 }
             }
@@ -1421,34 +1455,42 @@ void MainWindow::on_pushButton_last_clicked()
 }
 
 void MainWindow::playlist_buttons_clicked(int seq){
-    for(int i=0;i<playlist_buttons.count();++i){
-        playlist_buttons.at(i)->setStyleSheet("border-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
-    }
-    ui->pushButton_lyric->setText("");
-    ui->pushButton_lyric->setStyleSheet("color:black;\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);");
-    ui->pushButton_lyric_html->setIcon(*empty_icon);
+    if(playlist_buttons.at(seq)->isRightClicked==false){
+        for(int i=0;i<playlist_buttons.count();++i){
+            playlist_buttons.at(i)->setStyleSheet("border-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
+        }
+        ui->pushButton_lyric->setText("");
+        ui->pushButton_lyric->setStyleSheet("color:black;\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);");
+        ui->pushButton_lyric_html->setIcon(*empty_icon);
 
-    dd.ui->pushButton_lyric->setText("");
-    dd.ui->pushButton_lyric->setStyleSheet("color:#7f7f7f;\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);");
-    dd.ui->pushButton_lyric_html->setIcon(*empty_icon);
+        dd.ui->pushButton_lyric->setText("");
+        dd.ui->pushButton_lyric->setStyleSheet("color:#7f7f7f;\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);");
+        dd.ui->pushButton_lyric_html->setIcon(*empty_icon);
 
-    if(isRandomPlay==false){
-        play_progress=seq;
-        load_single_song(name_list.at(seq));
-        playlist_buttons.at(seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
-        playlist->setCurrentIndex(seq);
+        if(isRandomPlay==false){
+            play_progress=seq;
+            load_single_song(name_list.at(seq));
+            playlist_buttons.at(seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
+            playlist->setCurrentIndex(seq);
+        }
+        else{
+            for(int i=0;i<name_list.count();++i){
+                if(random_seq.at(i)==seq){
+                    randomplay_progress=i;
+                    break;
+                }
+            }
+            load_single_song(name_list.at(seq));
+            playlist_buttons.at(seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
+            playlist->setCurrentIndex(seq);
+        }
     }
     else{
-        for(int i=0;i<name_list.count();++i){
-            if(random_seq.at(i)==seq){
-                randomplay_progress=i;
-                break;
-            }
-        }
-        load_single_song(name_list.at(seq));
-        playlist_buttons.at(seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
-        playlist->setCurrentIndex(seq);
+        //
+
+        playlist_buttons.at(seq)->isRightClicked=false;
     }
+
 }
 
 void MainWindow::on_pushButton_minimize_clicked()
@@ -1580,7 +1622,7 @@ void MainWindow::get_config(QString id){
         QFont font(font_string,10);
         for(int i=0;i<conf.num;++i){
             QGroupBox* tempbox=new QGroupBox(ui->widget_examples);
-            tempbox->setGeometry(QRect((i-i/3*3)*120,i/3*30,120,30));
+            tempbox->setGeometry(QRect((i-i/2*2)*120,i/2*50,120,50));
             tempbox->setStyleSheet("border:0px;");
             QLabel* tempblock=new QLabel(tempbox);
             tempblock->setGeometry(QRect(10,12,10,10));
@@ -1672,13 +1714,13 @@ void MainWindow::on_pushButton_settings_clicked()
         ui->widget_settings->show();
         ui->Slider_volume->hide();
         ui->label_info_album->hide();
-        ui->horizontalSlider->setGeometry(QRect(0,490,860,22));
-        ui->label_time->move(710,520);
-        ui->label_duration->move(767,520);
-        ui->pushButton_play->move(421,516);
-        ui->pushButton_next->setGeometry(QRect(486,531,20,20));
-        ui->pushButton_last->setGeometry(QRect(381,531,20,20));
-        ui->pushButton_playmode->setGeometry(QRect(341,531,20,20));
+        ui->horizontalSlider->setGeometry(QRect(0,490,1050,22));
+        ui->label_time->move(890,520);
+        ui->label_duration->move(947,520);
+        ui->pushButton_play->move(521,516);
+        ui->pushButton_next->setGeometry(QRect(586,531,20,20));
+        ui->pushButton_last->setGeometry(QRect(481,531,20,20));
+        ui->pushButton_playmode->setGeometry(QRect(441,531,20,20));
         ui->widget_cover->setGeometry(QRect(40,515,50,50));
         QString info=title+" - "+artist+"  ";
         ui->label_settings_info->setText(info);
@@ -1686,7 +1728,8 @@ void MainWindow::on_pushButton_settings_clicked()
         QFont font(font_string,10);
         ui->label_settings_info->setFont(font);
         ui->label_settings_info->show();
-        ui->pushButton_DesktopLyric->move(516,526);
+        ui->pushButton_DesktopLyric->move(616,526);
+        ui->pushButton_playlist->setGeometry(QRect(656,531,20,20));
     }
     else{
         on_pushButton_settings_return_clicked();
@@ -1736,16 +1779,17 @@ void MainWindow::on_pushButton_settings_return_clicked()
     ui->widget_settings->hide();
     ui->Slider_volume->show();
     ui->label_info_album->show();
-    ui->horizontalSlider->setGeometry(QRect(20,520,610,22));
-    ui->label_time->move(640,510);
-    ui->label_duration->move(697,510);
-    ui->pushButton_play->move(570,440);
-    ui->pushButton_next->setGeometry(QRect(660,450,30,30));
-    ui->pushButton_last->setGeometry(QRect(490,450,30,30));
-    ui->pushButton_playmode->setGeometry(QRect(400,450,30,30));
-    ui->widget_cover->setGeometry(QRect(60,130,230,230));
+    ui->horizontalSlider->setGeometry(QRect(20,525,780,22));
+    ui->label_time->move(810,515);
+    ui->label_duration->move(867,515);
+    ui->pushButton_play->move(670,440);
+    ui->pushButton_next->setGeometry(QRect(760,450,30,30));
+    ui->pushButton_last->setGeometry(QRect(590,450,30,30));
+    ui->pushButton_playmode->setGeometry(QRect(500,450,30,30));
+    ui->widget_cover->setGeometry(QRect(55,135,230,230));
     ui->label_settings_info->hide();
-    ui->pushButton_DesktopLyric->move(730,450);
+    ui->pushButton_DesktopLyric->move(830,450);
+    ui->pushButton_playlist->setGeometry(QRect(950,524,30,28));
 }
 
 /*bool MainWindow::eventFilter(QObject* object, QEvent* event){
@@ -1906,4 +1950,21 @@ void MainWindow::on_checkBox_quickselect_clicked(bool checked)
     else{
         isQuickSelect=false;
     }
+}
+
+void MainWindow::on_pushButton_playlist_clicked()
+{
+    //ui->widget_playlist->setGeometry(QRect(850,0,ui->widget_playlist->width(),ui->widget_playlist->height()));
+    if(ui->widget_playlist->isVisible()==false){
+        ui->widget_playlist->show();
+    }
+    else{
+        ui->widget_playlist->hide();
+    }
+}
+
+void MainWindow::on_pushButton_hideplaylist_clicked()
+{
+    //ui->widget_playlist->setGeometry(QRect(-300,99,ui->widget_playlist->width(),ui->widget_playlist->height()));
+    ui->widget_playlist->hide();
 }

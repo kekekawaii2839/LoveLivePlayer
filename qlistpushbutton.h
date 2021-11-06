@@ -9,6 +9,7 @@ class QListPushButton:public QPushButton
 public:
     QListPushButton(QWidget* parent=nullptr);
     int seq;
+    bool isRightClicked;
     QString ori_stylesheet;
     void setStyleSheet(const QString &styleSheet,int mode);
 protected:

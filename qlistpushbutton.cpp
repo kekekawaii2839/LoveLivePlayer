@@ -9,10 +9,12 @@ QListPushButton::QListPushButton(QWidget* parent)
     this->installEventFilter(this);
     this->ori_stylesheet="";
     seq=-1;
+    isRightClicked=false;
 }
 
 void QListPushButton::mousePressEvent(QMouseEvent *e){
     QPushButton::mousePressEvent(e);
+    if(e->button()==Qt::RightButton) isRightClicked=true;
     emit clicked(seq);
 }
 

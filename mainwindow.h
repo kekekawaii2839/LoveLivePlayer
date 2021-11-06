@@ -95,6 +95,8 @@ private slots:
     void on_radioButton_settings_tray_1_toggled(bool checked);
     void on_pushButton_DesktopLyric_clicked();
     void on_checkBox_quickselect_clicked(bool checked);
+    void on_pushButton_playlist_clicked();
+    void on_pushButton_hideplaylist_clicked();
 };
 
 #endif // MAINWINDOW_H
