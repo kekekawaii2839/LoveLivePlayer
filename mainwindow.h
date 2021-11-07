@@ -89,6 +89,7 @@ private slots:
     void on_pushButton_settings_clicked();
     void read_userdata();
     void on_pushButton_settings_return_clicked();
+    void show_player();
     //bool eventFilter(QObject* object, QEvent* event);
     void on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason);
     void on_action_exit_triggered();
@@ -98,6 +99,7 @@ private slots:
     void on_checkBox_quickselect_clicked(bool checked);
     void on_pushButton_playlist_clicked();
     void on_pushButton_hideplaylist_clicked();
+    void on_pushButton_hideplayer_clicked();
 };
 
 #endif // MAINWINDOW_H
