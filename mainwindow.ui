@@ -1004,6 +1004,166 @@ color:black;</string>
        <number>100</number>
       </property>
      </widget>
+     <widget class="QPushButton" name="fakepushButton_play">
+      <property name="geometry">
+       <rect>
+        <x>670</x>
+        <y>340</y>
+        <width>48</width>
+        <height>48</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="fakepushButton_last">
+      <property name="geometry">
+       <rect>
+        <x>590</x>
+        <y>350</y>
+        <width>30</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-image: url(:/new/prefix1/player-skip-backward.png);</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="fakepushButton_next">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>350</y>
+        <width>30</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-image: url(:/new/prefix1/player-skip-forward.png);</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="fakepushButton_playlist">
+      <property name="geometry">
+       <rect>
+        <x>950</x>
+        <y>424</y>
+        <width>30</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-image: url(:/new/prefix1/playlist.png);</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="fakepushButton_playmode">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>350</y>
+        <width>30</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-image: url(:/new/prefix1/loop.png);</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="fakepushButton_DesktopLyric">
+      <property name="geometry">
+       <rect>
+        <x>830</x>
+        <y>350</y>
+        <width>30</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>汉仪文黑-85W</family>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgba(228, 0, 127, 0);</string>
+      </property>
+      <property name="text">
+       <string>词</string>
+      </property>
+     </widget>
+     <widget class="QSlider" name="fakehorizontalSlider">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>425</y>
+        <width>780</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="fakelabel_time">
+      <property name="geometry">
+       <rect>
+        <x>810</x>
+        <y>415</y>
+        <width>91</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="fakelabel_duration">
+      <property name="geometry">
+       <rect>
+        <x>867</x>
+        <y>415</y>
+        <width>91</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QWidget" name="fakewidget_cover" native="true">
+      <property name="geometry">
+       <rect>
+        <x>55</x>
+        <y>35</y>
+        <width>230</width>
+        <height>230</height>
+       </rect>
+      </property>
+     </widget>
+     <zorder>fakelabel_time</zorder>
+     <zorder>fakelabel_duration</zorder>
      <zorder>widget_cover_shadow</zorder>
      <zorder>widget_examples</zorder>
      <zorder>pushButton_lyric_html</zorder>
@@ -1016,6 +1176,14 @@ color:black;</string>
      <zorder>Slider_volume</zorder>
      <zorder>label_volume</zorder>
      <zorder>pushButton_hideplayer</zorder>
+     <zorder>fakepushButton_play</zorder>
+     <zorder>fakepushButton_last</zorder>
+     <zorder>fakepushButton_next</zorder>
+     <zorder>fakepushButton_playmode</zorder>
+     <zorder>fakepushButton_DesktopLyric</zorder>
+     <zorder>fakehorizontalSlider</zorder>
+     <zorder>fakepushButton_playlist</zorder>
+     <zorder>fakewidget_cover</zorder>
     </widget>
     <widget class="QWidget" name="widget_songlist" native="true">
      <property name="geometry">
@@ -1077,6 +1245,66 @@ color:black;</string>
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_no_songlist">
+        <property name="geometry">
+         <rect>
+          <x>250</x>
+          <y>160</y>
+          <width>311</width>
+          <height>131</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <family>汉仪文黑-85W</family>
+          <pointsize>15</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>暂无歌单，快去创建一个吧！</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_no_song_in_songlist">
+        <property name="geometry">
+         <rect>
+          <x>230</x>
+          <y>160</y>
+          <width>350</width>
+          <height>131</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <family>汉仪文黑-85W</family>
+          <pointsize>15</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>歌单是空的，快去添加歌曲吧！</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_playall">
+        <property name="geometry">
+         <rect>
+          <x>240</x>
+          <y>40</y>
+          <width>93</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>PlayAll</string>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
         </property>
        </widget>
       </widget>
@@ -1232,6 +1460,44 @@ color:black;</string>
         <zorder>pushButton_mylike</zorder>
         <zorder>label_allmusic_icon</zorder>
         <zorder>pushButton_allmusic</zorder>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_mysonglists">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>140</y>
+          <width>190</width>
+          <height>200</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border:none;</string>
+        </property>
+        <property name="title">
+         <string/>
+        </property>
+        <widget class="QLabel" name="label_mysonglists">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>15</y>
+           <width>60</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <family>汉仪文黑-85W</family>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#a3a3a3;&quot;&gt;我的歌单&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
        </widget>
       </widget>
      </widget>
