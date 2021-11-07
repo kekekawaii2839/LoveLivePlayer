@@ -29,6 +29,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QScrollBar>
+#include <QPropertyAnimation>
 
 namespace Ui {
 class MainWindow;

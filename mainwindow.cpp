@@ -19,6 +19,7 @@ QList<int> random_seq;
 int randomplay_progress;
 QStringList themes;
 QStringList songlist;//歌单文件名列表
+bool isPlaylistShowing=false;
 
 QMediaPlayer* player;
 QMediaPlaylist* playlist;
@@ -53,7 +54,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->pushButton_minimize->setDefault(false);
     ui->label_singers->hide();
     ui->Slider_volume->isHorizontal=false;
-    ui->widget_settings->hide();
+    //ui->widget_settings->hide();
     ui->label_settings_info->hide();
 
     player=new QMediaPlayer();
@@ -150,7 +151,7 @@ MainWindow::MainWindow(QWidget *parent) :
         //qDebug()<<themes.last();
     }
 
-    ui->widget_playlist->hide();
+    //ui->widget_playlist->hide();
 
     QString path_songlist=QApplication::applicationDirPath()+"/songlists/";
     QDirIterator iter_songlist(path_songlist,QStringList()<<"*.llist",
@@ -1710,8 +1711,8 @@ void MainWindow::on_pushButton_refresh_clicked()
 
 void MainWindow::on_pushButton_settings_clicked()
 {
-    if(ui->widget_settings->isVisible()==false){
-        ui->widget_settings->show();
+    if(ui->widget_settings->geometry().width()<1050){
+        ui->widget_settings->setGeometry(0,100,1050,380);
         ui->Slider_volume->hide();
         ui->label_info_album->hide();
         ui->horizontalSlider->setGeometry(QRect(0,490,1050,22));
@@ -1776,7 +1777,7 @@ void MainWindow::read_userdata(){
 
 void MainWindow::on_pushButton_settings_return_clicked()
 {
-    ui->widget_settings->hide();
+    ui->widget_settings->setGeometry(0,100,0,380);
     ui->Slider_volume->show();
     ui->label_info_album->show();
     ui->horizontalSlider->setGeometry(QRect(20,525,780,22));
@@ -1954,17 +1955,36 @@ void MainWindow::on_checkBox_quickselect_clicked(bool checked)
 
 void MainWindow::on_pushButton_playlist_clicked()
 {
-    //ui->widget_playlist->setGeometry(QRect(850,0,ui->widget_playlist->width(),ui->widget_playlist->height()));
-    if(ui->widget_playlist->isVisible()==false){
-        ui->widget_playlist->show();
+    int x=ui->widget_playlist->geometry().x();
+    QPropertyAnimation* show_playlist=new QPropertyAnimation(ui->widget_playlist,"geometry");
+    show_playlist->setDuration(1000);
+    show_playlist->setStartValue(QRect(x,10,0,580));
+    show_playlist->setEndValue(QRect(840,10,220,580));
+    show_playlist->setEasingCurve(QEasingCurve::OutQuart);
+
+    QPropertyAnimation* hide_playlist=new QPropertyAnimation(ui->widget_playlist,"geometry");
+    hide_playlist->setDuration(1000);
+    hide_playlist->setStartValue(QRect(x,10,220,580));
+    hide_playlist->setEndValue(QRect(1061,10,0,580));
+    hide_playlist->setEasingCurve(QEasingCurve::OutQuart);
+
+    if(isPlaylistShowing==false){
+        show_playlist->start();
+        isPlaylistShowing=true;
     }
     else{
-        ui->widget_playlist->hide();
+        hide_playlist->start();
+        isPlaylistShowing=false;
     }
 }
 
 void MainWindow::on_pushButton_hideplaylist_clicked()
 {
-    //ui->widget_playlist->setGeometry(QRect(-300,99,ui->widget_playlist->width(),ui->widget_playlist->height()));
-    ui->widget_playlist->hide();
+    QPropertyAnimation* hide_playlist=new QPropertyAnimation(ui->widget_playlist,"geometry");
+    hide_playlist->setDuration(1000);
+    hide_playlist->setStartValue(QRect(840,10,220,580));
+    hide_playlist->setEndValue(QRect(1061,10,0,580));
+    hide_playlist->setEasingCurve(QEasingCurve::OutQuart);
+    hide_playlist->start();
+    isPlaylistShowing=false;
 }
