@@ -3,6 +3,7 @@
 
 #include "qsliderpro.h"
 #include "qlistpushbutton.h"
+#include "qclickwidget.h"
 #include "libzplay.h"
 #include <windows.h>
 #include <QtWinExtras/QtWin>

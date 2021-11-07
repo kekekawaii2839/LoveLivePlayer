@@ -18,5 +18,7 @@
         <file>unlocked.png</file>
         <file>icon.ico</file>
         <file>playlist.png</file>
+        <file>like.png</file>
+        <file>note.png</file>
     </qresource>
 </RCC>
