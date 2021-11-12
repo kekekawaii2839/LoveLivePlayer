@@ -6,9 +6,10 @@
 #include "config.h"
 #include "desktoplyricwindow.h"
 #include "quickselect.h"
+#include "laudioplayer.h"
 
-extern QMediaPlayer* player;
-extern QMediaPlaylist* playlist;
+extern LAudioPlayer* player;
+//extern QMediaPlaylist* playlist;
 extern int duration;
 extern LRC lyric[200];
 extern LRC lyric_translate[200];

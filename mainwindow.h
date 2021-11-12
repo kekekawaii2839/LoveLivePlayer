@@ -9,6 +9,7 @@
 #include <QtWinExtras/QtWin>
 #include <gdiplus.h>
 #include "globalvariable.h"
+#include "laudioplayer.h"
 
 #include <QMainWindow>
 #include <QUrl>

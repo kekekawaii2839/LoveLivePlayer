@@ -25,8 +25,8 @@ int whatInMainPage=0;//0代表歌单界面 1代表设置界面
 QList<QListPushButton*> songlist_buttons;
 QList<QListPushButton*> songs_in_current_songlist_buttons;
 
-QMediaPlayer* player;
-QMediaPlaylist* playlist;
+LAudioPlayer* player;
+//QMediaPlaylist* playlist;
 int duration;
 LRC lyric[200];
 LRC lyric_translate[200];
@@ -61,14 +61,12 @@ MainWindow::MainWindow(QWidget *parent) :
     //ui->widget_settings->hide();
     ui->label_settings_info->hide();
 
-    player=new QMediaPlayer();
-    playlist=new QMediaPlaylist();
-    player->setPlaylist(playlist);
-    playlist->setPlaybackMode(QMediaPlaylist::Loop);
+    player=new LAudioPlayer();
+    player->playlist->setPlaybackMode(QMediaPlaylist::Loop);
     isRandomPlay=false;
     isAutoPlay=false;
     isTray=true;
-    player->setNotifyInterval(10);//10ms一刷新
+    //player->setNotifyInterval(10);//10ms一刷新
     ui->label_volume->setFont(QFont(font_string,10));
 
     connect(player,SIGNAL(positionChanged(qint64)),this,SLOT(time_change(qint64)));
@@ -951,9 +949,9 @@ void MainWindow::on_pushButton_play_clicked()
 {
     write_log("now playing:"+player->currentMedia().canonicalUrl().toString());
     write_log("play_progress="+QString::number(play_progress));
-    write_log("playlist.currentIndex="+QString::number(playlist->currentIndex()));
+    write_log("playlist.currentIndex="+QString::number(player->playlist->currentIndex()));
     write_log("name:"+name_list.at(play_progress));
-    write_log("playlist.currentMedia:"+playlist->currentMedia().canonicalUrl().toString());
+    write_log("playlist.currentMedia:"+player->playlist->currentMedia().canonicalUrl().toString());
     write_log("\n");
     if(player->state()==QMediaPlayer::PausedState){
         player->play();
@@ -1152,15 +1150,15 @@ void MainWindow::change_song(QMediaPlayer::MediaStatus status){
     qDebug()<<"MediaStatus:"<<status;
     write_log("MediaStatus:\nnow playing:"+player->currentMedia().canonicalUrl().toString());
     write_log("play_progress="+QString::number(play_progress));
-    write_log("playlist.currentIndex="+QString::number(playlist->currentIndex()));
+    write_log("playlist.currentIndex="+QString::number(player->playlist->currentIndex()));
     write_log("name:"+name_list.at(play_progress));
-    write_log("playlist.currentMedia:"+playlist->currentMedia().canonicalUrl().toString());
+    write_log("playlist.currentMedia:"+player->playlist->currentMedia().canonicalUrl().toString());
     write_log("\n");
     if(status==QMediaPlayer::EndOfMedia){
-        if(playlist->playbackMode()==QMediaPlaylist::CurrentItemInLoop){
+        if(player->playlist->playbackMode()==QMediaPlaylist::CurrentItemInLoop){
 
         }
-        else if(playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==false){
+        else if(player->playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==false){
             for(int i=0;i<200;++i){
                 lyric[i].time=-1;
                 lyric[i].text="";
@@ -1175,7 +1173,7 @@ void MainWindow::change_song(QMediaPlayer::MediaStatus status){
             else if(play_progress+1==name_list.length()){
                 play_progress=0;
             }
-            playlist->setCurrentIndex(play_progress);
+            player->playlist->setCurrentIndex(play_progress);
             ui->label_singers->setText("");
             ui->label_singers->hide();
             load_single_song(name_list[play_progress]);
@@ -1192,7 +1190,7 @@ void MainWindow::change_song(QMediaPlayer::MediaStatus status){
             else if(current_songlist_seq==-1) ui->pushButton_mylike->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
             else songlist_buttons.at(current_songlist_seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
         }
-        else if(playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==true){
+        else if(player->playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==true){
             for(int i=0;i<200;++i){
                 lyric[i].time=-1;
                 lyric[i].text="";
@@ -1212,7 +1210,7 @@ void MainWindow::change_song(QMediaPlayer::MediaStatus status){
             for(int i=0;i<playlist_buttons.count();++i){
                 playlist_buttons.at(i)->show();
             }
-            playlist->setCurrentIndex(random_seq.at(randomplay_progress));
+            player->playlist->setCurrentIndex(random_seq.at(randomplay_progress));
         }
     }
 }
@@ -1232,14 +1230,14 @@ void MainWindow::SliderVolumeClicked(){
 
 void MainWindow::on_pushButton_next_clicked()
 {
-    if(playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==false){
+    if(player->playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==false){
         if(play_progress+1==name_list.count()){
             play_progress=0;
         }
         else if(play_progress+1<name_list.count()){
             play_progress+=1;
         }
-        playlist->setCurrentIndex(play_progress);
+        player->playlist->setCurrentIndex(play_progress);
         load_single_song(name_list[play_progress]);
         for(int i=0;i<playlist_buttons.count();++i){
             playlist_buttons.at(i)->setStyleSheet("border-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
@@ -1252,14 +1250,14 @@ void MainWindow::on_pushButton_next_clicked()
         else if(current_songlist_seq==-1) ui->pushButton_mylike->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
         else songlist_buttons.at(current_songlist_seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
     }
-    else if(playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==true){
+    else if(player->playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==true){
         if(randomplay_progress+1==name_list.count()){
             randomplay_progress=0;
         }
         else if(randomplay_progress+1<name_list.count()){
             randomplay_progress++;
         }
-        playlist->setCurrentIndex(random_seq.at(randomplay_progress));
+        player->playlist->setCurrentIndex(random_seq.at(randomplay_progress));
         load_single_song(name_list[random_seq.at(randomplay_progress)]);
         for(int i=0;i<playlist_buttons.count();++i){
             playlist_buttons.at(i)->setStyleSheet("border-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
@@ -1437,14 +1435,14 @@ QString MainWindow::adjust_text_overlength(QString text,QLabel* obj,int mode){
 
 void MainWindow::on_pushButton_last_clicked()
 {
-    if(playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==false){
+    if(player->playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==false){
         if(play_progress==0){
             play_progress=name_list.count()-1;
         }
         else if(play_progress<name_list.count()&&play_progress>0){
             play_progress-=1;
         }
-        playlist->setCurrentIndex(play_progress);
+        player->playlist->setCurrentIndex(play_progress);
         load_single_song(name_list[play_progress]);
         for(int i=0;i<playlist_buttons.count();++i){
             playlist_buttons.at(i)->setStyleSheet("border-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
@@ -1454,14 +1452,14 @@ void MainWindow::on_pushButton_last_clicked()
             playlist_buttons.at(i)->show();
         }
     }
-    else if(playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==true){
+    else if(player->playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==true){
         if(randomplay_progress==0){
             randomplay_progress=name_list.count()-1;
         }
         else if(randomplay_progress<name_list.count()&&randomplay_progress>0){
             randomplay_progress-=1;
         }
-        playlist->setCurrentIndex(random_seq.at(randomplay_progress));
+        player->playlist->setCurrentIndex(random_seq.at(randomplay_progress));
         load_single_song(name_list[random_seq.at(randomplay_progress)]);
         for(int i=0;i<playlist_buttons.count();++i){
             playlist_buttons.at(i)->setStyleSheet("border-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
@@ -1499,7 +1497,7 @@ void MainWindow::playlist_buttons_clicked(int seq){
             play_progress=seq;
             load_single_song(name_list.at(seq));
             playlist_buttons.at(seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
-            playlist->setCurrentIndex(play_progress);
+            player->playlist->setCurrentIndex(play_progress);
         }
         else{
             for(int i=0;i<name_list.count();++i){
@@ -1510,7 +1508,7 @@ void MainWindow::playlist_buttons_clicked(int seq){
             }
             load_single_song(name_list.at(seq));
             playlist_buttons.at(seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
-            playlist->setCurrentIndex(seq);
+            player->playlist->setCurrentIndex(seq);
         }
     }
     else{
@@ -1567,15 +1565,15 @@ void MainWindow::on_pushButton_close_clicked()
 
 void MainWindow::on_pushButton_playmode_clicked()
 {
-    if(playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==false){//从列表循环到单曲循环
+    if(player->playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==false){//从列表循环到单曲循环
         ui->pushButton_playmode->setStyleSheet("border-image: url(:/new/prefix1/currentitemloop.png);");
         ui->fakepushButton_playmode->setStyleSheet("border-image: url(:/new/prefix1/currentitemloop.png);");
-        playlist->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
+        player->playlist->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
     }
-    else if(playlist->playbackMode()==QMediaPlaylist::CurrentItemInLoop){//从单曲循环到随机播放
+    else if(player->playlist->playbackMode()==QMediaPlaylist::CurrentItemInLoop){//从单曲循环到随机播放
         ui->pushButton_playmode->setStyleSheet("border-image: url(:/new/prefix1/randomplay.png);");
         ui->fakepushButton_playmode->setStyleSheet("border-image: url(:/new/prefix1/randomplay.png);");
-        playlist->setPlaybackMode(QMediaPlaylist::Loop);
+        player->playlist->setPlaybackMode(QMediaPlaylist::Loop);
         isRandomPlay=true;
 
         random_seq.clear();
@@ -1596,7 +1594,7 @@ void MainWindow::on_pushButton_playmode_clicked()
             }
         }
     }
-    else if(playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==true){//从随机播放到列表循环
+    else if(player->playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==true){//从随机播放到列表循环
         ui->pushButton_playmode->setStyleSheet("border-image: url(:/new/prefix1/loop.png);");
         ui->fakepushButton_playmode->setStyleSheet("border-image: url(:/new/prefix1/loop.png);");
         isRandomPlay=false;
@@ -1694,7 +1692,7 @@ void MainWindow::on_pushButton_refresh_clicked()
     playlist_buttons.clear();
     playlist_singers_buttons.clear();
     name_list.clear();
-    playlist->clear();
+    player->playlist->clear();
 
     QString path=QApplication::applicationDirPath()+"/songs/";
     QDirIterator iter(path,QStringList()<<"*.mp3",
@@ -1709,7 +1707,7 @@ void MainWindow::on_pushButton_refresh_clicked()
     font1.setPointSize(12);
     font2.setPointSize(8);
     for(int i=0;i<name_list.length();++i){
-        playlist->addMedia(QUrl(QApplication::applicationDirPath()+"/songs/"+name_list.at(i)));
+        player->playlist->addMedia(QUrl(QApplication::applicationDirPath()+"/songs/"+name_list.at(i)));
         QListPushButton* pb_temp=new QListPushButton(ui->scrollAreaWidgetContents);
         QListPushButton* pb_temp2=new QListPushButton(ui->scrollAreaWidgetContents);
         pb_temp->setGeometry(QRect(0,i*80+5,190,80));
@@ -1740,7 +1738,7 @@ void MainWindow::on_pushButton_refresh_clicked()
     }
     ui->scrollAreaWidgetContents->setMinimumHeight(name_list.length()*80+5);
     play_progress=0;
-    playlist->setCurrentIndex(0);
+    player->playlist->setCurrentIndex(0);
     player->pause();
     load_single_song(name_list.at(0));
     playlist_buttons.at(0)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
@@ -2014,7 +2012,7 @@ void MainWindow::hide_quickcontrol(){
     }
     if(isRandomPlay==false){
         play_progress=templist.at(r);
-        playlist->setCurrentIndex(play_progress);
+        player->playlist->setCurrentIndex(play_progress);
         load_single_song(name_list.at(templist.at(r)));
         playlist_buttons.at(play_progress)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
     }
@@ -2022,7 +2020,7 @@ void MainWindow::hide_quickcontrol(){
         for(int i=0;i<random_seq.count();++i){
             if(random_seq.at(i)==templist.at(r)){
                 randomplay_progress=i;
-                playlist->setCurrentIndex(random_seq.at(i));
+                player->playlist->setCurrentIndex(random_seq.at(i));
                 load_single_song(name_list.at(random_seq.at(i)));
                 playlist_buttons.at(random_seq.at(i))->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
                 break;
@@ -2214,7 +2212,7 @@ void MainWindow::on_pushButton_playall_clicked()
     playlist_buttons.clear();
     playlist_singers_buttons.clear();
     name_list.clear();
-    playlist->clear();
+    player->playlist->clear();
 
     for(int i=0;i<songs_in_current_songlist_buttons.count();++i){
         name_list.append(songs_in_current_songlist_buttons.at(i)->text()+".mp3");
@@ -2227,7 +2225,7 @@ void MainWindow::on_pushButton_playall_clicked()
     font1.setPointSize(12);
     font2.setPointSize(8);
     for(int i=0;i<name_list.count();++i){
-        playlist->addMedia(QUrl(path+name_list.at(i)));
+        player->playlist->addMedia(QUrl(path+name_list.at(i)));
         QListPushButton* pb_temp=new QListPushButton(ui->scrollAreaWidgetContents);
         QListPushButton* pb_temp2=new QListPushButton(ui->scrollAreaWidgetContents);
         pb_temp->setGeometry(QRect(0,i*80+5,190,80));
@@ -2258,7 +2256,7 @@ void MainWindow::on_pushButton_playall_clicked()
     }
     ui->scrollAreaWidgetContents->setMinimumHeight(name_list.length()*80+5);
     play_progress=0;
-    playlist->setCurrentIndex(0);
+    player->playlist->setCurrentIndex(0);
     player->pause();
     load_single_song(name_list.at(0));
     playlist_buttons.at(0)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
