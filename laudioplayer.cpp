@@ -13,6 +13,7 @@ LAudioPlayer::LAudioPlayer(QObject *parent)
     timer->setInterval(NotifyInterval);
     connect(timer,SIGNAL(timeout()),this,SLOT(LUpdate()));
     connect(playlist,SIGNAL(currentMediaChanged(QMediaContent)),this,SLOT(LSetMedia(QMediaContent)));
+    connect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(setPlayerIndex(int)));
 
     qDebug()<<"create LAudioPlayer successfully!";
 }
@@ -52,6 +53,7 @@ void LAudioPlayer::LSetMedia(const QMediaContent &media){
     zplayer->Close();
     QString fileUrl=media.canonicalUrl().toString();
     zplayer->OpenFile(fileUrl.toLocal8Bit(),libZPlay::sfAutodetect);
+    this->LPlay();
 
     qDebug()<<"LSetMedia()!";
 }
@@ -97,4 +99,18 @@ void LAudioPlayer::LUpdate(){
 
 QMediaPlayer::State LAudioPlayer::LState(){
     return L_State;
+}
+
+QMediaContent LAudioPlayer::LCurrentMedia(){
+    return this->playlist->currentMedia();
+}
+
+void LAudioPlayer::LSetVolume(int v){
+    //zplayer->SetPlayerVolume(v,v);//有卡顿
+    zplayer->SetMasterVolume(v,v);
+}
+
+void LAudioPlayer::setPlayerIndex(int index){
+    qDebug()<<"setPlayerIndex()!";
+    this->LSetMedia(playlist->media(index));
 }

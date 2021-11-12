@@ -31,9 +31,13 @@ public Q_SLOTS:
 
     void LSetMedia(const QMediaContent &media);
     void LSetPlaylist(QMediaPlaylist *temp_playlist);
+    void LSetVolume(int);
 
     void LUpdate();
     State LState();
+    QMediaContent LCurrentMedia();
+private slots:
+    void setPlayerIndex(int);
 };
 
 #endif // LAUDIOPLAYER_H

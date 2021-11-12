@@ -78,9 +78,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QFont font1;
     font1.setPointSize(12);
 
-    player->play();//必须放在conncet的前面 否则程序将崩溃
+    player->LPlay();//必须放在conncet的前面 否则程序将崩溃
     connect(player,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(change_song(QMediaPlayer::MediaStatus)));
-    connect(player,SIGNAL(error(QMediaPlayer::Error)),this,SLOT(player_error(QMediaPlayer::Error)));
+    //connect(player,SIGNAL(error(QMediaPlayer::Error)),this,SLOT(player_error(QMediaPlayer::Error)));
 
     QIcon icon = QIcon(":/new/prefix1/icon.png");
     mSysTrayIcon->setIcon(icon);
@@ -953,11 +953,11 @@ void MainWindow::on_pushButton_play_clicked()
     write_log("name:"+name_list.at(play_progress));
     write_log("playlist.currentMedia:"+player->playlist->currentMedia().canonicalUrl().toString());
     write_log("\n");
-    if(player->state()==QMediaPlayer::PausedState){
-        player->play();
+    if(player->LState()==QMediaPlayer::PausedState){
+        player->LPlay();
     }
-    else if(player->state()==QMediaPlayer::PlayingState){
-        player->pause();
+    else if(player->LState()==QMediaPlayer::PlayingState){
+        player->LPause();
     }
 }
 
@@ -972,7 +972,7 @@ void MainWindow::on_horizontalSlider_sliderReleased()
 {
     player->setPosition(ui->horizontalSlider->value());
     ui->fakehorizontalSlider->setValue(ui->horizontalSlider->value());
-    player->play();
+    player->LPlay();
     disconnect(ui->horizontalSlider,SIGNAL(valueChanged(int)),this,SLOT(time_change_manual(int)));
     disconnect(ui->horizontalSlider,SIGNAL(valueChanged(int)),this,SLOT(time_change(int)));
     connect(player,SIGNAL(positionChanged(qint64)),this,SLOT(time_change(qint64)));
@@ -1148,7 +1148,7 @@ void MainWindow::QSliderProClicked(){
 
 void MainWindow::change_song(QMediaPlayer::MediaStatus status){
     qDebug()<<"MediaStatus:"<<status;
-    write_log("MediaStatus:\nnow playing:"+player->currentMedia().canonicalUrl().toString());
+    write_log("MediaStatus:\nnow playing:"+player->LCurrentMedia().canonicalUrl().toString());
     write_log("play_progress="+QString::number(play_progress));
     write_log("playlist.currentIndex="+QString::number(player->playlist->currentIndex()));
     write_log("name:"+name_list.at(play_progress));
@@ -1217,7 +1217,7 @@ void MainWindow::change_song(QMediaPlayer::MediaStatus status){
 
 void MainWindow::on_Slider_volume_valueChanged(int value)
 {
-    player->setVolume(value);
+    player->LSetVolume(value);
     ui->label_volume->setText(QString::number(value));
     QFont font(font_string,10);
     ui->label_volume->setFont(font);
@@ -1225,7 +1225,7 @@ void MainWindow::on_Slider_volume_valueChanged(int value)
 
 void MainWindow::SliderVolumeClicked(){
     int pos=ui->Slider_volume->value();
-    player->setVolume(pos);
+    player->LSetVolume(pos);
 }
 
 void MainWindow::on_pushButton_next_clicked()
@@ -1739,10 +1739,10 @@ void MainWindow::on_pushButton_refresh_clicked()
     ui->scrollAreaWidgetContents->setMinimumHeight(name_list.length()*80+5);
     play_progress=0;
     player->playlist->setCurrentIndex(0);
-    player->pause();
+    player->LPause();
     load_single_song(name_list.at(0));
     playlist_buttons.at(0)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
-    player->play();
+    player->LPlay();
 }
 
 void MainWindow::on_pushButton_settings_clicked()
@@ -1827,7 +1827,7 @@ void MainWindow::read_userdata(){
         }
     }
 
-    if(isAutoPlay==false) player->pause();
+    if(isAutoPlay==false) player->LPause();
     if(isAutoShowDesktopLyric==true){
         dd.show();
         ui->pushButton_DesktopLyric->setStyleSheet("background-color: rgba(0,0,0,0);\ncolor:"+conf.theme_color+";");
@@ -2257,11 +2257,11 @@ void MainWindow::on_pushButton_playall_clicked()
     ui->scrollAreaWidgetContents->setMinimumHeight(name_list.length()*80+5);
     play_progress=0;
     player->playlist->setCurrentIndex(0);
-    player->pause();
+    player->LPause();
     load_single_song(name_list.at(0));
     playlist_buttons.at(0)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
     songlist_buttons.at(current_songlist_seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
-    player->play();
+    player->LPlay();
 }
 
 void MainWindow::on_pushButton_allmusic_clicked()
