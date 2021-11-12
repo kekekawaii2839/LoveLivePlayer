@@ -681,7 +681,7 @@ background-color: rgba(228, 0, 127, 0);</string>
      <widget class="QWidget" name="widget_cover_shadow" native="true">
       <property name="geometry">
        <rect>
-        <x>47</x>
+        <x>48</x>
         <y>28</y>
         <width>244</width>
         <height>244</height>
@@ -1220,7 +1220,7 @@ color:black;</string>
          <rect>
           <x>50</x>
           <y>30</y>
-          <width>120</width>
+          <width>200</width>
           <height>50</height>
          </rect>
         </property>
@@ -1294,7 +1294,7 @@ color:black;</string>
        <widget class="QPushButton" name="pushButton_playall">
         <property name="geometry">
          <rect>
-          <x>240</x>
+          <x>270</x>
           <y>40</y>
           <width>93</width>
           <height>28</height>
@@ -1373,7 +1373,7 @@ color:black;</string>
           <set>Qt::AlignCenter</set>
          </property>
         </widget>
-        <widget class="QPushButton" name="pushButton_mylike">
+        <widget class="QListPushButton" name="pushButton_mylike">
          <property name="geometry">
           <rect>
            <x>15</x>
@@ -1389,7 +1389,7 @@ color:black;</string>
           </font>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+          <string notr="true"/>
          </property>
          <property name="text">
           <string>我喜欢</string>
@@ -1408,7 +1408,8 @@ color:black;</string>
           </rect>
          </property>
          <property name="styleSheet">
-          <string notr="true">border-image: url(:/new/prefix1/like.png);</string>
+          <string notr="true">border-image: url(:/new/prefix1/like.png);
+background-color: rgba(0,0,0,0);</string>
          </property>
          <property name="text">
           <string/>
@@ -1424,13 +1425,14 @@ color:black;</string>
           </rect>
          </property>
          <property name="styleSheet">
-          <string notr="true">border-image: url(:/new/prefix1/note.png);</string>
+          <string notr="true">border-image: url(:/new/prefix1/note.png);
+background-color: rgba(0,0,0,0);</string>
          </property>
          <property name="text">
           <string/>
          </property>
         </widget>
-        <widget class="QPushButton" name="pushButton_allmusic">
+        <widget class="QListPushButton" name="pushButton_allmusic">
          <property name="geometry">
           <rect>
            <x>15</x>
@@ -1446,7 +1448,7 @@ color:black;</string>
           </font>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+          <string notr="true"/>
          </property>
          <property name="text">
           <string>    全部音乐</string>
@@ -1455,11 +1457,11 @@ color:black;</string>
           <bool>true</bool>
          </property>
         </widget>
+        <zorder>pushButton_mylike</zorder>
+        <zorder>pushButton_allmusic</zorder>
         <zorder>label_mylike_icon</zorder>
         <zorder>label_mymusic</zorder>
-        <zorder>pushButton_mylike</zorder>
         <zorder>label_allmusic_icon</zorder>
-        <zorder>pushButton_allmusic</zorder>
        </widget>
        <widget class="QGroupBox" name="groupBox_mysonglists">
         <property name="geometry">
@@ -1500,6 +1502,19 @@ color:black;</string>
         </widget>
        </widget>
       </widget>
+     </widget>
+     <widget class="Line" name="line_5">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>0</y>
+        <width>3</width>
+        <height>390</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
      </widget>
     </widget>
     <zorder>widget_songlist</zorder>
@@ -1703,6 +1718,11 @@ color:black;</string>
    <extends>QWidget</extends>
    <header location="global">qclickwidget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QListPushButton</class>
+   <extends>QPushButton</extends>
+   <header>qlistpushbutton.h</header>
   </customwidget>
  </customwidgets>
  <resources>

@@ -33,7 +33,8 @@ SOURCES += \
     scrolllabel.cpp \
     desktoplyricwindow.cpp \
     quickselect.cpp \
-    qclickwidget.cpp
+    qclickwidget.cpp \
+    laudioplayer.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -46,7 +47,8 @@ HEADERS += \
     desktoplyricwindow.h \
     globalvariable.h \
     quickselect.h \
-    qclickwidget.h
+    qclickwidget.h \
+    laudioplayer.h
 
 FORMS += \
         mainwindow.ui \

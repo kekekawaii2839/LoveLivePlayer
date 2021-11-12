@@ -31,6 +31,7 @@
 #include <QAction>
 #include <QScrollBar>
 #include <QPropertyAnimation>
+#include <QMessageBox>
 
 namespace Ui {
 class MainWindow;
@@ -105,6 +106,10 @@ private slots:
     void songlist_buttons_clicked(int);
     void songs_in_current_songlist_buttons_clicked(int);
     void on_pushButton_playall_clicked();
+    void on_pushButton_allmusic_clicked();
+    void on_pushButton_mylike_clicked();
+    void write_log(QString);
+    void player_error(QMediaPlayer::Error);
 };
 
 #endif // MAINWINDOW_H
