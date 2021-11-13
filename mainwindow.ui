@@ -371,7 +371,6 @@ background-color: rgba(228, 0, 127, 0);</string>
      </property>
      <property name="font">
       <font>
-       <family>汉仪文黑-85W</family>
        <pointsize>11</pointsize>
        <weight>50</weight>
        <bold>false</bold>
@@ -503,7 +502,6 @@ background-color: rgba(228, 0, 127, 0);</string>
          </property>
          <property name="font">
           <font>
-           <family>汉仪文黑-85W</family>
            <pointsize>11</pointsize>
           </font>
          </property>
@@ -522,7 +520,6 @@ background-color: rgba(228, 0, 127, 0);</string>
          </property>
          <property name="font">
           <font>
-           <family>汉仪文黑-85W</family>
            <pointsize>11</pointsize>
           </font>
          </property>
@@ -560,7 +557,6 @@ background-color: rgba(228, 0, 127, 0);</string>
          </property>
          <property name="font">
           <font>
-           <family>汉仪文黑-85W</family>
            <pointsize>11</pointsize>
           </font>
          </property>
@@ -579,7 +575,6 @@ background-color: rgba(228, 0, 127, 0);</string>
          </property>
          <property name="font">
           <font>
-           <family>汉仪文黑-85W</family>
            <pointsize>11</pointsize>
           </font>
          </property>
@@ -598,7 +593,6 @@ background-color: rgba(228, 0, 127, 0);</string>
          </property>
          <property name="font">
           <font>
-           <family>汉仪文黑-85W</family>
            <pointsize>11</pointsize>
           </font>
          </property>
@@ -636,7 +630,6 @@ background-color: rgba(228, 0, 127, 0);</string>
          </property>
          <property name="font">
           <font>
-           <family>汉仪文黑-85W</family>
            <pointsize>11</pointsize>
           </font>
          </property>
@@ -655,7 +648,6 @@ background-color: rgba(228, 0, 127, 0);</string>
          </property>
          <property name="font">
           <font>
-           <family>汉仪文黑-85W</family>
            <pointsize>11</pointsize>
           </font>
          </property>
@@ -718,7 +710,6 @@ border-right:7px solid qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:0,stop:0 rgb
       </property>
       <property name="font">
        <font>
-        <family>汉仪文黑-85W</family>
         <pointsize>10</pointsize>
        </font>
       </property>
@@ -769,7 +760,6 @@ background-color:rgba(0,0,0,0);</string>
       </property>
       <property name="font">
        <font>
-        <family>汉仪文黑-85W</family>
         <pointsize>13</pointsize>
        </font>
       </property>
@@ -798,7 +788,6 @@ background-color:rgba(0,0,0,0);</string>
       </property>
       <property name="font">
        <font>
-        <family>汉仪文黑-85W</family>
         <pointsize>11</pointsize>
        </font>
       </property>
@@ -827,7 +816,6 @@ background-color:rgba(0,0,0,0);</string>
       </property>
       <property name="font">
        <font>
-        <family>汉仪文黑-85W</family>
         <pointsize>11</pointsize>
        </font>
       </property>
@@ -864,7 +852,6 @@ background-color:rgba(0,0,0,0);</string>
       </property>
       <property name="font">
        <font>
-        <family>汉仪文黑-85W</family>
         <pointsize>11</pointsize>
        </font>
       </property>
@@ -901,7 +888,6 @@ background-color:rgba(0,0,0,0);</string>
       </property>
       <property name="font">
        <font>
-        <family>汉仪文黑-85W</family>
         <pointsize>11</pointsize>
        </font>
       </property>
@@ -963,11 +949,6 @@ background-color:rgba(0,0,0,0);</string>
         <width>35</width>
         <height>16</height>
        </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>汉仪文黑-85W</family>
-       </font>
       </property>
       <property name="text">
        <string>100</string>
@@ -1092,7 +1073,6 @@ color:black;</string>
       </property>
       <property name="font">
        <font>
-        <family>汉仪文黑-85W</family>
         <pointsize>11</pointsize>
        </font>
       </property>
@@ -1226,7 +1206,6 @@ color:black;</string>
         </property>
         <property name="font">
          <font>
-          <family>汉仪文黑-85W</family>
           <pointsize>20</pointsize>
          </font>
         </property>
@@ -1258,7 +1237,6 @@ color:black;</string>
         </property>
         <property name="font">
          <font>
-          <family>汉仪文黑-85W</family>
           <pointsize>15</pointsize>
          </font>
         </property>
@@ -1280,7 +1258,6 @@ color:black;</string>
         </property>
         <property name="font">
          <font>
-          <family>汉仪文黑-85W</family>
           <pointsize>15</pointsize>
          </font>
         </property>
@@ -1362,7 +1339,6 @@ color:black;</string>
          </property>
          <property name="font">
           <font>
-           <family>汉仪文黑-85W</family>
            <pointsize>9</pointsize>
           </font>
          </property>
@@ -1384,7 +1360,6 @@ color:black;</string>
          </property>
          <property name="font">
           <font>
-           <family>汉仪文黑-85W</family>
            <pointsize>11</pointsize>
           </font>
          </property>
@@ -1443,7 +1418,6 @@ background-color: rgba(0,0,0,0);</string>
          </property>
          <property name="font">
           <font>
-           <family>汉仪文黑-85W</family>
            <pointsize>11</pointsize>
           </font>
          </property>
@@ -1489,7 +1463,6 @@ background-color: rgba(0,0,0,0);</string>
          </property>
          <property name="font">
           <font>
-           <family>汉仪文黑-85W</family>
            <pointsize>9</pointsize>
           </font>
          </property>
@@ -1553,11 +1526,6 @@ background-color: rgba(0,0,0,0);</string>
        <width>210</width>
        <height>80</height>
       </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>汉仪文黑-85W</family>
-      </font>
      </property>
      <property name="text">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;播放列表&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#a3a3a3;&quot;&gt;共0首歌曲&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -1644,7 +1612,6 @@ background-color: rgba(0,0,0,0);</string>
      </property>
      <property name="font">
       <font>
-       <family>汉仪文黑-85W</family>
        <pointsize>10</pointsize>
       </font>
      </property>

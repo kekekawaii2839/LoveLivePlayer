@@ -7,6 +7,9 @@
 #include <QDebug>
 #include <QTimer>
 
+#include <windows.h>
+#include <QtWinExtras/QtWin>
+#include <gdiplus.h>
 #include "libzplay.h"
 
 class LAudioPlayer:public QMediaPlayer
@@ -32,12 +35,17 @@ public Q_SLOTS:
     void LSetMedia(const QMediaContent &media);
     void LSetPlaylist(QMediaPlaylist *temp_playlist);
     void LSetVolume(int);
+    void LSetPosition(int);
 
     void LUpdate();
     State LState();
     QMediaContent LCurrentMedia();
+
+    void SaveHDCToFile(libZPlay::TID3InfoExW, HWND);
 private slots:
     void setPlayerIndex(int);
+signals:
+    AlbumPicReady();
 };
 
 #endif // LAUDIOPLAYER_H

@@ -45,3 +45,8 @@ void QListPushButton::setStyleSheet(const QString &styleSheet,int mode){
         ori_stylesheet=styleSheet;
     }
 }
+
+void QListPushButton::setStyleSheet(const QString &styleSheet){
+    QPushButton::setStyleSheet(styleSheet);
+    ori_stylesheet=styleSheet;
+}

@@ -4,10 +4,6 @@
 #include "qsliderpro.h"
 #include "qlistpushbutton.h"
 #include "qclickwidget.h"
-#include "libzplay.h"
-#include <windows.h>
-#include <QtWinExtras/QtWin>
-#include <gdiplus.h>
 #include "globalvariable.h"
 #include "laudioplayer.h"
 
@@ -65,7 +61,7 @@ private slots:
     void time_change(qint64);
     void time_change(int);
     void get_duration(qint64);
-    void SaveHDCToFile(libZPlay::TID3InfoExW);
+    //void SaveHDCToFile(libZPlay::TID3InfoExW);
     bool read_lyric(QString,int);
     void on_pushButton_lyric_clicked();
     //void on_pushButton_play_clicked();
@@ -94,7 +90,7 @@ private slots:
     void on_pushButton_settings_return_clicked();
     void show_player();
     void show_player_next();
-    //bool eventFilter(QObject* object, QEvent* event);
+    bool eventFilter(QObject* object, QEvent* event);
     void on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason);
     void on_action_exit_triggered();
     void on_checkBox_isAutoPlay_clicked(bool checked);
@@ -111,6 +107,7 @@ private slots:
     void on_pushButton_mylike_clicked();
     void write_log(QString);
     void player_error(QMediaPlayer::Error);
+    void ShowAlbumPic();
 };
 
 #endif // MAINWINDOW_H

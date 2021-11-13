@@ -7,7 +7,6 @@ LAudioPlayer::LAudioPlayer(QObject *parent)
     playlist=new QMediaPlaylist();
     last_duration=-1;
     duration=-1;
-    //this->setMuted(true);
 
     timer=new QTimer();
     timer->setInterval(NotifyInterval);
@@ -25,7 +24,7 @@ void LAudioPlayer::LPlay(){
     L_State=QMediaPlayer::PlayingState;
     emit stateChanged(L_State);
 
-    qDebug()<<"LPlay()!";
+    //qDebug()<<"LPlay()!";
 }
 
 void LAudioPlayer::LPause(){
@@ -35,7 +34,7 @@ void LAudioPlayer::LPause(){
     L_State=QMediaPlayer::PausedState;
     emit stateChanged(L_State);
 
-    qDebug()<<"LPause()!";
+    //qDebug()<<"LPause()!";
 }
 
 void LAudioPlayer::LStop(){
@@ -45,17 +44,22 @@ void LAudioPlayer::LStop(){
     L_State=QMediaPlayer::StoppedState;
     emit stateChanged(L_State);
 
-    qDebug()<<"LStop()!";
+    //qDebug()<<"LStop()!";
 }
 
 void LAudioPlayer::LSetMedia(const QMediaContent &media){
     //this->setMedia(media,stream);
     zplayer->Close();
     QString fileUrl=media.canonicalUrl().toString();
-    zplayer->OpenFile(fileUrl.toLocal8Bit(),libZPlay::sfAutodetect);
+    wchar_t* wstr=new wchar_t[1024];
+    for(int i=0;i<1024;++i){
+        wstr[i]=0;
+    }
+    fileUrl.toWCharArray(wstr);
+    zplayer->OpenFileW(wstr,libZPlay::sfAutodetect);
     this->LPlay();
 
-    qDebug()<<"LSetMedia()!";
+    //qDebug()<<"LSetMedia()!";
 }
 
 void LAudioPlayer::LSetPlaylist(QMediaPlaylist *temp_playlist){
@@ -63,7 +67,7 @@ void LAudioPlayer::LSetPlaylist(QMediaPlaylist *temp_playlist){
     this->LSetMedia(playlist->currentMedia());
     this->LPlay();
 
-    qDebug()<<"LSetPlaylist()!";
+    //qDebug()<<"LSetPlaylist()!";
 }
 
 void LAudioPlayer::LUpdate(){
@@ -75,14 +79,14 @@ void LAudioPlayer::LUpdate(){
     //qDebug()<<"pos.ms="<<pos.ms;
     //qDebug()<<"duration="<<duration;
     if(pos.ms+100>=duration&&duration!=0){//zplayer的pos最小间隔貌似是50ms,而且最后一个应该更新的pos反而不更新
-        qDebug()<<"end!";
+        //qDebug()<<"end!";
         last_duration=0;
         duration=0;
         L_MediaStatus=QMediaPlayer::EndOfMedia;
         emit mediaStatusChanged(L_MediaStatus);
     }
     if(duration==-1){//一开始CurrentIndex=-1
-        playlist->setCurrentIndex(playlist->nextIndex());
+        playlist->setCurrentIndex(0);
         this->LSetMedia(playlist->currentMedia());
         this->LPlay();
     }
@@ -111,6 +115,48 @@ void LAudioPlayer::LSetVolume(int v){
 }
 
 void LAudioPlayer::setPlayerIndex(int index){
-    qDebug()<<"setPlayerIndex()!";
+    //qDebug()<<"setPlayerIndex()!";
     this->LSetMedia(playlist->media(index));
+}
+
+void LAudioPlayer::LSetPosition(int pos){
+    libZPlay::TStreamTime currentTime;
+    zplayer->GetPosition(&currentTime);
+
+    libZPlay::TStreamTime setTime;
+
+    if(pos>currentTime.ms){
+        setTime.ms=pos-currentTime.ms;
+        zplayer->Seek(libZPlay::tfMillisecond,&setTime,libZPlay::smFromCurrentForward);
+    }
+    else if(pos<currentTime.ms){
+        setTime.ms=currentTime.ms-pos;
+        zplayer->Seek(libZPlay::tfMillisecond,&setTime,libZPlay::smFromCurrentBackward);
+    }
+    else return;
+
+    emit positionChanged(pos);
+
+    //qDebug()<<"LSetPosition()!"<<"  pos="<<pos<<"  currentTime.ms="<<currentTime.ms<<"  setTime.ms="<<setTime.ms;
+}
+
+void LAudioPlayer::SaveHDCToFile(libZPlay::TID3InfoExW id3_info,HWND hwnd){
+    libZPlay::TID3PictureW pic;
+    HDC hdc=GetDC(hwnd);
+    HDC memDc=CreateCompatibleDC(hdc);
+    HBITMAP hBmp=CreateCompatibleBitmap(hdc,id3_info.Picture.Width,id3_info.Picture.Height);
+    SelectObject(memDc,hBmp);
+
+    pic=id3_info.Picture;
+    zplayer->DrawBitmapToHDC(memDc,0,0,id3_info.Picture.Width,id3_info.Picture.Height,id3_info.Picture.hBitmap);
+
+    QPixmap pixmap=QtWin::fromHBITMAP(hBmp,QtWin::HBitmapNoAlpha);
+    QImage img=pixmap.toImage();
+    img.save("album.png","PNG",100);
+    SelectObject(memDc,(HBITMAP)NULL);
+    DeleteDC(memDc);
+    DeleteObject(hBmp);
+    DeleteDC(hdc);
+
+    emit AlbumPicReady();
 }

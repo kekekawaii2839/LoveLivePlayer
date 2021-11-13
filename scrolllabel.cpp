@@ -1,11 +1,12 @@
 ﻿#include "scrolllabel.h"
 
 #include <QPainter>
+#include <QDebug>
 
 ScrollLabel::ScrollLabel(QWidget* parent)
 {
     this->setParent(parent);
-    this->startTimer(100);
+    timerid=this->startTimer(10);
 }
 
 void ScrollLabel::paintEvent(QPaintEvent *event){
@@ -23,7 +24,6 @@ void ScrollLabel::timerEvent(QTimerEvent *event){
     if(fontMetrics().width(text())<width()){//无需滚动的时候则是普通的Label
         m_strDrawText=text();
         m_nCurrentIndex=0;
-        update();
         return;
     }
 
@@ -41,6 +41,7 @@ void ScrollLabel::timerEvent(QTimerEvent *event){
     m_nCurrentIndex++;
     if(m_nCurrentIndex==m_nTextWidth){
         m_nCurrentIndex=0;
+        m_strDrawText="";
     }
 
     update();

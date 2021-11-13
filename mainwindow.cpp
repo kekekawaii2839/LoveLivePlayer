@@ -42,7 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowFlags(Qt::FramelessWindowHint);//删除主窗口标题
     setMouseTracking(true);
     //setFocusPolicy(Qt::StrongFocus);
-    //installEventFilter(this);//安装事件过滤器
+    installEventFilter(this);//安装事件过滤器
 
     QGraphicsDropShadowEffect* shadow=new QGraphicsDropShadowEffect(this);
     shadow->setOffset(0, 0);
@@ -74,6 +74,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->horizontalSlider,SIGNAL(clicked()),this,SLOT(QSliderProClicked()));
     connect(ui->Slider_volume,SIGNAL(clicked()),this,SLOT(SliderVolumeClicked()));
     connect(player,SIGNAL(stateChanged(QMediaPlayer::State)),this,SLOT(player_state_change(QMediaPlayer::State)));
+    connect(player,SIGNAL(AlbumPicReady()),this,SLOT(ShowAlbumPic()));
 
     QFont font1;
     font1.setPointSize(12);
@@ -767,7 +768,7 @@ void MainWindow::get_duration(qint64 time){
     qDebug()<<"got duration:"<<duration;
 }
 
-void MainWindow::SaveHDCToFile(libZPlay::TID3InfoExW id3_info){
+/*void MainWindow::SaveHDCToFile(libZPlay::TID3InfoExW id3_info){
     libZPlay::TID3PictureW pic;
     HDC hdc=GetDC(hwnd);
     HDC memDc=CreateCompatibleDC(hdc);
@@ -784,7 +785,7 @@ void MainWindow::SaveHDCToFile(libZPlay::TID3InfoExW id3_info){
     DeleteDC(memDc);
     DeleteObject(hBmp);
     DeleteDC(hdc);
-}
+}*/
 
 bool MainWindow::read_lyric(QString path,int mode){
     if(mode==0){//原文
@@ -970,7 +971,7 @@ void MainWindow::on_horizontalSlider_sliderPressed()
 
 void MainWindow::on_horizontalSlider_sliderReleased()
 {
-    player->setPosition(ui->horizontalSlider->value());
+    player->LSetPosition(ui->horizontalSlider->value());
     ui->fakehorizontalSlider->setValue(ui->horizontalSlider->value());
     player->LPlay();
     disconnect(ui->horizontalSlider,SIGNAL(valueChanged(int)),this,SLOT(time_change_manual(int)));
@@ -1008,7 +1009,9 @@ void MainWindow::get_meta(QString path,bool isNeedAlbumCover){
     path.toWCharArray(wstr);
     if(zplayer->OpenFileW(wstr,libZPlay::sfAutodetect)){
         if(zplayer->LoadID3ExW(&id3_info,1)){
-            if(isNeedAlbumCover==true) SaveHDCToFile(id3_info);
+            if(isNeedAlbumCover==true){
+                player->SaveHDCToFile(id3_info,hwnd);
+            }
             title=QString::fromWCharArray(id3_info.Title);
             artist=QString::fromWCharArray(id3_info.Artist);
             album=QString::fromWCharArray(id3_info.Album);
@@ -1029,11 +1032,6 @@ void MainWindow::get_meta(QString path,bool isNeedAlbumCover){
         ui->label_info_title->setText(adjust_text_overlength(title,ui->label_info_title,1));
         ui->label_info_artist->setText(adjust_text_overlength("歌手："+artist,ui->label_info_artist,1));
         ui->label_info_album->setText(adjust_text_overlength("专辑："+album,ui->label_info_album,1));
-    }
-    //读取封面并显示
-    if(isNeedAlbumCover==true){
-        ui->widget_cover->setStyleSheet("border-image:url("+QApplication::applicationDirPath()+"/album.png);");
-        ui->fakewidget_cover->setStyleSheet("border-image:url("+QApplication::applicationDirPath()+"/album.png);");
     }
 }
 
@@ -1088,7 +1086,7 @@ void MainWindow::load_single_song(QString name){
     //以下是更改设置中滚动标题的内容
     QString info=title+" - "+artist+"  ";
     ui->label_settings_info->setText(info);
-    ui->label_settings_info->setInterVal(100);
+    ui->label_settings_info->setInterVal(10);
 
     //以下是调整播放列表滚动条的值
     if(isRandomPlay==false){
@@ -1142,7 +1140,7 @@ void MainWindow::load_single_song(QString name){
 void MainWindow::QSliderProClicked(){
     int pos=ui->horizontalSlider->value();
     disconnect(player,SIGNAL(positionChanged(qint64)),this,SLOT(time_change(qint64)));
-    player->setPosition(pos);
+    player->LSetPosition(pos);
     connect(player,SIGNAL(positionChanged(qint64)),this,SLOT(time_change(qint64)));
 }
 
@@ -1156,7 +1154,7 @@ void MainWindow::change_song(QMediaPlayer::MediaStatus status){
     write_log("\n");
     if(status==QMediaPlayer::EndOfMedia){
         if(player->playlist->playbackMode()==QMediaPlaylist::CurrentItemInLoop){
-
+            player->LPlay();
         }
         else if(player->playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==false){
             for(int i=0;i<200;++i){
@@ -1655,10 +1653,12 @@ void MainWindow::get_config(QString id){
         groupboxes.removeFirst();
     }
     if(conf.member.count()>1){//.config文件最后有一个空的换行导致conf.member至少有一个元素
+        int up_margin=(ui->widget_examples->height()-qRound(conf.member.count()*1.0/2)*50)/2;
+        if(up_margin<0) up_margin=0;
         QFont font(font_string,10);
         for(int i=0;i<conf.num;++i){
             QGroupBox* tempbox=new QGroupBox(ui->widget_examples);
-            tempbox->setGeometry(QRect((i-i/2*2)*120,i/2*50,120,50));
+            tempbox->setGeometry(QRect((i-i/2*2)*120,i/2*50+up_margin,120,50));
             tempbox->setStyleSheet("border:0px;");
             QLabel* tempblock=new QLabel(tempbox);
             tempblock->setGeometry(QRect(10,12,10,10));
@@ -1879,15 +1879,16 @@ void MainWindow::show_player_next(){
     ui->widget_songlist->setGeometry(QRect(0,100,0,390));
 }
 
-/*bool MainWindow::eventFilter(QObject* object, QEvent* event){
-    if(event->type()==QEvent::KeyPress){
-        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
-        if(keyEvent->key()==Qt::Key_Space){
-            this->on_pushButton_play_clicked();
+bool MainWindow::eventFilter(QObject* object, QEvent* event){
+    if(event->type()==QEvent::MouseButtonPress){
+        if(object!=ui->widget_playlist
+                &&object!=ui->pushButton_hideplaylist
+                &&object!=ui->pushButton_playlist){
+            if(isPlaylistShowing==true) on_pushButton_hideplaylist_clicked();
         }
     }
     return false;
-}*/
+}
 
 void MainWindow::on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason reason){
     switch(reason){
@@ -2400,4 +2401,9 @@ void MainWindow::player_error(QMediaPlayer::Error e){
     else if(e==QMediaPlayer::AccessDeniedError) qDebug()<<"AccessDeniedError";
     else if(e==QMediaPlayer::ServiceMissingError) qDebug()<<"ServiceMissingError";
     else if(e==QMediaPlayer::MediaIsPlaylist) qDebug()<<"MediaIsPlaylist";
+}
+
+void MainWindow::ShowAlbumPic(){
+    ui->widget_cover->setStyleSheet("border-image:url("+QApplication::applicationDirPath()+"/album.png);");
+    ui->fakewidget_cover->setStyleSheet("border-image:url("+QApplication::applicationDirPath()+"/album.png);");
 }
