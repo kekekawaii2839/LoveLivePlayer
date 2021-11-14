@@ -443,7 +443,7 @@ background-color: rgba(228, 0, 127, 0);</string>
        <string/>
       </property>
      </widget>
-     <widget class="QScrollArea" name="scrollArea_settings">
+     <widget class="AnimatedScrollArea" name="scrollArea_settings">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -653,6 +653,61 @@ background-color: rgba(228, 0, 127, 0);</string>
          </property>
          <property name="text">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#7e7e7e;&quot;&gt;快速切歌&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_settings_log">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>298</y>
+          <width>850</width>
+          <height>80</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">#groupBox_settings_log{
+    border-top:1px solid rgb(220,220,220);
+    border-bottom:1px solid rgb(220,220,220);
+}</string>
+        </property>
+        <property name="title">
+         <string/>
+        </property>
+        <widget class="QCheckBox" name="checkBox_log">
+         <property name="geometry">
+          <rect>
+           <x>160</x>
+           <y>30</y>
+           <width>121</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>开启</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_settings_log">
+         <property name="geometry">
+          <rect>
+           <x>30</x>
+           <y>30</y>
+           <width>72</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#7e7e7e;&quot;&gt;日志文件&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </widget>
@@ -1174,7 +1229,7 @@ color:black;</string>
        <height>390</height>
       </rect>
      </property>
-     <widget class="QScrollArea" name="scrollArea_songlist_detail">
+     <widget class="AnimatedScrollArea" name="scrollArea_songlist_detail">
       <property name="geometry">
        <rect>
         <x>200</x>
@@ -1286,7 +1341,7 @@ color:black;</string>
        </widget>
       </widget>
      </widget>
-     <widget class="QScrollArea" name="scrollArea_songlists">
+     <widget class="AnimatedScrollArea" name="scrollArea_songlists">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -1544,7 +1599,7 @@ background-color: rgba(0,0,0,0);</string>
       <enum>Qt::Vertical</enum>
      </property>
     </widget>
-    <widget class="QScrollArea" name="scrollArea">
+    <widget class="AnimatedScrollArea" name="scrollArea">
      <property name="geometry">
       <rect>
        <x>1</x>
@@ -1690,6 +1745,12 @@ background-color: rgba(0,0,0,0);</string>
    <class>QListPushButton</class>
    <extends>QPushButton</extends>
    <header>qlistpushbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>AnimatedScrollArea</class>
+   <extends>QScrollArea</extends>
+   <header>animatedscrollarea.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

@@ -1164,10 +1164,17 @@ void MainWindow::change_song(QMediaPlayer::MediaStatus status){
                 playlist_buttons.at(i)->show();
             }
 
-            qDebug()<<"current_songlist_seq:"<<current_songlist_seq;
-            if(current_songlist_seq==-2) ui->pushButton_allmusic->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
-            else if(current_songlist_seq==-1) ui->pushButton_mylike->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
-            else songlist_buttons.at(current_songlist_seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
+            //qDebug()<<"current_songlist_seq:"<<current_songlist_seq;
+            if(current_songlist_seq==-2){
+                ui->pushButton_allmusic->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
+
+            }
+            else if(current_songlist_seq==-1){
+                ui->pushButton_mylike->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
+            }
+            else if(current_songlist_seq>=0){
+                songlist_buttons.at(current_songlist_seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
+            }
         }
         else if(player->playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==true){
             for(int i=0;i<200;++i){
@@ -1231,9 +1238,16 @@ void MainWindow::on_pushButton_next_clicked()
         for(int i=0;i<playlist_buttons.count();++i){
             playlist_buttons.at(i)->show();
         }
-        if(current_songlist_seq==-2) ui->pushButton_allmusic->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
-        else if(current_songlist_seq==-1) ui->pushButton_mylike->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
-        else songlist_buttons.at(current_songlist_seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
+        if(current_songlist_seq==-2){
+            ui->pushButton_allmusic->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
+
+        }
+        else if(current_songlist_seq==-1){
+            ui->pushButton_mylike->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
+        }
+        else if(current_songlist_seq>=0){
+            songlist_buttons.at(current_songlist_seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
+        }
     }
     else if(player->playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==true){
         if(randomplay_progress+1==name_list.count()){
@@ -1252,9 +1266,16 @@ void MainWindow::on_pushButton_next_clicked()
         for(int i=0;i<playlist_buttons.count();++i){
             playlist_buttons.at(i)->show();
         }
-        if(current_songlist_seq==-2) ui->pushButton_allmusic->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
-        else if(current_songlist_seq==-1) ui->pushButton_mylike->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
-        else songlist_buttons.at(current_songlist_seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
+        if(current_songlist_seq==-2){
+            ui->pushButton_allmusic->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
+
+        }
+        else if(current_songlist_seq==-1){
+            ui->pushButton_mylike->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
+        }
+        else if(current_songlist_seq>=0){
+            songlist_buttons.at(current_songlist_seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
+        }
     }
     ui->pushButton_lyric->setText("");
     dd.ui->pushButton_lyric->setText("");
@@ -1456,9 +1477,16 @@ void MainWindow::on_pushButton_last_clicked()
             playlist_buttons.at(i)->show();
         }
     }
-    if(current_songlist_seq==-2) ui->pushButton_allmusic->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
-    else if(current_songlist_seq==-1) ui->pushButton_mylike->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
-    else songlist_buttons.at(current_songlist_seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
+    if(current_songlist_seq==-2){
+        ui->pushButton_allmusic->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
+
+    }
+    else if(current_songlist_seq==-1){
+        ui->pushButton_mylike->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
+    }
+    else if(current_songlist_seq>=0){
+        songlist_buttons.at(current_songlist_seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
+    }
     ui->pushButton_lyric->setText("");
     dd.ui->pushButton_lyric->setText("");
     ui->label_singers->setText("");
@@ -1542,6 +1570,9 @@ void MainWindow::on_pushButton_close_clicked()
         if(current_songlist_seq==-2) temp+="allmusic\n";
         else if(current_songlist_seq==-1) temp+="likes.llist\n";
         else temp+=songlist.at(current_songlist_seq)+"\n";
+
+        if(isLog==false) temp+="0\n";
+        else temp+="1\n";
 
         data.write(temp.toUtf8());
     }
@@ -1781,6 +1812,7 @@ void MainWindow::read_userdata(){
     //第七行表示上次退出程序时所处的播放模式 0循环 1单曲循环 2随机
     //第八行表示上次退出程序时正在播放的音频所处的播放列表index
     //第九行表示上次退出程序时主页显示的歌单
+    //第十行表示是否记录日志文件
     int index=0,playmode=0;
     QString last_songlist;
     QFile data(QApplication::applicationDirPath()+"/resources/userdata");
@@ -1799,6 +1831,8 @@ void MainWindow::read_userdata(){
         playmode=list.at(6).toInt();
         index=list.at(7).toInt();
         last_songlist=list.at(8);
+
+        isLog=list.at(9).toInt();
     }
     data.close();
     if(isAutoPlay==true){
@@ -1818,6 +1852,9 @@ void MainWindow::read_userdata(){
     }
     if(isQuickSelect==true){
         ui->checkBox_quickselect->setCheckState(Qt::Checked);
+    }
+    if(isLog==true){
+        ui->checkBox_log->setCheckState(Qt::Checked);
     }
 
     if(last_songlist=="allmusic") on_pushButton_allmusic_clicked();
@@ -1859,7 +1896,7 @@ void MainWindow::read_userdata(){
         QStringList tt=c.split("\n");
         for(int i=0;i<tt.count();++i){
             if(tt.at(i)!="") name_list.append(tt.at(i));
-            qDebug()<<"tt.at(i)="<<tt.at(i);
+            //qDebug()<<"tt.at(i)="<<tt.at(i);
         }
     }
 
@@ -1906,7 +1943,16 @@ void MainWindow::read_userdata(){
     //player->LPause();
     load_single_song(name_list.at(index));
     playlist_buttons.at(index)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
-    songlist_buttons.at(current_songlist_seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
+    if(current_songlist_seq==-2){
+        ui->pushButton_allmusic->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
+
+    }
+    else if(current_songlist_seq==-1){
+        ui->pushButton_mylike->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
+    }
+    else if(current_songlist_seq>=0){
+        songlist_buttons.at(current_songlist_seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
+    }
     player->LPlay();
 
     if(isAutoPlay==false) player->LPause();
@@ -2153,7 +2199,7 @@ void MainWindow::on_pushButton_hideplaylist_clicked()
 {
     QPropertyAnimation* hide_playlist=new QPropertyAnimation(ui->widget_playlist,"geometry");
     hide_playlist->setDuration(1000);
-    hide_playlist->setStartValue(QRect(840,10,220,580));
+    hide_playlist->setStartValue(ui->widget_playlist->geometry());
     hide_playlist->setEndValue(QRect(1061,10,0,580));
     hide_playlist->setEasingCurve(QEasingCurve::OutQuart);
     hide_playlist->start();
@@ -2343,12 +2389,22 @@ void MainWindow::on_pushButton_playall_clicked()
     player->LPause();
     load_single_song(name_list.at(0));
     playlist_buttons.at(0)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
-    songlist_buttons.at(current_songlist_seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
+    if(current_songlist_seq==-2){
+        ui->pushButton_allmusic->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
+
+    }
+    else if(current_songlist_seq==-1){
+        ui->pushButton_mylike->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
+    }
+    else if(current_songlist_seq>=0){
+        songlist_buttons.at(current_songlist_seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
+    }
     player->LPlay();
 }
 
 void MainWindow::on_pushButton_allmusic_clicked()
 {
+    current_songlist_seq=-2;
     ui->label_songlist_title->setText("全部音乐");
     for(int i=0;i<songlist_buttons.count();++i){
         songlist_buttons.at(i)->setStyleSheet("border-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
@@ -2403,6 +2459,7 @@ void MainWindow::on_pushButton_allmusic_clicked()
 
 void MainWindow::on_pushButton_mylike_clicked()
 {
+    current_songlist_seq=-1;
     ui->label_songlist_title->setText("我喜欢");
     for(int i=0;i<songlist_buttons.count();++i){
         songlist_buttons.at(i)->setStyleSheet("border-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
@@ -2456,19 +2513,21 @@ void MainWindow::on_pushButton_mylike_clicked()
 }
 
 void MainWindow::write_log(QString text){
-    QFile logg(QApplication::applicationDirPath()+"/log.txt");
-    QString cont;
-    if(logg.open(QIODevice::ReadOnly)){
-        cont=logg.readAll();
-    }
-    logg.close();
+    if(isLog==true){
+        QFile logg(QApplication::applicationDirPath()+"/log.txt");
+        QString cont;
+        if(logg.open(QIODevice::ReadOnly)){
+            cont=logg.readAll();
+        }
+        logg.close();
 
-    QFile loggg(QApplication::applicationDirPath()+"/log.txt");
-    if(loggg.open(QIODevice::WriteOnly)){
-        cont+=text+"\n";
-        loggg.write(cont.toUtf8());
+        QFile loggg(QApplication::applicationDirPath()+"/log.txt");
+        if(loggg.open(QIODevice::WriteOnly)){
+            cont+=text+"\n";
+            loggg.write(cont.toUtf8());
+        }
+        loggg.close();
     }
-    loggg.close();
 }
 
 void MainWindow::player_error(QMediaPlayer::Error e){
@@ -2488,4 +2547,14 @@ void MainWindow::player_error(QMediaPlayer::Error e){
 void MainWindow::ShowAlbumPic(){
     ui->widget_cover->setStyleSheet("border-image:url("+QApplication::applicationDirPath()+"/album.png);");
     ui->fakewidget_cover->setStyleSheet("border-image:url("+QApplication::applicationDirPath()+"/album.png);");
+}
+
+void MainWindow::on_checkBox_log_clicked(bool checked)
+{
+    if(checked==true){
+        isLog=true;
+    }
+    else{
+        isLog=false;
+    }
 }

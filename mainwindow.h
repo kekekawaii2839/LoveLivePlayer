@@ -108,6 +108,7 @@ private slots:
     void write_log(QString);
     void player_error(QMediaPlayer::Error);
     void ShowAlbumPic();
+    void on_checkBox_log_clicked(bool checked);
 };
 
 #endif // MAINWINDOW_H
