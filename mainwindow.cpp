@@ -13,7 +13,7 @@ QList<QListPushButton*> playlist_buttons;
 QList<QListPushButton*> playlist_singers_buttons;
 QList<QGroupBox*> groupboxes;
 QIcon* empty_icon;
-bool isRandomPlay,isAutoPlay,isTray,isAutoShowDesktopLyric;
+bool isRandomPlay,isAutoPlay,isTray,isAutoShowDesktopLyric,isLog;
 QPoint ori_pos;
 QList<int> random_seq;
 int randomplay_progress;
@@ -114,7 +114,7 @@ MainWindow::MainWindow(QWidget *parent) :
                       QDirIterator::Subdirectories);
     while(iter_songlist.hasNext()){
         iter_songlist.next();
-        if(iter_songlist.fileName()!="likes.llist"){//保留出"我喜欢"的文件
+        if(iter_songlist.fileName()!="likes.llist"&&iter_songlist.fileName()!="_last.llist"){//保留出"我喜欢"的文件和上次退出程序时的播放列表存储文件
             songlist.append(iter_songlist.fileName());
         }
     }
@@ -768,25 +768,6 @@ void MainWindow::get_duration(qint64 time){
     qDebug()<<"got duration:"<<duration;
 }
 
-/*void MainWindow::SaveHDCToFile(libZPlay::TID3InfoExW id3_info){
-    libZPlay::TID3PictureW pic;
-    HDC hdc=GetDC(hwnd);
-    HDC memDc=CreateCompatibleDC(hdc);
-    HBITMAP hBmp=CreateCompatibleBitmap(hdc,id3_info.Picture.Width,id3_info.Picture.Height);
-    SelectObject(memDc,hBmp);
-
-    pic=id3_info.Picture;
-    zplayer->DrawBitmapToHDC(memDc,0,0,id3_info.Picture.Width,id3_info.Picture.Height,id3_info.Picture.hBitmap);
-
-    QPixmap pixmap=QtWin::fromHBITMAP(hBmp,QtWin::HBitmapNoAlpha);
-    QImage img=pixmap.toImage();
-    img.save("album.png","PNG",100);
-    SelectObject(memDc,(HBITMAP)NULL);
-    DeleteDC(memDc);
-    DeleteObject(hBmp);
-    DeleteDC(hdc);
-}*/
-
 bool MainWindow::read_lyric(QString path,int mode){
     if(mode==0){//原文
         QFile lrc(path);
@@ -1154,7 +1135,7 @@ void MainWindow::change_song(QMediaPlayer::MediaStatus status){
     write_log("\n");
     if(status==QMediaPlayer::EndOfMedia){
         if(player->playlist->playbackMode()==QMediaPlaylist::CurrentItemInLoop){
-            player->LPlay();
+            player->playlist->setCurrentIndex(play_progress);
         }
         else if(player->playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==false){
             for(int i=0;i<200;++i){
@@ -1199,7 +1180,12 @@ void MainWindow::change_song(QMediaPlayer::MediaStatus status){
             }
             ui->label_singers->setText("");
             ui->label_singers->hide();
-            randomplay_progress++;
+            if(randomplay_progress+1==name_list.count()){
+                randomplay_progress=0;
+            }
+            else if(randomplay_progress+1<name_list.count()){
+                randomplay_progress++;
+            }
             load_single_song(name_list.at(random_seq.at(randomplay_progress)));
             for(int i=0;i<playlist_buttons.count();++i){
                 playlist_buttons.at(i)->setStyleSheet("border-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
@@ -1208,6 +1194,7 @@ void MainWindow::change_song(QMediaPlayer::MediaStatus status){
             for(int i=0;i<playlist_buttons.count();++i){
                 playlist_buttons.at(i)->show();
             }
+            play_progress=random_seq.at(randomplay_progress);
             player->playlist->setCurrentIndex(random_seq.at(randomplay_progress));
         }
     }
@@ -1255,6 +1242,7 @@ void MainWindow::on_pushButton_next_clicked()
         else if(randomplay_progress+1<name_list.count()){
             randomplay_progress++;
         }
+        play_progress=random_seq.at(randomplay_progress);
         player->playlist->setCurrentIndex(random_seq.at(randomplay_progress));
         load_single_song(name_list[random_seq.at(randomplay_progress)]);
         for(int i=0;i<playlist_buttons.count();++i){
@@ -1457,6 +1445,7 @@ void MainWindow::on_pushButton_last_clicked()
         else if(randomplay_progress<name_list.count()&&randomplay_progress>0){
             randomplay_progress-=1;
         }
+        play_progress=random_seq.at(randomplay_progress);
         player->playlist->setCurrentIndex(random_seq.at(randomplay_progress));
         load_single_song(name_list[random_seq.at(randomplay_progress)]);
         for(int i=0;i<playlist_buttons.count();++i){
@@ -1536,9 +1525,24 @@ void MainWindow::on_pushButton_close_clicked()
         temp+=QString::number(dd.geometry().x())+" "+QString::number(dd.geometry().y())+"\n";
         if(isAutoShowDesktopLyric==false) temp+="0\n";
         else temp+="1\n";
-        if(ui->label_songlist_title->text()=="全部音乐") temp+="allmusic";
-        else if(ui->label_songlist_title->text()=="我喜欢") temp+="likes.llist";
-        else temp+=ui->label_songlist_title->text()+".llist";
+
+        if(player->playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==false){
+             temp+="0\n";
+             temp+=QString::number(play_progress)+"\n";
+        }
+        else if(player->playlist->playbackMode()==QMediaPlaylist::CurrentItemInLoop){
+            temp+="1\n";
+            temp+=QString::number(play_progress)+"\n";
+        }
+        else if(player->playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==true){
+            temp+="2\n";
+            temp+=QString::number(random_seq.at(randomplay_progress))+"\n";
+        }
+
+        if(current_songlist_seq==-2) temp+="allmusic\n";
+        else if(current_songlist_seq==-1) temp+="likes.llist\n";
+        else temp+=songlist.at(current_songlist_seq)+"\n";
+
         data.write(temp.toUtf8());
     }
     data.close();
@@ -1559,6 +1563,16 @@ void MainWindow::on_pushButton_close_clicked()
         mSysTrayIcon->hide();
         this->close();
     }
+
+    QFile list(QApplication::applicationDirPath()+"/songlists/_last.llist");
+    if(list.open(QIODevice::WriteOnly)){
+        QString temp;
+        for(int i=0;i<name_list.count();++i){
+            temp+=name_list.at(i)+"\n";
+        }
+        list.write(temp.toUtf8());
+    }
+    list.close();
 }
 
 void MainWindow::on_pushButton_playmode_clicked()
@@ -1764,22 +1778,27 @@ void MainWindow::on_pushButton_settings_clicked()
 void MainWindow::read_userdata(){
     //userdata文件第一行是音量大小 第二行表示是否自动播放 第三行表示是否最小化到托盘
     //第四行表示桌面歌词是否锁定 第五行表示桌面歌词的坐标 第六行表示是否在程序启动时显示桌面歌词
-    //第七行保存上次关闭程序前读取的歌单文件名
+    //第七行表示上次退出程序时所处的播放模式 0循环 1单曲循环 2随机
+    //第八行表示上次退出程序时正在播放的音频所处的播放列表index
+    //第九行表示上次退出程序时主页显示的歌单
+    int index=0,playmode=0;
+    QString last_songlist;
     QFile data(QApplication::applicationDirPath()+"/resources/userdata");
-    QString last_songlist="allmusic";//默认值是全部音乐
     if(data.open(QIODevice::ReadOnly)){
         QString temp=data.readAll();
         QStringList list=temp.split("\n");
         ui->Slider_volume->setValue(list.at(0).toInt());
         isAutoPlay=list.at(1).toInt();
         isTray=list.at(2).toInt();
-        dd.is_locked=list.at(3).toInt();
 
+        dd.is_locked=list.at(3).toInt();
         QStringList xy=list.at(4).split(" ");
         dd.move(xy.at(0).toInt(),xy.at(1).toInt());
-
         isAutoShowDesktopLyric=list.at(5).toInt();
-        last_songlist=list.at(6);
+
+        playmode=list.at(6).toInt();
+        index=list.at(7).toInt();
+        last_songlist=list.at(8);
     }
     data.close();
     if(isAutoPlay==true){
@@ -1801,31 +1820,94 @@ void MainWindow::read_userdata(){
         ui->checkBox_quickselect->setCheckState(Qt::Checked);
     }
 
-    if(last_songlist=="allmusic"){
-        on_pushButton_allmusic_clicked();
-        on_pushButton_playall_clicked();
-        current_songlist_seq=-2;
-    }
-    else if(last_songlist=="likes.llist"){
-        on_pushButton_mylike_clicked();
-        on_pushButton_playall_clicked();
-        current_songlist_seq=-1;
-    }
+    if(last_songlist=="allmusic") on_pushButton_allmusic_clicked();
+    else if(last_songlist=="likes.llist") on_pushButton_mylike_clicked();
     else{
-        for(int i=0;i<songlist.count();++i){
-            if(last_songlist==songlist.at(i)){
-                qDebug()<<"find last_songlist!";
-                songlist_buttons_clicked(i);
-                on_pushButton_playall_clicked();
-                break;
-            }
-            if(i==songlist.count()-1){//如果上次的歌单未找到
-                on_pushButton_allmusic_clicked();
-                on_pushButton_playall_clicked();
-                current_songlist_seq=-2;
+        if(songlist.count()>0){
+            for(int i=0;i<songlist.count();++i){
+                if(last_songlist==songlist.at(i)){
+                    songlist_buttons_clicked(i);
+                    break;
+                }
+                if(i+1==songlist.count()) on_pushButton_allmusic_clicked();
             }
         }
+        else on_pushButton_allmusic_clicked();
     }
+
+    //读取上次退出程序时的播放列表
+    for(int i=0;i<playlist_buttons.count();++i){
+        playlist_buttons.at(i)->setVisible(false);
+        playlist_buttons.at(i)->hide();
+        disconnect(playlist_buttons.at(i),SIGNAL(clicked(int)),this,SLOT(playlist_buttons_clicked(int)));
+    }
+    for(int i=0;i<playlist_singers_buttons.count();++i){
+        playlist_singers_buttons.at(i)->setVisible(false);
+        playlist_singers_buttons.at(i)->hide();
+    }
+    playlist_buttons.clear();
+    playlist_singers_buttons.clear();
+    name_list.clear();
+    player->playlist->clear();
+
+    QFile _last(QApplication::applicationDirPath()+"/songlists/_last.llist");
+    if(_last.open(QIODevice::ReadOnly)){
+        QString c=_last.readAll();
+        if(c.contains("\r")){
+            c.replace("\r","");
+        }
+        QStringList tt=c.split("\n");
+        for(int i=0;i<tt.count();++i){
+            if(tt.at(i)!="") name_list.append(tt.at(i));
+            qDebug()<<"tt.at(i)="<<tt.at(i);
+        }
+    }
+
+    QString path=QApplication::applicationDirPath()+"/songs/";
+    QFont font1,font2;
+    font1.setPointSize(12);
+    font2.setPointSize(8);
+    for(int i=0;i<name_list.count();++i){
+        player->playlist->addMedia(QUrl(path+name_list.at(i)));
+        QListPushButton* pb_temp=new QListPushButton(ui->scrollAreaWidgetContents);
+        QListPushButton* pb_temp2=new QListPushButton(ui->scrollAreaWidgetContents);
+        pb_temp->setGeometry(QRect(0,i*80+5,190,80));
+        pb_temp2->setGeometry(QRect(0,i*80+50,190,30));
+        get_meta(path+name_list.at(i),false);
+        pb_temp->setDefault(false);
+        pb_temp->setVisible(true);
+        pb_temp2->setDefault(false);
+        pb_temp2->setVisible(true);
+        pb_temp->setStyleSheet("border-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
+        pb_temp->setFont(font1);
+        pb_temp->setAttribute(Qt::WA_Hover,true);
+        pb_temp2->setStyleSheet("color:#a3a3a3;\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
+        pb_temp2->setFont(font2);
+        pb_temp2->setAttribute(Qt::WA_TransparentForMouseEvents,true);
+        pb_temp->setText(adjust_text_overlength(" "+title,pb_temp,1));
+        pb_temp2->setText(adjust_text_overlength(" "+artist,pb_temp2,1));
+        pb_temp->seq=i;
+        pb_temp2->seq=i;
+        playlist_buttons.append(pb_temp);
+        playlist_singers_buttons.append(pb_temp2);
+    }
+    ui->label_playlist->setText("<html><head/><body><p><span style=\" font-size:12pt;\">播放列表</span></p><p><span style=\" color:#a3a3a3;font-size:9pt;\">共"
+                                +QString::number(name_list.count())+"首歌曲</span></p></body></html>");
+    for(int i=0;i<playlist_buttons.length();++i){
+        connect(playlist_buttons.at(i),SIGNAL(clicked(int)),this,SLOT(playlist_buttons_clicked(int)));
+        playlist_buttons.at(i)->show();
+    }
+    ui->scrollAreaWidgetContents->setMinimumHeight(name_list.count()*80+5);
+    play_progress=index;
+    for(int i=0;i<playmode;++i){
+        on_pushButton_playmode_clicked();
+    }
+    player->playlist->setCurrentIndex(index);
+    //player->LPause();
+    load_single_song(name_list.at(index));
+    playlist_buttons.at(index)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
+    songlist_buttons.at(current_songlist_seq)->setStyleSheet("color:"+conf.theme_color+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
+    player->LPlay();
 
     if(isAutoPlay==false) player->LPause();
     if(isAutoShowDesktopLyric==true){
@@ -2200,7 +2282,7 @@ void MainWindow::songs_in_current_songlist_buttons_clicked(int seq){
 
 void MainWindow::on_pushButton_playall_clicked()
 {
-    qDebug()<<"on_pushButton_playall_clicked!";
+    //qDebug()<<"on_pushButton_playall_clicked!";
     for(int i=0;i<playlist_buttons.count();++i){
         playlist_buttons.at(i)->setVisible(false);
         playlist_buttons.at(i)->hide();
@@ -2374,14 +2456,14 @@ void MainWindow::on_pushButton_mylike_clicked()
 }
 
 void MainWindow::write_log(QString text){
-    QFile logg(QApplication::applicationDirPath()+"log.txt");
+    QFile logg(QApplication::applicationDirPath()+"/log.txt");
     QString cont;
     if(logg.open(QIODevice::ReadOnly)){
         cont=logg.readAll();
     }
     logg.close();
 
-    QFile loggg(QApplication::applicationDirPath()+"log.txt");
+    QFile loggg(QApplication::applicationDirPath()+"/log.txt");
     if(loggg.open(QIODevice::WriteOnly)){
         cont+=text+"\n";
         loggg.write(cont.toUtf8());

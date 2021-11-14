@@ -85,11 +85,12 @@ void LAudioPlayer::LUpdate(){
         L_MediaStatus=QMediaPlayer::EndOfMedia;
         emit mediaStatusChanged(L_MediaStatus);
     }
-    if(duration==-1){//一开始CurrentIndex=-1
+    /*if(duration==-1){//一开始CurrentIndex=-1
+        qDebug()<<"duration==-1";
         playlist->setCurrentIndex(0);
         this->LSetMedia(playlist->currentMedia());
         this->LPlay();
-    }
+    }*/
 
     zplayer->GetStreamInfo(&info);
     duration=info.Length.ms;
