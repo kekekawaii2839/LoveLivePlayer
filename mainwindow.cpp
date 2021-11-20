@@ -24,6 +24,7 @@ bool isPlaylistShowing=false;
 int whatInMainPage=0;//0代表歌单界面 1代表设置界面
 QList<QListPushButton*> songlist_buttons;
 QList<QListPushButton*> songs_in_current_songlist_buttons;
+QGraphicsOpacityEffect* effect_for_title_bg;
 
 LAudioPlayer* player;
 //QMediaPlaylist* playlist;
@@ -45,10 +46,23 @@ MainWindow::MainWindow(QWidget *parent) :
     installEventFilter(this);//安装事件过滤器
 
     QGraphicsDropShadowEffect* shadow=new QGraphicsDropShadowEffect(this);
-    shadow->setOffset(0, 0);
+    shadow->setOffset(0,0);
     shadow->setColor(Qt::black);
     shadow->setBlurRadius(15);//设置阴影圆角
-    ui->widget_shadow->setGraphicsEffect(shadow);//QGraphicsDropShadowEffect只能安装一次 再次调用setGraphicsEffect时 之前安装的效果将被卸载
+    ui->widget_shadow->setGraphicsEffect(shadow);//QGraphicsEffect的子类只能在一个QWidget中安装一次 再次调用setGraphicsEffect时 之前安装的效果将被卸载
+
+    /*QGraphicsBlurEffect* blur=new QGraphicsBlurEffect();
+    blur->setBlurHints(QGraphicsBlurEffect::QualityHint);*/
+
+    QLinearGradient alphaGradient(ui->widget_title_bg->rect().topLeft(),ui->widget_title_bg->rect().topRight());
+    alphaGradient.setColorAt(0.0, Qt::transparent);
+    alphaGradient.setColorAt(0.16, Qt::black);
+    alphaGradient.setColorAt(0.83, Qt::black);
+    alphaGradient.setColorAt(1.0, Qt::transparent);
+    effect_for_title_bg=new QGraphicsOpacityEffect(ui->widget_title_bg);
+    effect_for_title_bg->setOpacityMask(alphaGradient);
+    effect_for_title_bg->setOpacity(1.0);
+    ui->widget_title_bg->setGraphicsEffect(effect_for_title_bg);
 
     empty_icon=new QIcon;
     mSysTrayIcon = new QSystemTrayIcon(this);//必须放在load_single_song()的前面
@@ -129,7 +143,7 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->label_no_song_in_songlist->hide();
         for(int i=0;i<songlist.count();++i){
             QListPushButton* pb_temp=new QListPushButton(ui->groupBox_mysonglists);
-            pb_temp->setGeometry(QRect(15,i*50+40,160,40));
+            pb_temp->setGeometry(QRect(15,i*50+40,260,40));
             pb_temp->setDefault(false);
             pb_temp->setStyleSheet("border-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
             pb_temp->setFont(font1);
@@ -142,7 +156,7 @@ MainWindow::MainWindow(QWidget *parent) :
             connect(songlist_buttons.at(i),SIGNAL(clicked(int)),this,SLOT(songlist_buttons_clicked(int)));
             songlist_buttons.at(i)->show();
         }
-        ui->groupBox_mysonglists->setGeometry(QRect(0,140,190,songlist_buttons.count()*50+40));
+        ui->groupBox_mysonglists->setGeometry(QRect(0,140,300,songlist_buttons.count()*50+40));
     }
 
     ui->pushButton_allmusic->setStyleSheet("border-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
@@ -1287,11 +1301,11 @@ void MainWindow::on_pushButton_next_clicked()
 
 void MainWindow::player_state_change(QMediaPlayer::State state){
     if(state==QMediaPlayer::PausedState){
-        ui->pushButton_play->setStyleSheet("border-image: url(:/new/prefix1/player-play-circle.png);");
+        ui->pushButton_play->setStyleSheet("QToolTip{font:9pt\"微软雅黑\";}\n#pushButton_play{border-image: url(:/new/prefix1/player-play-circle.png);}");
         ui->fakepushButton_play->setStyleSheet("border-image: url(:/new/prefix1/player-play-circle.png);");
     }
     else if(state==QMediaPlayer::PlayingState){
-        ui->pushButton_play->setStyleSheet("border-image: url(:/new/prefix1/player-pause-circle.png);");
+        ui->pushButton_play->setStyleSheet("QToolTip{font:9pt\"微软雅黑\";}\n#pushButton_play{border-image: url(:/new/prefix1/player-pause-circle.png);}");
         ui->fakepushButton_play->setStyleSheet("border-image: url(:/new/prefix1/player-pause-circle.png);");
     }
 }
@@ -1654,7 +1668,8 @@ void MainWindow::get_config(QString id){
         conf.title=t.at(1);
         conf.num=t.at(2).toInt();
         conf.icon_addr=QApplication::applicationDirPath()+"/resources/"+t.at(3);
-        for(int i=4;i<t.count();++i){
+        conf.bg_addr=QApplication::applicationDirPath()+"/resources/"+t.at(4);
+        for(int i=5;i<t.count();++i){
             QString temp=t.at(i);
             temp=temp.left(temp.length()-1);
             conf.member.append(temp);//写config文件时最后一行一定要再留一个空换行
@@ -1669,6 +1684,7 @@ void MainWindow::get_config(QString id){
     conf.theme_color=conf.theme_color.left(conf.theme_color.length()-1);
     conf.title=conf.title.left(conf.title.length()-1);
     conf.icon_addr=conf.icon_addr.left(conf.icon_addr.length()-1);
+    conf.bg_addr=conf.bg_addr.left(conf.bg_addr.length()-1);
 
     con.close();
     //qDebug()<<"conf.theme_color:"<<conf.theme_color<<"\nconf.title:"<<conf.title<<"\nconf.num:"<<conf.num<<"\nconf.icon_addr:"<<conf.icon_addr;
@@ -1684,6 +1700,12 @@ void MainWindow::get_config(QString id){
     }
     else{
         ui->widget_icon->setStyleSheet("background-color:rgba(0,0,0,0);");
+    }
+    if(conf.bg_addr!=QApplication::applicationDirPath()+"/resources/none"){
+        ui->widget_title_bg->setStyleSheet("border-image: url("+conf.bg_addr+");");
+    }
+    else{
+        ui->widget_title_bg->setStyleSheet("background-color:rgba(0,0,0,0);");
     }
     if(dd.isVisible()){
         ui->pushButton_DesktopLyric->setStyleSheet("background-color: rgba(0,0,0,0);\ncolor:"+conf.theme_color+";");
@@ -1755,8 +1777,8 @@ void MainWindow::on_pushButton_refresh_clicked()
         player->playlist->addMedia(QUrl(QApplication::applicationDirPath()+"/songs/"+name_list.at(i)));
         QListPushButton* pb_temp=new QListPushButton(ui->scrollAreaWidgetContents);
         QListPushButton* pb_temp2=new QListPushButton(ui->scrollAreaWidgetContents);
-        pb_temp->setGeometry(QRect(0,i*80+5,190,80));
-        pb_temp2->setGeometry(QRect(0,i*80+50,190,30));
+        pb_temp->setGeometry(QRect(0,i*80+5,220,80));
+        pb_temp2->setGeometry(QRect(0,i*80+50,220,30));
         get_meta(path+name_list.at(i),false);
         pb_temp->setDefault(false);
         pb_temp->setVisible(true);
@@ -1792,17 +1814,17 @@ void MainWindow::on_pushButton_refresh_clicked()
 
 void MainWindow::on_pushButton_settings_clicked()
 {
-    if(ui->widget_settings->geometry().width()<1050){
-        ui->widget_settings->setGeometry(0,100,1050,380);
+    if(ui->widget_settings->geometry().width()<ui->widget_shadow->geometry().height()){
+        ui->widget_settings->setGeometry(0,100,ui->widget_shadow->geometry().height(),380);
         ui->widget_settings->raise();
         on_pushButton_hideplayer_clicked();
         whatInMainPage=1;
-        ui->widget_songlist->setGeometry(QRect(0,100,0,390));
+        ui->widget_songlist->setGeometry(QRect(0,ui->widget_title->height(),ui->widget_shadow->width(),635));
     }
     else{
         on_pushButton_settings_return_clicked();
         whatInMainPage=0;
-        ui->widget_songlist->setGeometry(QRect(0,100,1050,390));
+        ui->widget_songlist->setGeometry(QRect(0,ui->widget_title->height(),ui->widget_shadow->width(),635));
     }
 }
 
@@ -1908,8 +1930,8 @@ void MainWindow::read_userdata(){
         player->playlist->addMedia(QUrl(path+name_list.at(i)));
         QListPushButton* pb_temp=new QListPushButton(ui->scrollAreaWidgetContents);
         QListPushButton* pb_temp2=new QListPushButton(ui->scrollAreaWidgetContents);
-        pb_temp->setGeometry(QRect(0,i*80+5,190,80));
-        pb_temp2->setGeometry(QRect(0,i*80+50,190,30));
+        pb_temp->setGeometry(QRect(0,i*80+5,220,80));
+        pb_temp2->setGeometry(QRect(0,i*80+50,220,30));
         get_meta(path+name_list.at(i),false);
         pb_temp->setDefault(false);
         pb_temp->setVisible(true);
@@ -1967,7 +1989,7 @@ void MainWindow::on_pushButton_settings_return_clicked()
     ui->widget_settings->setGeometry(0,100,0,380);
     ui->widget_settings->lower();
     whatInMainPage=0;
-    ui->widget_songlist->setGeometry(QRect(0,100,1050,390));
+    ui->widget_songlist->setGeometry(QRect(0,ui->widget_title->height(),ui->widget_shadow->width(),635));
     /*if(ui->widget_cover->is_small==true){
         show_player();
         ui->widget_cover->is_small=false;
@@ -1978,8 +2000,8 @@ void MainWindow::show_player(){
     if(ui->widget_cover->is_small==false){//???????
         QPropertyAnimation* show_player=new QPropertyAnimation(ui->widget_player,"geometry");
         show_player->setDuration(750);
-        show_player->setStartValue(QRect(0,580,1050,0));
-        show_player->setEndValue(QRect(0,100,1050,480));
+        show_player->setStartValue(QRect(0,ui->widget_shadow->height(),ui->widget_shadow->width(),0));
+        show_player->setEndValue(QRect(0,ui->widget_title->height(),ui->widget_shadow->width(),ui->widget_shadow->height()-ui->widget_title->height()));
         show_player->setEasingCurve(QEasingCurve::OutQuart);
         show_player->start();
         connect(show_player,SIGNAL(finished()),this,SLOT(show_player_next()));
@@ -1990,21 +2012,21 @@ void MainWindow::show_player(){
 
 void MainWindow::show_player_next(){
     ui->label_settings_info->hide();
-    ui->horizontalSlider->setGeometry(QRect(20,525,780,22));
-    ui->label_time->move(810,515);
-    ui->label_duration->move(867,515);
-    ui->pushButton_play->move(670,440);
-    ui->pushButton_next->setGeometry(QRect(760,450,30,30));
-    ui->pushButton_last->setGeometry(QRect(590,450,30,30));
-    ui->pushButton_playmode->setGeometry(QRect(500,450,30,30));
-    ui->widget_cover->setGeometry(QRect(55,135,230,230));
-    ui->pushButton_DesktopLyric->move(830,450);
-    ui->pushButton_playlist->setGeometry(QRect(950,524,30,28));
+    ui->horizontalSlider->setGeometry(QRect(50,ui->widget_shadow->geometry().height()-60,1100,22));
+    ui->label_time->move(1210,815);
+    ui->label_duration->move(1267,815);
+    ui->pushButton_play->move(1050,650);
+    ui->pushButton_next->setGeometry(QRect(1140,660,30,30));
+    ui->pushButton_last->setGeometry(QRect(970,660,30,30));
+    ui->pushButton_playmode->setGeometry(QRect(880,660,30,30));
+    ui->widget_cover->setGeometry(QRect(130,300,300,300));
+    ui->pushButton_DesktopLyric->move(1210,660);
+    ui->pushButton_playlist->setGeometry(QRect(1350,824,30,28));
 
     ui->widget_player->lower();//调整前后遮挡问题
     ui->widget_settings->lower();
-    ui->widget_settings->setGeometry(0,100,0,380);
-    ui->widget_songlist->setGeometry(QRect(0,100,0,390));
+    ui->widget_settings->setGeometry(0,ui->widget_title->height(),0,380);
+    ui->widget_songlist->setGeometry(QRect(0,ui->widget_title->height(),0,390));
 }
 
 bool MainWindow::eventFilter(QObject* object, QEvent* event){
@@ -2174,15 +2196,15 @@ void MainWindow::on_pushButton_playlist_clicked()
 {
     int x=ui->widget_playlist->geometry().x();
     QPropertyAnimation* show_playlist=new QPropertyAnimation(ui->widget_playlist,"geometry");
-    show_playlist->setDuration(1000);
-    show_playlist->setStartValue(QRect(x,10,0,580));
-    show_playlist->setEndValue(QRect(840,10,220,580));
+    show_playlist->setDuration(950);
+    show_playlist->setStartValue(QRect(x,10,0,ui->widget_shadow->height()));
+    show_playlist->setEndValue(QRect(this->width()-10-250,10,250,ui->widget_shadow->height()));
     show_playlist->setEasingCurve(QEasingCurve::OutQuart);
 
     QPropertyAnimation* hide_playlist=new QPropertyAnimation(ui->widget_playlist,"geometry");
-    hide_playlist->setDuration(1000);
-    hide_playlist->setStartValue(QRect(x,10,220,580));
-    hide_playlist->setEndValue(QRect(1061,10,0,580));
+    hide_playlist->setDuration(950);
+    hide_playlist->setStartValue(QRect(x,10,250,ui->widget_shadow->height()));
+    hide_playlist->setEndValue(QRect(this->width()-9,10,0,ui->widget_shadow->height()));
     hide_playlist->setEasingCurve(QEasingCurve::OutQuart);
 
     if(isPlaylistShowing==false){
@@ -2198,9 +2220,9 @@ void MainWindow::on_pushButton_playlist_clicked()
 void MainWindow::on_pushButton_hideplaylist_clicked()
 {
     QPropertyAnimation* hide_playlist=new QPropertyAnimation(ui->widget_playlist,"geometry");
-    hide_playlist->setDuration(1000);
+    hide_playlist->setDuration(950);
     hide_playlist->setStartValue(ui->widget_playlist->geometry());
-    hide_playlist->setEndValue(QRect(1061,10,0,580));
+    hide_playlist->setEndValue(QRect(this->width()-9,10,0,ui->widget_shadow->height()));
     hide_playlist->setEasingCurve(QEasingCurve::OutQuart);
     hide_playlist->start();
     isPlaylistShowing=false;
@@ -2209,35 +2231,35 @@ void MainWindow::on_pushButton_hideplaylist_clicked()
 void MainWindow::on_pushButton_hideplayer_clicked()
 {
     ui->horizontalSlider->setParent(ui->widget_shadow);
-    ui->horizontalSlider->setGeometry(QRect(0,490,1050,22));
+    ui->horizontalSlider->setGeometry(QRect(0,ui->widget_shadow->geometry().height()-95,1480,22));
     ui->label_time->setParent(ui->widget_shadow);
-    ui->label_time->move(890,520);
+    ui->label_time->move(1290,817);
     ui->label_duration->setParent(ui->widget_shadow);
-    ui->label_duration->move(947,520);
+    ui->label_duration->move(1347,817);
     ui->pushButton_play->setParent(ui->widget_shadow);
-    ui->pushButton_play->move(521,516);
+    ui->pushButton_play->move(716,816);//521+195
     ui->pushButton_next->setParent(ui->widget_shadow);
-    ui->pushButton_next->setGeometry(QRect(586,531,20,20));
+    ui->pushButton_next->setGeometry(QRect(781,831,20,20));
     ui->pushButton_last->setParent(ui->widget_shadow);
-    ui->pushButton_last->setGeometry(QRect(481,531,20,20));
+    ui->pushButton_last->setGeometry(QRect(676,831,20,20));
     ui->pushButton_playmode->setParent(ui->widget_shadow);
-    ui->pushButton_playmode->setGeometry(QRect(441,531,20,20));
+    ui->pushButton_playmode->setGeometry(QRect(636,831,20,20));
     ui->widget_cover->setParent(ui->widget_shadow);
-    ui->widget_cover->setGeometry(QRect(40,515,50,50));
+    ui->widget_cover->setGeometry(QRect(40,815,50,50));
     QString info=title+" - "+artist+"  ";
     ui->label_settings_info->setText(info);
     ui->label_settings_info->setInterVal(100);
     QFont font(font_string,10);
     ui->label_settings_info->setFont(font);
     ui->label_settings_info->show();
-    ui->pushButton_DesktopLyric->move(616,526);
-    ui->pushButton_playlist->setGeometry(QRect(656,531,20,20));
+    ui->pushButton_DesktopLyric->move(811,826);
+    ui->pushButton_playlist->setGeometry(QRect(851,831,20,20));
 
     if(ui->widget_cover->is_small==false){
         QPropertyAnimation* hide_player=new QPropertyAnimation(ui->widget_player,"geometry");
         hide_player->setDuration(750);
-        hide_player->setStartValue(QRect(0,100,1050,480));
-        hide_player->setEndValue(QRect(0,580,1050,0));
+        hide_player->setStartValue(QRect(0,ui->widget_title->height(),ui->widget_shadow->geometry().width(),ui->widget_shadow->height()-ui->widget_title->height()));
+        hide_player->setEndValue(QRect(0,ui->widget_shadow->height(),ui->widget_shadow->geometry().width(),0));
         hide_player->setEasingCurve(QEasingCurve::OutQuart);
         hide_player->start();
 
@@ -2248,13 +2270,13 @@ void MainWindow::on_pushButton_hideplayer_clicked()
         ui->widget_songlist->raise();
         ui->widget_settings->raise();
         ui->widget_player->raise();
-        ui->widget_songlist->setGeometry(QRect(0,100,1050,390));
+        ui->widget_songlist->setGeometry(QRect(0,ui->widget_title->height(),ui->widget_shadow->width(),635));
     }
     else if(whatInMainPage==1){
         ui->widget_settings->raise();
         ui->widget_songlist->raise();
         ui->widget_player->raise();
-        ui->widget_settings->setGeometry(0,100,1050,380);
+        ui->widget_settings->setGeometry(0,ui->widget_title->height(),ui->widget_shadow->geometry().height(),380);
     }
     ui->widget_cover->is_small=true;
 }
@@ -2287,7 +2309,7 @@ void MainWindow::songlist_buttons_clicked(int seq){
                 font1.setPointSize(11);
                 for(int i=0;i<content.count();++i){
                     QListPushButton* pb_temp=new QListPushButton(ui->scrollAreaWidgetContents_songlist_detail);
-                    pb_temp->setGeometry(QRect(15,i*50+120,820,50));
+                    pb_temp->setGeometry(QRect(15,i*50+160,ui->scrollAreaWidgetContents_songlist_detail->width()-10,50));
                     pb_temp->setDefault(false);
                     pb_temp->setStyleSheet("border-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
                     pb_temp->setFont(font1);
@@ -2311,7 +2333,7 @@ void MainWindow::songlist_buttons_clicked(int seq){
                     connect(songs_in_current_songlist_buttons.at(i),SIGNAL(clicked(int)),this,SLOT(songs_in_current_songlist_buttons_clicked(int)));
                     songs_in_current_songlist_buttons.at(i)->show();
                 }
-                ui->scrollAreaWidgetContents_songlist_detail->setMinimumHeight(songs_in_current_songlist_buttons.count()*50+120);
+                ui->scrollAreaWidgetContents_songlist_detail->setMinimumHeight(songs_in_current_songlist_buttons.count()*50+160);
             }
         }
     }
@@ -2357,8 +2379,8 @@ void MainWindow::on_pushButton_playall_clicked()
         player->playlist->addMedia(QUrl(path+name_list.at(i)));
         QListPushButton* pb_temp=new QListPushButton(ui->scrollAreaWidgetContents);
         QListPushButton* pb_temp2=new QListPushButton(ui->scrollAreaWidgetContents);
-        pb_temp->setGeometry(QRect(0,i*80+5,190,80));
-        pb_temp2->setGeometry(QRect(0,i*80+50,190,30));
+        pb_temp->setGeometry(QRect(0,i*80+5,220,80));
+        pb_temp2->setGeometry(QRect(0,i*80+50,220,30));
         get_meta(path+name_list.at(i),false);
         pb_temp->setDefault(false);
         pb_temp->setVisible(true);
@@ -2430,7 +2452,7 @@ void MainWindow::on_pushButton_allmusic_clicked()
     font1.setPointSize(11);
     for(int i=0;i<ooo.count();++i){
         QListPushButton* pb_temp=new QListPushButton(ui->scrollAreaWidgetContents_songlist_detail);
-        pb_temp->setGeometry(QRect(15,i*50+120,820,50));
+        pb_temp->setGeometry(QRect(15,i*50+160,ui->scrollAreaWidgetContents_songlist_detail->width()-10,50));
         pb_temp->setDefault(false);
         pb_temp->setStyleSheet("border-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
         pb_temp->setFont(font1);
@@ -2454,7 +2476,7 @@ void MainWindow::on_pushButton_allmusic_clicked()
         connect(songs_in_current_songlist_buttons.at(i),SIGNAL(clicked(int)),this,SLOT(songs_in_current_songlist_buttons_clicked(int)));
         songs_in_current_songlist_buttons.at(i)->show();
     }
-    ui->scrollAreaWidgetContents_songlist_detail->setMinimumHeight(songs_in_current_songlist_buttons.count()*50+120);
+    ui->scrollAreaWidgetContents_songlist_detail->setMinimumHeight(songs_in_current_songlist_buttons.count()*50+160);
 }
 
 void MainWindow::on_pushButton_mylike_clicked()
@@ -2483,7 +2505,7 @@ void MainWindow::on_pushButton_mylike_clicked()
             font1.setPointSize(11);
             for(int i=0;i<content.count();++i){
                 QListPushButton* pb_temp=new QListPushButton(ui->scrollAreaWidgetContents_songlist_detail);
-                pb_temp->setGeometry(QRect(15,i*50+120,820,50));
+                pb_temp->setGeometry(QRect(15,i*50+160,ui->scrollAreaWidgetContents_songlist_detail->width()-10,50));
                 pb_temp->setDefault(false);
                 pb_temp->setStyleSheet("border-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;",1);
                 pb_temp->setFont(font1);
@@ -2507,7 +2529,7 @@ void MainWindow::on_pushButton_mylike_clicked()
                 connect(songs_in_current_songlist_buttons.at(i),SIGNAL(clicked(int)),this,SLOT(songs_in_current_songlist_buttons_clicked(int)));
                 songs_in_current_songlist_buttons.at(i)->show();
             }
-            ui->scrollAreaWidgetContents_songlist_detail->setMinimumHeight(songs_in_current_songlist_buttons.count()*50+120);
+            ui->scrollAreaWidgetContents_songlist_detail->setMinimumHeight(songs_in_current_songlist_buttons.count()*50+160);
         }
     }
 }

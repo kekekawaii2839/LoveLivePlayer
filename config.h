@@ -12,7 +12,7 @@ public:
     QString theme_color;
     QString title;
     int num;
-    QString icon_addr;
+    QString icon_addr,bg_addr;
     QStringList member;
 };
 

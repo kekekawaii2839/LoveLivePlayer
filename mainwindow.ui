@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1070</width>
-    <height>600</height>
+    <width>1500</width>
+    <height>900</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -44,155 +44,20 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>1050</width>
-      <height>580</height>
+      <width>1480</width>
+      <height>880</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgba(255, 255, 255, 255);</string>
     </property>
-    <widget class="QTitleWidget" name="widget_title" native="true">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>1050</width>
-       <height>100</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
-     <widget class="QWidget" name="widget_icon" native="true">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>25</y>
-        <width>175</width>
-        <height>50</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_minimize">
-      <property name="geometry">
-       <rect>
-        <x>880</x>
-        <y>10</y>
-        <width>40</width>
-        <height>40</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>AcadEref</family>
-        <pointsize>12</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-        <underline>false</underline>
-       </font>
-      </property>
-      <property name="toolTipDuration">
-       <number>-1</number>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgba(228, 0, 127, 0);
-color:white;</string>
-      </property>
-      <property name="text">
-       <string notr="true">—</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_close">
-      <property name="geometry">
-       <rect>
-        <x>1000</x>
-        <y>10</y>
-        <width>40</width>
-        <height>40</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>AcadEref</family>
-        <pointsize>12</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgba(228, 0, 127, 0);
-color:white;</string>
-      </property>
-      <property name="text">
-       <string notr="true">×</string>
-      </property>
-      <property name="autoRepeatInterval">
-       <number>100</number>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_refresh">
-      <property name="geometry">
-       <rect>
-        <x>940</x>
-        <y>10</y>
-        <width>40</width>
-        <height>40</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>20</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-image: url(:/new/prefix1/refresh.png);
-background-repeat:no-repeat;
-background-position:center;
-background-color: rgba(228, 0, 127, 0);</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_settings">
-      <property name="geometry">
-       <rect>
-        <x>820</x>
-        <y>10</y>
-        <width>40</width>
-        <height>40</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>20</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-image: url(:/new/prefix1/settings.png);
-background-repeat:no-repeat;
-background-position:center;
-background-color: rgba(228, 0, 127, 0);</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </widget>
     <widget class="QClickWidget" name="widget_cover" native="true">
      <property name="geometry">
       <rect>
-       <x>55</x>
-       <y>135</y>
-       <width>230</width>
-       <height>230</height>
+       <x>130</x>
+       <y>300</y>
+       <width>300</width>
+       <height>300</height>
       </rect>
      </property>
      <property name="font">
@@ -207,9 +72,9 @@ background-color: rgba(228, 0, 127, 0);</string>
     <widget class="QSliderPro" name="horizontalSlider">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>525</y>
-       <width>780</width>
+       <x>50</x>
+       <y>820</y>
+       <width>1100</width>
        <height>22</height>
       </rect>
      </property>
@@ -229,8 +94,8 @@ background-color: rgba(228, 0, 127, 0);</string>
     <widget class="QLabel" name="label_time">
      <property name="geometry">
       <rect>
-       <x>810</x>
-       <y>515</y>
+       <x>1160</x>
+       <y>815</y>
        <width>91</width>
        <height>41</height>
       </rect>
@@ -247,8 +112,8 @@ background-color: rgba(228, 0, 127, 0);</string>
     <widget class="QLabel" name="label_duration">
      <property name="geometry">
       <rect>
-       <x>867</x>
-       <y>515</y>
+       <x>1227</x>
+       <y>815</y>
        <width>91</width>
        <height>41</height>
       </rect>
@@ -265,8 +130,8 @@ background-color: rgba(228, 0, 127, 0);</string>
     <widget class="QPushButton" name="pushButton_playmode">
      <property name="geometry">
       <rect>
-       <x>500</x>
-       <y>450</y>
+       <x>880</x>
+       <y>510</y>
        <width>30</width>
        <height>30</height>
       </rect>
@@ -281,8 +146,8 @@ background-color: rgba(228, 0, 127, 0);</string>
     <widget class="QPushButton" name="pushButton_last">
      <property name="geometry">
       <rect>
-       <x>590</x>
-       <y>450</y>
+       <x>970</x>
+       <y>510</y>
        <width>30</width>
        <height>30</height>
       </rect>
@@ -303,8 +168,8 @@ background-color: rgba(228, 0, 127, 0);</string>
     <widget class="QPushButton" name="pushButton_play">
      <property name="geometry">
       <rect>
-       <x>670</x>
-       <y>440</y>
+       <x>1050</x>
+       <y>500</y>
        <width>48</width>
        <height>48</height>
       </rect>
@@ -315,8 +180,8 @@ background-color: rgba(228, 0, 127, 0);</string>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
      </property>
-     <property name="styleSheet">
-      <string notr="true"/>
+     <property name="toolTip">
+      <string notr="true">播放/暂停 Space</string>
      </property>
      <property name="text">
       <string/>
@@ -328,8 +193,8 @@ background-color: rgba(228, 0, 127, 0);</string>
     <widget class="QPushButton" name="pushButton_next">
      <property name="geometry">
       <rect>
-       <x>760</x>
-       <y>450</y>
+       <x>1140</x>
+       <y>510</y>
        <width>30</width>
        <height>30</height>
       </rect>
@@ -350,9 +215,9 @@ background-color: rgba(228, 0, 127, 0);</string>
     <widget class="ScrollLabel" name="label_settings_info">
      <property name="geometry">
       <rect>
-       <x>110</x>
-       <y>520</y>
-       <width>250</width>
+       <x>120</x>
+       <y>817</y>
+       <width>300</width>
        <height>20</height>
       </rect>
      </property>
@@ -363,8 +228,8 @@ background-color: rgba(228, 0, 127, 0);</string>
     <widget class="QPushButton" name="pushButton_DesktopLyric">
      <property name="geometry">
       <rect>
-       <x>830</x>
-       <y>450</y>
+       <x>1210</x>
+       <y>510</y>
        <width>30</width>
        <height>30</height>
       </rect>
@@ -386,8 +251,8 @@ background-color: rgba(228, 0, 127, 0);</string>
     <widget class="QPushButton" name="pushButton_playlist">
      <property name="geometry">
       <rect>
-       <x>950</x>
-       <y>524</y>
+       <x>1350</x>
+       <y>824</y>
        <width>30</width>
        <height>28</height>
       </rect>
@@ -720,18 +585,18 @@ background-color: rgba(228, 0, 127, 0);</string>
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>100</y>
+       <y>150</y>
        <width>0</width>
-       <height>480</height>
+       <height>730</height>
       </rect>
      </property>
      <widget class="QWidget" name="widget_cover_shadow" native="true">
       <property name="geometry">
        <rect>
-        <x>48</x>
-        <y>28</y>
-        <width>244</width>
-        <height>244</height>
+        <x>123</x>
+        <y>143</y>
+        <width>314</width>
+        <height>314</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -744,10 +609,10 @@ border-right:7px solid qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:0,stop:0 rgb
      <widget class="QWidget" name="widget_examples" native="true">
       <property name="geometry">
        <rect>
-        <x>315</x>
-        <y>80</y>
+        <x>515</x>
+        <y>150</y>
         <width>240</width>
-        <height>240</height>
+        <height>300</height>
        </rect>
       </property>
      </widget>
@@ -757,10 +622,10 @@ border-right:7px solid qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:0,stop:0 rgb
       </property>
       <property name="geometry">
        <rect>
-        <x>620</x>
-        <y>100</y>
-        <width>311</width>
-        <height>71</height>
+        <x>910</x>
+        <y>160</y>
+        <width>330</width>
+        <height>90</height>
        </rect>
       </property>
       <property name="font">
@@ -785,8 +650,8 @@ border:1px solid black;</string>
      <widget class="QPushButton" name="pushButton_lyric_html">
       <property name="geometry">
        <rect>
-        <x>560</x>
-        <y>150</y>
+        <x>860</x>
+        <y>250</y>
         <width>441</width>
         <height>101</height>
        </rect>
@@ -807,10 +672,10 @@ background-color:rgba(0,0,0,0);</string>
      <widget class="QPushButton" name="pushButton_lyric">
       <property name="geometry">
        <rect>
-        <x>560</x>
-        <y>150</y>
-        <width>441</width>
-        <height>101</height>
+        <x>840</x>
+        <y>240</y>
+        <width>480</width>
+        <height>120</height>
        </rect>
       </property>
       <property name="font">
@@ -835,8 +700,8 @@ background-color:rgba(0,0,0,0);</string>
      <widget class="QPushButton" name="pushButton_lyric_translate">
       <property name="geometry">
        <rect>
-        <x>590</x>
-        <y>210</y>
+        <x>890</x>
+        <y>330</y>
         <width>381</width>
         <height>101</height>
        </rect>
@@ -863,9 +728,9 @@ background-color:rgba(0,0,0,0);</string>
      <widget class="ScrollLabel" name="label_info_title">
       <property name="geometry">
        <rect>
-        <x>25</x>
-        <y>285</y>
-        <width>301</width>
+        <x>100</x>
+        <y>485</y>
+        <width>370</width>
         <height>40</height>
        </rect>
       </property>
@@ -899,9 +764,9 @@ background-color:rgba(0,0,0,0);</string>
      <widget class="QLabel" name="label_info_artist">
       <property name="geometry">
        <rect>
-        <x>25</x>
-        <y>325</y>
-        <width>301</width>
+        <x>100</x>
+        <y>525</y>
+        <width>370</width>
         <height>40</height>
        </rect>
       </property>
@@ -935,9 +800,9 @@ background-color:rgba(0,0,0,0);</string>
      <widget class="QLabel" name="label_info_album">
       <property name="geometry">
        <rect>
-        <x>25</x>
-        <y>365</y>
-        <width>301</width>
+        <x>100</x>
+        <y>565</y>
+        <width>370</width>
         <height>40</height>
        </rect>
       </property>
@@ -971,10 +836,10 @@ background-color:rgba(0,0,0,0);</string>
      <widget class="QSliderPro" name="Slider_volume">
       <property name="geometry">
        <rect>
-        <x>1005</x>
-        <y>330</y>
+        <x>1405</x>
+        <y>550</y>
         <width>22</width>
-        <height>120</height>
+        <height>150</height>
        </rect>
       </property>
       <property name="cursor">
@@ -999,8 +864,8 @@ background-color:rgba(0,0,0,0);</string>
      <widget class="QLabel" name="label_volume">
       <property name="geometry">
        <rect>
-        <x>1000</x>
-        <y>310</y>
+        <x>1400</x>
+        <y>520</y>
         <width>35</width>
         <height>16</height>
        </rect>
@@ -1015,8 +880,8 @@ background-color:rgba(0,0,0,0);</string>
      <widget class="QPushButton" name="pushButton_hideplayer">
       <property name="geometry">
        <rect>
-        <x>980</x>
-        <y>20</y>
+        <x>1410</x>
+        <y>30</y>
         <width>40</width>
         <height>40</height>
        </rect>
@@ -1043,8 +908,8 @@ color:black;</string>
      <widget class="QPushButton" name="fakepushButton_play">
       <property name="geometry">
        <rect>
-        <x>670</x>
-        <y>340</y>
+        <x>1050</x>
+        <y>500</y>
         <width>48</width>
         <height>48</height>
        </rect>
@@ -1056,8 +921,8 @@ color:black;</string>
      <widget class="QPushButton" name="fakepushButton_last">
       <property name="geometry">
        <rect>
-        <x>590</x>
-        <y>350</y>
+        <x>970</x>
+        <y>510</y>
         <width>30</width>
         <height>30</height>
        </rect>
@@ -1072,8 +937,8 @@ color:black;</string>
      <widget class="QPushButton" name="fakepushButton_next">
       <property name="geometry">
        <rect>
-        <x>760</x>
-        <y>350</y>
+        <x>1140</x>
+        <y>510</y>
         <width>30</width>
         <height>30</height>
        </rect>
@@ -1088,8 +953,8 @@ color:black;</string>
      <widget class="QPushButton" name="fakepushButton_playlist">
       <property name="geometry">
        <rect>
-        <x>950</x>
-        <y>424</y>
+        <x>1350</x>
+        <y>674</y>
         <width>30</width>
         <height>28</height>
        </rect>
@@ -1104,8 +969,8 @@ color:black;</string>
      <widget class="QPushButton" name="fakepushButton_playmode">
       <property name="geometry">
        <rect>
-        <x>500</x>
-        <y>350</y>
+        <x>880</x>
+        <y>510</y>
         <width>30</width>
         <height>30</height>
        </rect>
@@ -1120,8 +985,8 @@ color:black;</string>
      <widget class="QPushButton" name="fakepushButton_DesktopLyric">
       <property name="geometry">
        <rect>
-        <x>830</x>
-        <y>350</y>
+        <x>1210</x>
+        <y>510</y>
         <width>30</width>
         <height>30</height>
        </rect>
@@ -1141,9 +1006,9 @@ color:black;</string>
      <widget class="QSlider" name="fakehorizontalSlider">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>425</y>
-        <width>780</width>
+        <x>50</x>
+        <y>670</y>
+        <width>1100</width>
         <height>22</height>
        </rect>
       </property>
@@ -1155,7 +1020,7 @@ color:black;</string>
       <property name="geometry">
        <rect>
         <x>810</x>
-        <y>415</y>
+        <y>665</y>
         <width>91</width>
         <height>41</height>
        </rect>
@@ -1173,7 +1038,7 @@ color:black;</string>
       <property name="geometry">
        <rect>
         <x>867</x>
-        <y>415</y>
+        <y>665</y>
         <width>91</width>
         <height>41</height>
        </rect>
@@ -1190,10 +1055,10 @@ color:black;</string>
      <widget class="QWidget" name="fakewidget_cover" native="true">
       <property name="geometry">
        <rect>
-        <x>55</x>
-        <y>35</y>
-        <width>230</width>
-        <height>230</height>
+        <x>130</x>
+        <y>150</y>
+        <width>300</width>
+        <height>300</height>
        </rect>
       </property>
      </widget>
@@ -1224,18 +1089,18 @@ color:black;</string>
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>100</y>
-       <width>1050</width>
-       <height>390</height>
+       <y>150</y>
+       <width>1480</width>
+       <height>635</height>
       </rect>
      </property>
      <widget class="AnimatedScrollArea" name="scrollArea_songlist_detail">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>300</x>
         <y>0</y>
-        <width>850</width>
-        <height>390</height>
+        <width>1180</width>
+        <height>635</height>
        </rect>
       </property>
       <property name="widgetResizable">
@@ -1246,15 +1111,15 @@ color:black;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>848</width>
-         <height>388</height>
+         <width>1178</width>
+         <height>633</height>
         </rect>
        </property>
        <widget class="QLabel" name="label_songlist_title">
         <property name="geometry">
          <rect>
           <x>50</x>
-          <y>30</y>
+          <y>50</y>
           <width>200</width>
           <height>50</height>
          </rect>
@@ -1272,8 +1137,8 @@ color:black;</string>
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>110</y>
-          <width>850</width>
+          <y>150</y>
+          <width>1180</width>
           <height>3</height>
          </rect>
         </property>
@@ -1284,8 +1149,8 @@ color:black;</string>
        <widget class="QLabel" name="label_no_songlist">
         <property name="geometry">
          <rect>
-          <x>250</x>
-          <y>160</y>
+          <x>495</x>
+          <y>200</y>
           <width>311</width>
           <height>131</height>
          </rect>
@@ -1305,8 +1170,8 @@ color:black;</string>
        <widget class="QLabel" name="label_no_song_in_songlist">
         <property name="geometry">
          <rect>
-          <x>230</x>
-          <y>160</y>
+          <x>480</x>
+          <y>200</y>
           <width>350</width>
           <height>131</height>
          </rect>
@@ -1326,8 +1191,8 @@ color:black;</string>
        <widget class="QPushButton" name="pushButton_playall">
         <property name="geometry">
          <rect>
-          <x>270</x>
-          <y>40</y>
+          <x>380</x>
+          <y>60</y>
           <width>93</width>
           <height>28</height>
          </rect>
@@ -1346,8 +1211,8 @@ color:black;</string>
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>200</width>
-        <height>390</height>
+        <width>300</width>
+        <height>635</height>
        </rect>
       </property>
       <property name="widgetResizable">
@@ -1358,8 +1223,8 @@ color:black;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>198</width>
-         <height>388</height>
+         <width>298</width>
+         <height>633</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -1373,7 +1238,7 @@ color:black;</string>
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>190</width>
+          <width>290</width>
           <height>140</height>
          </rect>
         </property>
@@ -1409,7 +1274,7 @@ color:black;</string>
           <rect>
            <x>15</x>
            <y>90</y>
-           <width>160</width>
+           <width>260</width>
            <height>40</height>
           </rect>
          </property>
@@ -1467,7 +1332,7 @@ background-color: rgba(0,0,0,0);</string>
           <rect>
            <x>15</x>
            <y>40</y>
-           <width>160</width>
+           <width>260</width>
            <height>40</height>
           </rect>
          </property>
@@ -1497,7 +1362,7 @@ background-color: rgba(0,0,0,0);</string>
          <rect>
           <x>0</x>
           <y>140</y>
-          <width>190</width>
+          <width>290</width>
           <height>200</height>
          </rect>
         </property>
@@ -1534,7 +1399,7 @@ background-color: rgba(0,0,0,0);</string>
      <widget class="Line" name="line_5">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>300</x>
         <y>0</y>
         <width>3</width>
         <height>390</height>
@@ -1546,7 +1411,6 @@ background-color: rgba(0,0,0,0);</string>
      </widget>
     </widget>
     <zorder>widget_songlist</zorder>
-    <zorder>widget_title</zorder>
     <zorder>widget_cover</zorder>
     <zorder>horizontalSlider</zorder>
     <zorder>pushButton_playmode</zorder>
@@ -1564,10 +1428,10 @@ background-color: rgba(0,0,0,0);</string>
    <widget class="QWidget" name="widget_playlist" native="true">
     <property name="geometry">
      <rect>
-      <x>1071</x>
+      <x>1501</x>
       <y>10</y>
-      <width>220</width>
-      <height>580</height>
+      <width>250</width>
+      <height>880</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -1592,7 +1456,7 @@ background-color: rgba(0,0,0,0);</string>
        <x>0</x>
        <y>0</y>
        <width>3</width>
-       <height>580</height>
+       <height>880</height>
       </rect>
      </property>
      <property name="orientation">
@@ -1603,9 +1467,9 @@ background-color: rgba(0,0,0,0);</string>
      <property name="geometry">
       <rect>
        <x>1</x>
-       <y>80</y>
-       <width>219</width>
-       <height>420</height>
+       <y>100</y>
+       <width>249</width>
+       <height>710</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -1619,8 +1483,8 @@ background-color: rgba(0,0,0,0);</string>
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>196</width>
-        <height>700</height>
+        <width>247</width>
+        <height>708</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -1638,7 +1502,7 @@ background-color: rgba(0,0,0,0);</string>
      <property name="geometry">
       <rect>
        <x>120</x>
-       <y>524</y>
+       <y>824</y>
        <width>30</width>
        <height>28</height>
       </rect>
@@ -1660,7 +1524,7 @@ background-color: rgba(0,0,0,0);</string>
      <property name="geometry">
       <rect>
        <x>155</x>
-       <y>524</y>
+       <y>824</y>
        <width>41</width>
        <height>30</height>
       </rect>
@@ -1678,7 +1542,7 @@ background-color: rgba(0,0,0,0);</string>
      <property name="geometry">
       <rect>
        <x>50</x>
-       <y>500</y>
+       <y>810</y>
        <width>120</width>
        <height>3</height>
       </rect>
@@ -1691,7 +1555,7 @@ background-color: rgba(0,0,0,0);</string>
      <property name="geometry">
       <rect>
        <x>50</x>
-       <y>80</y>
+       <y>100</y>
        <width>120</width>
        <height>3</height>
       </rect>
@@ -1701,6 +1565,151 @@ background-color: rgba(0,0,0,0);</string>
      </property>
     </widget>
    </widget>
+   <widget class="QTitleWidget" name="widget_title" native="true">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>1480</width>
+      <height>150</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <widget class="QWidget" name="widget_icon" native="true">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>45</y>
+       <width>210</width>
+       <height>60</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_minimize">
+     <property name="geometry">
+      <rect>
+       <x>1300</x>
+       <y>20</y>
+       <width>40</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>AcadEref</family>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+       <underline>false</underline>
+      </font>
+     </property>
+     <property name="toolTipDuration">
+      <number>-1</number>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(228, 0, 127, 0);
+color:white;</string>
+     </property>
+     <property name="text">
+      <string notr="true">—</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_close">
+     <property name="geometry">
+      <rect>
+       <x>1420</x>
+       <y>20</y>
+       <width>40</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>AcadEref</family>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(228, 0, 127, 0);
+color:white;</string>
+     </property>
+     <property name="text">
+      <string notr="true">×</string>
+     </property>
+     <property name="autoRepeatInterval">
+      <number>100</number>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_refresh">
+     <property name="geometry">
+      <rect>
+       <x>1360</x>
+       <y>20</y>
+       <width>40</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>20</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-image: url(:/new/prefix1/refresh.png);
+background-repeat:no-repeat;
+background-position:center;
+background-color: rgba(228, 0, 127, 0);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_settings">
+     <property name="geometry">
+      <rect>
+       <x>1240</x>
+       <y>20</y>
+       <width>40</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>20</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-image: url(:/new/prefix1/settings.png);
+background-repeat:no-repeat;
+background-position:center;
+background-color: rgba(228, 0, 127, 0);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QWidget" name="widget_title_bg" native="true">
+     <property name="geometry">
+      <rect>
+       <x>320</x>
+       <y>0</y>
+       <width>870</width>
+       <height>150</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <zorder>widget_shadow</zorder>
+   <zorder>widget_title</zorder>
+   <zorder>widget_playlist</zorder>
   </widget>
   <action name="action_exit">
    <property name="icon">
