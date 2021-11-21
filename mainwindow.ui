@@ -94,28 +94,10 @@
     <widget class="QLabel" name="label_time">
      <property name="geometry">
       <rect>
-       <x>1160</x>
-       <y>815</y>
-       <width>91</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_duration">
-     <property name="geometry">
-      <rect>
-       <x>1227</x>
-       <y>815</y>
-       <width>91</width>
-       <height>41</height>
+       <x>1180</x>
+       <y>811</y>
+       <width>180</width>
+       <height>40</height>
       </rect>
      </property>
      <property name="font">
@@ -1019,28 +1001,10 @@ color:black;</string>
      <widget class="QLabel" name="fakelabel_time">
       <property name="geometry">
        <rect>
-        <x>810</x>
-        <y>665</y>
-        <width>91</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="fakelabel_duration">
-      <property name="geometry">
-       <rect>
-        <x>867</x>
-        <y>665</y>
-        <width>91</width>
-        <height>41</height>
+        <x>1180</x>
+        <y>661</y>
+        <width>180</width>
+        <height>40</height>
        </rect>
       </property>
       <property name="font">
@@ -1063,7 +1027,6 @@ color:black;</string>
       </property>
      </widget>
      <zorder>fakelabel_time</zorder>
-     <zorder>fakelabel_duration</zorder>
      <zorder>widget_cover_shadow</zorder>
      <zorder>widget_examples</zorder>
      <zorder>pushButton_lyric_html</zorder>
@@ -1402,7 +1365,7 @@ background-color: rgba(0,0,0,0);</string>
         <x>300</x>
         <y>0</y>
         <width>3</width>
-        <height>390</height>
+        <height>635</height>
        </rect>
       </property>
       <property name="orientation">
@@ -1420,7 +1383,6 @@ background-color: rgba(0,0,0,0);</string>
     <zorder>label_settings_info</zorder>
     <zorder>pushButton_DesktopLyric</zorder>
     <zorder>label_time</zorder>
-    <zorder>label_duration</zorder>
     <zorder>pushButton_playlist</zorder>
     <zorder>widget_settings</zorder>
     <zorder>widget_player</zorder>

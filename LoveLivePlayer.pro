@@ -66,7 +66,7 @@ win32: LIBS += -L$$PWD/../../Qt/libzplay-2.02-sdk/libzplay-2.02-sdk/C++/ -lzplay
 INCLUDEPATH += $$PWD/../../Qt/libzplay-2.02-sdk/libzplay-2.02-sdk/C++
 DEPENDPATH += $$PWD/../../Qt/libzplay-2.02-sdk/libzplay-2.02-sdk/C++
 
-win32:!win32-g++: PRE_TARGETDEPS += $$PWD/../../Qt/libzplay-2.02-sdk/libzplay-2.02-sdk/C++/zplay.lib
+win32:!win32-g++: PRE_TARGETDEPS += $$PWD/../../Qt/libzplay-2.02-sdk/libzplay-2.02-sdk/C++/libzplay.lib
 else:win32-g++: PRE_TARGETDEPS += $$PWD/../../Qt/libzplay-2.02-sdk/libzplay-2.02-sdk/C++/libzplay.a
 
 LIBS += C:/Windows/System32/GdiPlus.dll

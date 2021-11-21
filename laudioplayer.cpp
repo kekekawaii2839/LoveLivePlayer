@@ -79,7 +79,7 @@ void LAudioPlayer::LUpdate(){
     //qDebug()<<"pos.ms="<<pos.ms;
     //qDebug()<<"duration="<<duration;
     if(pos.ms+100>=duration&&duration!=0){//zplayer的pos最小间隔貌似是50ms,而且最后一个应该更新的pos反而不更新
-        //qDebug()<<"end!";
+        qDebug()<<"end!";
         last_duration=0;
         duration=0;
         L_MediaStatus=QMediaPlayer::EndOfMedia;

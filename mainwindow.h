@@ -57,14 +57,46 @@ private:
     QSystemTrayIcon* mSysTrayIcon;
     DesktopLyricWindow dd;
 
+    LAudioPlayer* player;
+    int duration;
+    LRC lyric[200];
+    LRC lyric_translate[200];
+    config conf;
+
+    QPropertyAnimation* show_player;
+    QPropertyAnimation* hide_player;
+    QPropertyAnimation* show_playlist;
+    QPropertyAnimation* hide_playlist;
+
+    libZPlay::ZPlay* zplayer;
+    QString title,artist,album;
+    HWND hwnd;
+    int valid_lyric;//储存有效lyric的数量
+    QStringList name_list;//播放列表
+    int play_progress;//列表播放进度
+    QList<QListPushButton*> playlist_buttons;
+    QList<QListPushButton*> playlist_singers_buttons;
+    QList<QGroupBox*> groupboxes;
+    QIcon* empty_icon;
+    bool isRandomPlay,isAutoPlay,isTray,isAutoShowDesktopLyric,isLog;
+    QPoint ori_pos;
+    QList<int> random_seq;
+    int randomplay_progress;
+    QStringList themes;
+    QStringList songlist;//歌单文件名列表
+    int current_songlist_seq;//现在选中的歌单在songlist中序号 -2代表全部音乐 -1代表我喜欢
+    bool isPlaylistShowing=false;
+    int whatInMainPage=0;//0代表歌单界面 1代表设置界面
+    QList<QListPushButton*> songlist_buttons;
+    QList<QListPushButton*> songs_in_current_songlist_buttons;
+    QGraphicsOpacityEffect* effect_for_title_bg;
+
 private slots:
-    void time_change(qint64);
     void time_change(int);
     void get_duration(qint64);
-    //void SaveHDCToFile(libZPlay::TID3InfoExW);
+    QString duration_convert();
     bool read_lyric(QString,int);
     void on_pushButton_lyric_clicked();
-    //void on_pushButton_play_clicked();
     void on_horizontalSlider_sliderPressed();
     void on_horizontalSlider_sliderReleased();
     void time_change_manual(int);
@@ -74,11 +106,9 @@ private slots:
     void change_song(QMediaPlayer::MediaStatus);
     void on_Slider_volume_valueChanged(int value);
     void SliderVolumeClicked();
-    //void on_pushButton_next_clicked();
     void player_state_change(QMediaPlayer::State);
     QString adjust_text_overlength(QString,QPushButton*,int);
     QString adjust_text_overlength(QString,QLabel*,int);
-    //void on_pushButton_last_clicked();
     void playlist_buttons_clicked(int);
     void on_pushButton_minimize_clicked();
     void on_pushButton_close_clicked();
@@ -88,8 +118,8 @@ private slots:
     void on_pushButton_settings_clicked();
     void read_userdata();
     void on_pushButton_settings_return_clicked();
-    void show_player();
-    void show_player_next();
+    void Show_player();
+    void Show_player_next();
     bool eventFilter(QObject* object, QEvent* event);
     void on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason);
     void on_action_exit_triggered();
@@ -109,6 +139,8 @@ private slots:
     void player_error(QMediaPlayer::Error);
     void ShowAlbumPic();
     void on_checkBox_log_clicked(bool checked);
+    void init_animes();
+    void delete_animes();
 };
 
 #endif // MAINWINDOW_H

@@ -46,6 +46,7 @@ private slots:
     void setPlayerIndex(int);
 signals:
     AlbumPicReady();
+    positionChanged(int);
 };
 
 #endif // LAUDIOPLAYER_H

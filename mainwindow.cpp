@@ -3,36 +3,6 @@
 #include "ui_desktoplyricwindow.h"//不写就无法调用子窗口的控件
 #include "ui_quickselect.h"
 
-libZPlay::ZPlay* zplayer;
-QString title,artist,album;
-HWND hwnd;
-int valid_lyric;//储存有效lyric的数量
-QStringList name_list;//播放列表
-int play_progress;//列表播放进度
-QList<QListPushButton*> playlist_buttons;
-QList<QListPushButton*> playlist_singers_buttons;
-QList<QGroupBox*> groupboxes;
-QIcon* empty_icon;
-bool isRandomPlay,isAutoPlay,isTray,isAutoShowDesktopLyric,isLog;
-QPoint ori_pos;
-QList<int> random_seq;
-int randomplay_progress;
-QStringList themes;
-QStringList songlist;//歌单文件名列表
-int current_songlist_seq;//现在选中的歌单在songlist中序号 -2代表全部音乐 -1代表我喜欢
-bool isPlaylistShowing=false;
-int whatInMainPage=0;//0代表歌单界面 1代表设置界面
-QList<QListPushButton*> songlist_buttons;
-QList<QListPushButton*> songs_in_current_songlist_buttons;
-QGraphicsOpacityEffect* effect_for_title_bg;
-
-LAudioPlayer* player;
-//QMediaPlaylist* playlist;
-int duration;
-LRC lyric[200];
-LRC lyric_translate[200];
-config conf;
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -83,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //player->setNotifyInterval(10);//10ms一刷新
     ui->label_volume->setFont(QFont(font_string,10));
 
-    connect(player,SIGNAL(positionChanged(qint64)),this,SLOT(time_change(qint64)));
+    connect(player,SIGNAL(positionChanged(int)),this,SLOT(time_change(int)));
     connect(player,SIGNAL(durationChanged(qint64)),this,SLOT(get_duration(qint64)));
     connect(ui->horizontalSlider,SIGNAL(clicked()),this,SLOT(QSliderProClicked()));
     connect(ui->Slider_volume,SIGNAL(clicked()),this,SLOT(SliderVolumeClicked()));
@@ -120,7 +90,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //ui->widget_playlist->hide();
     on_pushButton_hideplayer_clicked();
     on_pushButton_settings_return_clicked();
-    connect(ui->widget_cover,SIGNAL(clicked()),this,SLOT(show_player()));
+    connect(ui->widget_cover,SIGNAL(clicked()),this,SLOT(Show_player()));
 
     QString path_songlist=QApplication::applicationDirPath()+"/songlists/";
     QDirIterator iter_songlist(path_songlist,QStringList()<<"*.llist",
@@ -162,302 +132,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->pushButton_allmusic->setStyleSheet("border-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
     ui->pushButton_mylike->setStyleSheet("border-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:center;",1);
 
+    //初始化动画变量
+    //init_animes();
+
     read_userdata();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-}
-
-void MainWindow::time_change(qint64 time){
-    QString temp=tr("%1").arg(time);
-    int real_time=temp.toInt();
-    int minute=real_time/60000;
-    int second=(real_time-minute*60000)/1000;
-    QString min,sec;
-    if(minute<10){
-        min="0"+QString::number(minute);
-    }
-    else min=QString::number(minute);
-    if(second<10){
-        sec="0"+QString::number(second);
-    }
-    else sec=QString::number(second);
-    ui->label_time->setText(min+":"+sec);
-    ui->fakelabel_time->setText(min+":"+sec);
-    ui->horizontalSlider->setSliderPosition(real_time);
-    for(int i=0;i<valid_lyric-1;++i){
-        if(real_time>=lyric[i].time&&real_time<lyric[i+1].time){
-            if(ui->pushButton_lyric->text()!=lyric[i].text){
-                if(lyric[i].text.contains("<")){//html
-                    QTextDocument html;
-                    html.setHtml(lyric[i].text);
-                    QPixmap pixmap(html.size().width(),html.size().height());
-                    pixmap.fill(Qt::transparent);
-                    QPainter painter(&pixmap);
-                    html.drawContents(&painter,pixmap.rect());
-                    QIcon icon(pixmap);
-                    ui->pushButton_lyric_html->setText("");
-                    ui->pushButton_lyric_html->setIcon(icon);
-                    ui->pushButton_lyric_html->setIconSize(pixmap.rect().size());
-                    ui->pushButton_lyric->setText("");
-                    ui->pushButton_lyric_translate->setText(lyric_translate[i].text);
-
-                    QString dda=lyric[i].text;
-                    dda.replace("color:#000000","color:#7f7f7f");
-                    dda.replace("font-size:14pt;","font-size:13pt;");
-                    //qDebug()<<dda; e.g.<span style=" font-size:14pt; font-weight:600; color:#55aaff;">aaaaa</span><span style=" font-size:14pt; font-weight:600; color:#ffaaff;">aaaaaaa</span>
-                    QTextDocument htmll;
-                    htmll.setHtml(dda);
-                    QPixmap pixmapp(htmll.size().width(),htmll.size().height());
-                    pixmapp.fill(Qt::transparent);
-                    QPainter painterr(&pixmapp);
-                    htmll.drawContents(&painterr,pixmapp.rect());
-                    QIcon iconn(pixmapp);
-                    dd.ui->pushButton_lyric_html->setText("");
-                    dd.ui->pushButton_lyric_html->setIcon(iconn);
-                    dd.ui->pushButton_lyric_html->setIconSize(pixmapp.rect().size());
-                    dd.ui->pushButton_lyric->setText("");
-
-                    if(!lyric_translate[i].text.contains("\n")){
-                        dd.ui->label_lyric_translate->setText(lyric_translate[i].text);
-                    }
-                    else{
-                        QStringList tem=lyric_translate[i].text.split("\n");
-                        QString aaa;
-                        for(int m=0;m<tem.count();++m){
-                            aaa.append(tem.at(m)+" ");
-                        }
-                        dd.ui->label_lyric_translate->setText(adjust_text_overlength(aaa,dd.ui->label_lyric_translate,1));
-                    }
-                }
-                else{
-                    ui->pushButton_lyric_html->setIcon(*empty_icon);
-                    dd.ui->pushButton_lyric_html->setIcon(*empty_icon);
-                    ui->pushButton_lyric->setText(lyric[i].text);
-                    if(!lyric[i].text.contains("\n")){
-                        dd.ui->pushButton_lyric->setText(lyric[i].text);
-                    }
-                    else{
-                        QStringList tem=lyric[i].text.split("\n");
-                        QString aaa;
-                        for(int m=0;m<tem.count();++m){
-                            aaa.append(tem.at(m)+" ");
-                        }
-                        dd.ui->pushButton_lyric->setText(adjust_text_overlength(aaa,dd.ui->pushButton_lyric,1));
-                    }
-                    ui->pushButton_lyric_translate->setText(lyric_translate[i].text);
-                    if(!lyric_translate[i].text.contains("\n")){
-                        dd.ui->label_lyric_translate->setText(lyric_translate[i].text);
-                    }
-                    else{
-                        QStringList tem=lyric_translate[i].text.split("\n");
-                        QString aaa;
-                        for(int m=0;m<tem.count();++m){
-                            aaa.append(tem.at(m)+" ");
-                        }
-                        dd.ui->label_lyric_translate->setText(adjust_text_overlength(aaa,dd.ui->label_lyric_translate,1));
-                    }
-                    if(lyric[i].color_num==0||lyric[i].color_num==conf.num){
-                        ui->pushButton_lyric->setStyleSheet("color:black;\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);");
-                        dd.ui->pushButton_lyric->setStyleSheet("color:#7f7f7f;\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);");
-                    }
-                    else if(lyric[i].color_num==1){
-                        for(int u=0;u<conf.num;++u){
-                            if(lyric[i].color[u]==true){
-                                ui->pushButton_lyric->setStyleSheet("color:"+conf.member.at(u).left(7)+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);");
-                                dd.ui->pushButton_lyric->setStyleSheet("color:"+conf.member.at(u).left(7)+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);");
-                            }
-                        }
-                    }
-                    else{
-                        QString style_prefix="color:qlineargradient(spread:pad x1:0, y1:0, x2:1, y2:0, ";
-                        QString style_suffix=");\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);";
-                        QString temp="";
-                        int progress=0;
-                        for(int ii=0;ii<lyric[i].color_num;++ii){
-                            temp+="stop:"+QString::number(ii*1.0/(lyric[i].color_num-1))+" ";
-                            for(int iii=progress;iii<conf.num;++iii){
-                                if(lyric[i].color[iii]==true){
-                                    temp+=conf.member.at(iii).left(7)+",";
-                                    iii++;//防止break导致的iii不变
-                                    progress=iii;//一定要在iii++后再赋值，否则progress不变，一直卡在一个颜色
-                                    break;
-                                }
-                            }
-                        }
-                        temp=temp.mid(0,temp.length()-1);
-                        ui->pushButton_lyric->setStyleSheet(style_prefix+temp+style_suffix);
-                        dd.ui->pushButton_lyric->setStyleSheet(style_prefix+temp+style_suffix);
-                    }
-                }
-
-                //开始设置歌手显示
-                QString singers="";
-                if(lyric[i].color_num==conf.num){
-                    for(int k=0;k<conf.num;++k){
-                        singers+=conf.member.at(k).right(conf.member.at(k).length()-7)+"、";
-                    }
-                }
-                else if(lyric[i].color_num==0) singers="、";
-                else{
-                    for(int k=0;k<conf.num;++k){
-                        if(lyric[i].color[k]==true){
-                            singers+=conf.member.at(k).right(conf.member.at(k).length()-7)+"、";
-                        }
-                    }
-                }
-                singers=singers.left(singers.length()-1);
-                if(singers==""){
-                    ui->label_singers->hide();
-                }
-                else if(ui->label_singers->text()==""){
-                    ui->label_singers->show();
-                }
-                ui->label_singers->setText(singers);
-            }
-            break;
-        }
-        else if(real_time>=lyric[valid_lyric-1].time){
-            if(ui->pushButton_lyric->text()!=lyric[valid_lyric-1].text){
-                if(lyric[valid_lyric-1].text.contains("<")){//html
-                    QTextDocument html;
-                    html.setHtml(lyric[valid_lyric-1].text);
-                    QPixmap pixmap(html.size().width(),html.size().height());
-                    pixmap.fill(Qt::transparent);
-                    QPainter painter(&pixmap);
-                    html.drawContents(&painter,pixmap.rect());
-                    QIcon icon(pixmap);
-                    ui->pushButton_lyric_html->setText("");
-                    ui->pushButton_lyric_html->setIcon(icon);
-                    ui->pushButton_lyric_html->setIconSize(pixmap.rect().size());
-                    ui->pushButton_lyric->setText("");
-                    ui->pushButton_lyric_translate->setText(lyric_translate[valid_lyric-1].text);
-
-                    QString dda=lyric[valid_lyric-1].text;
-                    dda.replace("color:#000000","color:#7f7f7f");
-                    dda.replace("font-size:14pt;","font-size:13pt;");
-                    //qDebug()<<dda; e.g.<span style=" font-size:14pt; font-weight:600; color:#55aaff;">aaaaa</span><span style=" font-size:14pt; font-weight:600; color:#ffaaff;">aaaaaaa</span>
-                    QTextDocument htmll;
-                    htmll.setHtml(dda);
-                    QPixmap pixmapp(htmll.size().width(),htmll.size().height());
-                    pixmapp.fill(Qt::transparent);
-                    QPainter painterr(&pixmapp);
-                    htmll.drawContents(&painterr,pixmapp.rect());
-                    QIcon iconn(pixmapp);
-                    dd.ui->pushButton_lyric_html->setText("");
-                    dd.ui->pushButton_lyric_html->setIcon(iconn);
-                    dd.ui->pushButton_lyric_html->setIconSize(pixmapp.rect().size());
-                    dd.ui->pushButton_lyric->setText("");
-                    if(!lyric_translate[valid_lyric-1].text.contains("\n")){
-                        dd.ui->label_lyric_translate->setText(lyric_translate[valid_lyric-1].text);
-                    }
-                    else{
-                        QStringList tem=lyric_translate[valid_lyric-1].text.split("\n");
-                        QString aaa;
-                        for(int m=0;m<tem.count();++m){
-                            aaa.append(tem.at(m)+" ");
-                        }
-                        dd.ui->label_lyric_translate->setText(adjust_text_overlength(aaa,dd.ui->label_lyric_translate,1));
-                    }
-                }
-                else{
-                    ui->pushButton_lyric_html->setIcon(*empty_icon);
-                    ui->pushButton_lyric->setText(lyric[valid_lyric-1].text);
-                    ui->pushButton_lyric_translate->setText(lyric_translate[valid_lyric-1].text);
-
-                    dd.ui->pushButton_lyric_html->setIcon(*empty_icon);
-                    if(!lyric[valid_lyric-1].text.contains("\n")){
-                        dd.ui->pushButton_lyric->setText(lyric[valid_lyric-1].text);
-                    }
-                    else{
-                        QStringList tem=lyric[valid_lyric-1].text.split("\n");
-                        QString aaa;
-                        for(int m=0;m<tem.count();++m){
-                            aaa.append(tem.at(m)+" ");
-                        }
-                        dd.ui->pushButton_lyric->setText(adjust_text_overlength(aaa,dd.ui->pushButton_lyric,1));
-                    }
-                    if(!lyric_translate[valid_lyric-1].text.contains("\n")){
-                        dd.ui->label_lyric_translate->setText(lyric_translate[valid_lyric-1].text);
-                    }
-                    else{
-                        QStringList tem=lyric_translate[valid_lyric-1].text.split("\n");
-                        QString aaa;
-                        for(int m=0;m<tem.count();++m){
-                            aaa.append(tem.at(m)+" ");
-                        }
-                        dd.ui->label_lyric_translate->setText(adjust_text_overlength(aaa,dd.ui->label_lyric_translate,1));
-                    }
-
-                    //开始调色
-                    if(lyric[valid_lyric-1].color_num==0){
-                        ui->pushButton_lyric->setStyleSheet("color:black;\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);");
-                        dd.ui->pushButton_lyric->setStyleSheet("color:#7f7f7f;\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);");
-                    }
-                    else if(lyric[valid_lyric-1].color_num==conf.num){
-                        ui->pushButton_lyric->setStyleSheet("color:black;\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);");
-                        dd.ui->pushButton_lyric->setStyleSheet("color:#7f7f7f;\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);");
-                    }
-                    else if(lyric[valid_lyric-1].color_num==1){
-                        for(int u=0;u<conf.num;++u){
-                            if(lyric[valid_lyric-1].color[u]==true){
-                                ui->pushButton_lyric->setStyleSheet("color:"+conf.member.at(u).left(7)+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);");
-                                dd.ui->pushButton_lyric->setStyleSheet("color:"+conf.member.at(u).left(7)+";\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);");
-                            }
-                        }
-                    }
-                    else{
-                        QString style_prefix="color:qlineargradient(spread:pad x1:0, y1:0, x2:1, y2:0, ";
-                        QString style_suffix=");\nborder-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);";
-                        QString temp="";
-                        int progress=0;
-                        for(int ii=0;ii<lyric[valid_lyric-1].color_num;++ii){
-                            temp+="stop:"+QString::number(ii*1.0/(lyric[valid_lyric-1].color_num-1))+" ";
-                            for(int iii=progress;iii<conf.num;++iii){
-                                if(lyric[valid_lyric-1].color[iii]==true){
-                                    temp+=conf.member.at(iii).left(7)+",";
-                                    iii++;//防止break导致的iii不变
-                                    progress=iii;//一定要在iii++后再赋值，否则progress不变，一直卡在一个颜色
-                                    break;
-                                }
-                            }
-                        }
-                        temp=temp.mid(0,temp.length()-1);
-                        ui->pushButton_lyric->setStyleSheet(style_prefix+temp+style_suffix);
-                        dd.ui->pushButton_lyric->setStyleSheet(style_prefix+temp+style_suffix);
-                    }
-
-                }
-
-                //开始设置歌手显示
-                QString singers="";
-                if(lyric[valid_lyric-1].color_num==conf.num){
-                    for(int k=0;k<conf.num;++k){
-                        singers+=conf.member.at(k).right(conf.member.at(k).length()-7)+"、";
-                    }
-                }
-                else if(lyric[valid_lyric-1].color_num==0) singers="、";
-                else{
-                    for(int k=0;k<conf.num;++k){
-                        if(lyric[valid_lyric-1].color[k]==true){
-                            singers+=conf.member.at(k).right(conf.member.at(k).length()-7)+"、";
-                        }
-                    }
-                }
-                singers=singers.left(singers.length()-1);
-                if(singers==""){
-                    ui->label_singers->hide();
-                }
-                else if(ui->label_singers->text()==""){
-                    ui->label_singers->show();
-                }
-                ui->label_singers->setText(singers);
-            }
-            break;
-        }
-    }
 }
 
 void MainWindow::time_change(int time){
@@ -473,8 +156,10 @@ void MainWindow::time_change(int time){
         sec="0"+QString::number(second);
     }
     else sec=QString::number(second);
-    ui->label_time->setText(min+":"+sec);
-    ui->fakelabel_time->setText(min+":"+sec);
+    ui->label_time->setText(min+":"+sec+"/"+duration_convert());
+    ui->fakelabel_time->setText(ui->label_time->text());
+    ui->horizontalSlider->setSliderPosition(real_time);
+    ui->fakehorizontalSlider->setSliderPosition(real_time);
     for(int i=0;i<199;++i){
         if(real_time>=lyric[i].time&&real_time<lyric[i+1].time){
             if(ui->pushButton_lyric->text()!=lyric[i].text){
@@ -753,13 +438,22 @@ void MainWindow::time_change(int time){
 }
 
 void MainWindow::get_duration(qint64 time){
-    write_log("time="+QString::number(time));
+    duration=time;
+    QString ddd=duration_convert();
+    ui->label_time->setText("00:00/"+ddd);
+    ui->fakelabel_time->setText(ui->label_time->text());
+    ui->horizontalSlider->setMaximum(duration);
+    ui->horizontalSlider->setMinimum(0);
+    ui->fakehorizontalSlider->setMaximum(duration);
+    ui->fakehorizontalSlider->setMinimum(0);
+    qDebug()<<"got duration:"<<duration;
+}
+
+QString MainWindow::duration_convert(){
     int minute,second;
     QString min,sec;
-    minute=time/60000;
-    write_log("minute="+QString::number(minute));
-    second=(time-minute*60000)/1000;
-    write_log("second="+QString::number(second));
+    minute=duration/60000;
+    second=(duration-minute*60000)/1000;
     if(minute<10){
         min="0"+QString::number(minute);
     }
@@ -772,14 +466,7 @@ void MainWindow::get_duration(qint64 time){
     else{
         sec=QString::number(second);
     }
-    ui->label_duration->setText("/"+min+":"+sec);
-    ui->fakelabel_duration->setText("/"+min+":"+sec);
-    duration=time;
-    ui->horizontalSlider->setMaximum(duration);
-    ui->horizontalSlider->setMinimum(0);
-    ui->fakehorizontalSlider->setMaximum(duration);
-    ui->fakehorizontalSlider->setMinimum(0);
-    qDebug()<<"got duration:"<<duration;
+    return min+":"+sec;
 }
 
 bool MainWindow::read_lyric(QString path,int mode){
@@ -959,7 +646,7 @@ void MainWindow::on_pushButton_play_clicked()
 
 void MainWindow::on_horizontalSlider_sliderPressed()
 {
-    disconnect(player,SIGNAL(positionChanged(qint64)),this,SLOT(time_change(qint64)));
+    disconnect(player,SIGNAL(positionChanged(int)),this,SLOT(time_change(int)));
     connect(ui->horizontalSlider,SIGNAL(valueChanged(int)),this,SLOT(time_change_manual(int)));
     connect(ui->horizontalSlider,SIGNAL(valueChanged(int)),this,SLOT(time_change(int)));
 }
@@ -971,7 +658,7 @@ void MainWindow::on_horizontalSlider_sliderReleased()
     player->LPlay();
     disconnect(ui->horizontalSlider,SIGNAL(valueChanged(int)),this,SLOT(time_change_manual(int)));
     disconnect(ui->horizontalSlider,SIGNAL(valueChanged(int)),this,SLOT(time_change(int)));
-    connect(player,SIGNAL(positionChanged(qint64)),this,SLOT(time_change(qint64)));
+    connect(player,SIGNAL(positionChanged(int)),this,SLOT(time_change(int)));
 }
 
 void MainWindow::time_change_manual(int time){
@@ -986,8 +673,8 @@ void MainWindow::time_change_manual(int time){
         sec="0"+QString::number(second);
     }
     else sec=QString::number(second);
-    ui->label_time->setText(min+":"+sec);
-    ui->fakelabel_time->setText(min+":"+sec);
+    ui->label_time->setText(min+":"+sec+"/"+duration_convert());
+    ui->fakelabel_time->setText(ui->label_time->text());
 }
 
 void MainWindow::get_meta(QString path,bool isNeedAlbumCover){
@@ -1134,9 +821,9 @@ void MainWindow::load_single_song(QString name){
 
 void MainWindow::QSliderProClicked(){
     int pos=ui->horizontalSlider->value();
-    disconnect(player,SIGNAL(positionChanged(qint64)),this,SLOT(time_change(qint64)));
+    disconnect(player,SIGNAL(positionChanged(int)),this,SLOT(time_change(int)));
     player->LSetPosition(pos);
-    connect(player,SIGNAL(positionChanged(qint64)),this,SLOT(time_change(qint64)));
+    connect(player,SIGNAL(positionChanged(int)),this,SLOT(time_change(int)));
 }
 
 void MainWindow::change_song(QMediaPlayer::MediaStatus status){
@@ -1991,30 +1678,24 @@ void MainWindow::on_pushButton_settings_return_clicked()
     whatInMainPage=0;
     ui->widget_songlist->setGeometry(QRect(0,ui->widget_title->height(),ui->widget_shadow->width(),635));
     /*if(ui->widget_cover->is_small==true){
-        show_player();
+        Show_player();
         ui->widget_cover->is_small=false;
     }*/
 }
 
-void MainWindow::show_player(){
+void MainWindow::Show_player(){
     if(ui->widget_cover->is_small==false){//???????
-        QPropertyAnimation* show_player=new QPropertyAnimation(ui->widget_player,"geometry");
-        show_player->setDuration(750);
-        show_player->setStartValue(QRect(0,ui->widget_shadow->height(),ui->widget_shadow->width(),0));
-        show_player->setEndValue(QRect(0,ui->widget_title->height(),ui->widget_shadow->width(),ui->widget_shadow->height()-ui->widget_title->height()));
-        show_player->setEasingCurve(QEasingCurve::OutQuart);
+        init_animes();
         show_player->start();
-        connect(show_player,SIGNAL(finished()),this,SLOT(show_player_next()));
     }
 
     ui->widget_cover->is_small=false;
 }
 
-void MainWindow::show_player_next(){
+void MainWindow::Show_player_next(){
     ui->label_settings_info->hide();
     ui->horizontalSlider->setGeometry(QRect(50,ui->widget_shadow->geometry().height()-60,1100,22));
-    ui->label_time->move(1210,815);
-    ui->label_duration->move(1267,815);
+    ui->label_time->move(1180,811);
     ui->pushButton_play->move(1050,650);
     ui->pushButton_next->setGeometry(QRect(1140,660,30,30));
     ui->pushButton_last->setGeometry(QRect(970,660,30,30));
@@ -2027,6 +1708,8 @@ void MainWindow::show_player_next(){
     ui->widget_settings->lower();
     ui->widget_settings->setGeometry(0,ui->widget_title->height(),0,380);
     ui->widget_songlist->setGeometry(QRect(0,ui->widget_title->height(),0,390));
+
+    delete_animes();
 }
 
 bool MainWindow::eventFilter(QObject* object, QEvent* event){
@@ -2195,23 +1878,16 @@ void MainWindow::on_checkBox_quickselect_clicked(bool checked)
 void MainWindow::on_pushButton_playlist_clicked()
 {
     int x=ui->widget_playlist->geometry().x();
-    QPropertyAnimation* show_playlist=new QPropertyAnimation(ui->widget_playlist,"geometry");
-    show_playlist->setDuration(950);
-    show_playlist->setStartValue(QRect(x,10,0,ui->widget_shadow->height()));
-    show_playlist->setEndValue(QRect(this->width()-10-250,10,250,ui->widget_shadow->height()));
-    show_playlist->setEasingCurve(QEasingCurve::OutQuart);
-
-    QPropertyAnimation* hide_playlist=new QPropertyAnimation(ui->widget_playlist,"geometry");
-    hide_playlist->setDuration(950);
-    hide_playlist->setStartValue(QRect(x,10,250,ui->widget_shadow->height()));
-    hide_playlist->setEndValue(QRect(this->width()-9,10,0,ui->widget_shadow->height()));
-    hide_playlist->setEasingCurve(QEasingCurve::OutQuart);
 
     if(isPlaylistShowing==false){
+        init_animes();
+        show_playlist->setStartValue(QRect(x,10,0,ui->widget_shadow->height()));
         show_playlist->start();
         isPlaylistShowing=true;
     }
     else{
+        init_animes();
+        hide_playlist->setStartValue(QRect(x,10,250,ui->widget_shadow->height()));
         hide_playlist->start();
         isPlaylistShowing=false;
     }
@@ -2219,11 +1895,7 @@ void MainWindow::on_pushButton_playlist_clicked()
 
 void MainWindow::on_pushButton_hideplaylist_clicked()
 {
-    QPropertyAnimation* hide_playlist=new QPropertyAnimation(ui->widget_playlist,"geometry");
-    hide_playlist->setDuration(950);
-    hide_playlist->setStartValue(ui->widget_playlist->geometry());
-    hide_playlist->setEndValue(QRect(this->width()-9,10,0,ui->widget_shadow->height()));
-    hide_playlist->setEasingCurve(QEasingCurve::OutQuart);
+    init_animes();
     hide_playlist->start();
     isPlaylistShowing=false;
 }
@@ -2233,9 +1905,7 @@ void MainWindow::on_pushButton_hideplayer_clicked()
     ui->horizontalSlider->setParent(ui->widget_shadow);
     ui->horizontalSlider->setGeometry(QRect(0,ui->widget_shadow->geometry().height()-95,1480,22));
     ui->label_time->setParent(ui->widget_shadow);
-    ui->label_time->move(1290,817);
-    ui->label_duration->setParent(ui->widget_shadow);
-    ui->label_duration->move(1347,817);
+    ui->label_time->move(1290,820);
     ui->pushButton_play->setParent(ui->widget_shadow);
     ui->pushButton_play->move(716,816);//521+195
     ui->pushButton_next->setParent(ui->widget_shadow);
@@ -2256,13 +1926,8 @@ void MainWindow::on_pushButton_hideplayer_clicked()
     ui->pushButton_playlist->setGeometry(QRect(851,831,20,20));
 
     if(ui->widget_cover->is_small==false){
-        QPropertyAnimation* hide_player=new QPropertyAnimation(ui->widget_player,"geometry");
-        hide_player->setDuration(750);
-        hide_player->setStartValue(QRect(0,ui->widget_title->height(),ui->widget_shadow->geometry().width(),ui->widget_shadow->height()-ui->widget_title->height()));
-        hide_player->setEndValue(QRect(0,ui->widget_shadow->height(),ui->widget_shadow->geometry().width(),0));
-        hide_player->setEasingCurve(QEasingCurve::OutQuart);
+        init_animes();
         hide_player->start();
-
         ui->fakehorizontalSlider->setValue(ui->horizontalSlider->value());
     }
 
@@ -2579,4 +2244,39 @@ void MainWindow::on_checkBox_log_clicked(bool checked)
     else{
         isLog=false;
     }
+}
+
+void MainWindow::init_animes(){
+    show_player=new QPropertyAnimation(ui->widget_player,"geometry");
+    show_player->setDuration(500);
+    show_player->setStartValue(QRect(0,ui->widget_shadow->height(),ui->widget_shadow->width(),0));
+    show_player->setEndValue(QRect(0,ui->widget_title->height(),ui->widget_shadow->width(),ui->widget_shadow->height()-ui->widget_title->height()));
+    show_player->setEasingCurve(QEasingCurve::OutQuart);
+    connect(show_player,SIGNAL(finished()),this,SLOT(Show_player_next()));
+
+    hide_player=new QPropertyAnimation(ui->widget_player,"geometry");
+    hide_player->setDuration(500);
+    hide_player->setStartValue(QRect(0,ui->widget_title->height(),ui->widget_shadow->geometry().width(),ui->widget_shadow->height()-ui->widget_title->height()));
+    hide_player->setEndValue(QRect(0,ui->widget_shadow->height(),ui->widget_shadow->geometry().width(),0));
+    hide_player->setEasingCurve(QEasingCurve::OutQuart);
+    connect(hide_player,SIGNAL(finished()),this,SLOT(delete_animes()));
+
+    show_playlist=new QPropertyAnimation(ui->widget_playlist,"geometry");
+    show_playlist->setDuration(500);
+    show_playlist->setEndValue(QRect(this->width()-10-250,10,250,ui->widget_shadow->height()));
+    show_playlist->setEasingCurve(QEasingCurve::OutQuart);
+    connect(show_playlist,SIGNAL(finished()),this,SLOT(delete_animes()));
+
+    hide_playlist=new QPropertyAnimation(ui->widget_playlist,"geometry");
+    hide_playlist->setDuration(500);
+    hide_playlist->setEndValue(QRect(this->width()-9,10,0,ui->widget_shadow->height()));
+    hide_playlist->setEasingCurve(QEasingCurve::OutQuart);
+    connect(hide_playlist,SIGNAL(finished()),this,SLOT(delete_animes()));
+}
+
+void MainWindow::delete_animes(){
+    show_player->deleteLater();
+    hide_player->deleteLater();
+    show_playlist->deleteLater();
+    hide_playlist->deleteLater();
 }
