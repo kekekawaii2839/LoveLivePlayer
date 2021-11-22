@@ -18,6 +18,7 @@ protected:
     bool eventFilter(QObject *watched, QEvent *event);
 signals:
     clicked(int);
+    dblclicked(int);
 };
 
 #endif // QLISTPUSHBUTTON_H

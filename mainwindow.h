@@ -73,6 +73,7 @@ private:
     HWND hwnd;
     int valid_lyric;//储存有效lyric的数量
     QStringList name_list;//播放列表
+    QStringList all_list;//储存全部音乐的文件名的列表
     int play_progress;//列表播放进度
     QList<QListPushButton*> playlist_buttons;
     QList<QListPushButton*> playlist_singers_buttons;
@@ -88,7 +89,10 @@ private:
     bool isPlaylistShowing=false;
     int whatInMainPage=0;//0代表歌单界面 1代表设置界面
     QList<QListPushButton*> songlist_buttons;
-    QList<QListPushButton*> songs_in_current_songlist_buttons;
+    QList<QListPushButton*> current_songlist_buttons;
+    QList<QLabel*> current_songlist_labels;
+    QList<QLabel*> current_songlist_labels2;
+    QList<QLabel*> current_songlist_labels3;
     QGraphicsOpacityEffect* effect_for_title_bg;
 
 private slots:
@@ -107,8 +111,7 @@ private slots:
     void on_Slider_volume_valueChanged(int value);
     void SliderVolumeClicked();
     void player_state_change(QMediaPlayer::State);
-    QString adjust_text_overlength(QString,QPushButton*,int);
-    QString adjust_text_overlength(QString,QLabel*,int);
+    QString adjust_text_overlength(QString,QWidget*,int);
     void playlist_buttons_clicked(int);
     void on_pushButton_minimize_clicked();
     void on_pushButton_close_clicked();
@@ -131,7 +134,7 @@ private slots:
     void on_pushButton_hideplaylist_clicked();
     void on_pushButton_hideplayer_clicked();
     void songlist_buttons_clicked(int);
-    void songs_in_current_songlist_buttons_clicked(int);
+    void current_songlist_buttons_clicked(int);
     void on_pushButton_playall_clicked();
     void on_pushButton_allmusic_clicked();
     void on_pushButton_mylike_clicked();
@@ -141,6 +144,14 @@ private slots:
     void on_checkBox_log_clicked(bool checked);
     void init_animes();
     void delete_animes();
+    void addPushbuttonsInPlaylist();
+    void addPushbuttonsInSonglist(QStringList);
+    void clearItemsInCurrentSonglist();
+    void get_all_list();
+    void changeThemeColor(
+            int seq_playlist=-1,
+            int seq_songlist=-3,
+            int seq_currentSongInSonglist=-1);
 };
 
 #endif // MAINWINDOW_H

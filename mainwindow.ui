@@ -250,9 +250,9 @@
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>100</y>
+       <y>150</y>
        <width>0</width>
-       <height>380</height>
+       <height>635</height>
       </rect>
      </property>
      <property name="sizePolicy">
@@ -269,8 +269,8 @@
      <widget class="QPushButton" name="pushButton_settings_return">
       <property name="geometry">
        <rect>
-        <x>40</x>
-        <y>30</y>
+        <x>80</x>
+        <y>60</y>
         <width>40</width>
         <height>40</height>
        </rect>
@@ -293,10 +293,10 @@ background-color: rgba(228, 0, 127, 0);</string>
      <widget class="AnimatedScrollArea" name="scrollArea_settings">
       <property name="geometry">
        <rect>
-        <x>100</x>
-        <y>80</y>
-        <width>880</width>
-        <height>300</height>
+        <x>200</x>
+        <y>150</y>
+        <width>1080</width>
+        <height>335</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -310,7 +310,7 @@ background-color: rgba(228, 0, 127, 0);</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>857</width>
+         <width>1057</width>
          <height>400</height>
         </rect>
        </property>
@@ -325,7 +325,7 @@ background-color: rgba(228, 0, 127, 0);</string>
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>850</width>
+          <width>1060</width>
           <height>80</height>
          </rect>
         </property>
@@ -380,7 +380,7 @@ background-color: rgba(228, 0, 127, 0);</string>
          <rect>
           <x>0</x>
           <y>79</y>
-          <width>850</width>
+          <width>1060</width>
           <height>141</height>
          </rect>
         </property>
@@ -453,7 +453,7 @@ background-color: rgba(228, 0, 127, 0);</string>
          <rect>
           <x>0</x>
           <y>219</y>
-          <width>850</width>
+          <width>1060</width>
           <height>80</height>
          </rect>
         </property>
@@ -508,7 +508,7 @@ background-color: rgba(228, 0, 127, 0);</string>
          <rect>
           <x>0</x>
           <y>298</y>
-          <width>850</width>
+          <width>1060</width>
           <height>80</height>
          </rect>
         </property>
@@ -1082,7 +1082,7 @@ color:black;</string>
         <property name="geometry">
          <rect>
           <x>50</x>
-          <y>50</y>
+          <y>30</y>
           <width>200</width>
           <height>50</height>
          </rect>
@@ -1155,7 +1155,7 @@ color:black;</string>
         <property name="geometry">
          <rect>
           <x>380</x>
-          <y>60</y>
+          <y>40</y>
           <width>93</width>
           <height>28</height>
          </rect>
@@ -1165,6 +1165,60 @@ color:black;</string>
         </property>
         <property name="flat">
          <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_songlist_artist">
+        <property name="geometry">
+         <rect>
+          <x>520</x>
+          <y>120</y>
+          <width>40</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>歌手</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_songlist_songname">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>120</y>
+          <width>40</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>歌曲</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_songlist_album">
+        <property name="geometry">
+         <rect>
+          <x>860</x>
+          <y>120</y>
+          <width>40</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>专辑</string>
         </property>
        </widget>
       </widget>

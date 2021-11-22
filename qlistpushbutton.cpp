@@ -32,6 +32,9 @@ bool QListPushButton::eventFilter(QObject *watched, QEvent *event){
             this->setStyleSheet(ori_stylesheet,0);
             return true;
         }
+        else if(event->type()==QEvent::MouseButtonDblClick){
+            emit dblclicked(seq);
+        }
     }
     return QPushButton::eventFilter(watched,event);
 }
