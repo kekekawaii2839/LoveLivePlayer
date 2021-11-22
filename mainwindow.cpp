@@ -1945,7 +1945,7 @@ void MainWindow::on_checkBox_log_clicked(bool checked)
     }
 }
 
-void MainWindow::init_animes(){
+/*void MainWindow::init_animes(){
     show_player=new QPropertyAnimation(ui->widget_player,"geometry");
     show_player->setDuration(500);
     show_player->setStartValue(QRect(0,ui->widget_shadow->height(),ui->widget_shadow->width(),0));
@@ -1978,7 +1978,7 @@ void MainWindow::delete_animes(){
     hide_player->deleteLater();
     show_playlist->deleteLater();
     hide_playlist->deleteLater();
-}
+}*/
 
 void MainWindow::addPushbuttonsInPlaylist(){
     QString path=QApplication::applicationDirPath()+"/songs/";

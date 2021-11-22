@@ -63,10 +63,10 @@ private:
     LRC lyric_translate[200];
     config conf;
 
-    QPropertyAnimation* show_player;
+    /*QPropertyAnimation* show_player;
     QPropertyAnimation* hide_player;
     QPropertyAnimation* show_playlist;
-    QPropertyAnimation* hide_playlist;
+    QPropertyAnimation* hide_playlist;*/
 
     libZPlay::ZPlay* zplayer;
     QString title,artist,album;
@@ -142,8 +142,8 @@ private slots:
     void player_error(QMediaPlayer::Error);
     void ShowAlbumPic();
     void on_checkBox_log_clicked(bool checked);
-    void init_animes();
-    void delete_animes();
+    //void init_animes();
+    //void delete_animes();
     void addPushbuttonsInPlaylist();
     void addPushbuttonsInSonglist(QStringList);
     void clearItemsInCurrentSonglist();
