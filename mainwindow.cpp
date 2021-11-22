@@ -1477,7 +1477,12 @@ void MainWindow::on_pushButton_settings_return_clicked()
 
 void MainWindow::Show_player(){
     if(ui->widget_cover->is_small==false){//???????
-        init_animes();
+        QPropertyAnimation* show_player=new QPropertyAnimation(ui->widget_player,"geometry");
+        show_player->setDuration(500);
+        show_player->setStartValue(QRect(0,ui->widget_shadow->height(),ui->widget_shadow->width(),0));
+        show_player->setEndValue(QRect(0,ui->widget_title->height(),ui->widget_shadow->width(),ui->widget_shadow->height()-ui->widget_title->height()));
+        show_player->setEasingCurve(QEasingCurve::OutQuart);
+        connect(show_player,SIGNAL(finished()),this,SLOT(Show_player_next()));
         show_player->start();
     }
 
@@ -1501,7 +1506,7 @@ void MainWindow::Show_player_next(){
     ui->widget_settings->setGeometry(0,ui->widget_title->height(),0,380);
     ui->widget_songlist->setGeometry(QRect(0,ui->widget_title->height(),0,390));
 
-    delete_animes();
+    //delete_animes();
 }
 
 bool MainWindow::eventFilter(QObject* object, QEvent* event){
@@ -1669,14 +1674,22 @@ void MainWindow::on_pushButton_playlist_clicked()
     int x=ui->widget_playlist->geometry().x();
 
     if(isPlaylistShowing==false){
-        init_animes();
+        QPropertyAnimation* show_playlist=new QPropertyAnimation(ui->widget_playlist,"geometry");
+        show_playlist->setDuration(500);
+        show_playlist->setEndValue(QRect(this->width()-10-250,10,250,ui->widget_shadow->height()));
+        show_playlist->setEasingCurve(QEasingCurve::OutQuart);
+        connect(show_playlist,SIGNAL(finished()),this,SLOT(delete_animes()));
         show_playlist->setStartValue(QRect(x,10,0,ui->widget_shadow->height()));
         show_playlist->start();
         isPlaylistShowing=true;
     }
     else{
-        init_animes();
+        QPropertyAnimation* hide_playlist=new QPropertyAnimation(ui->widget_playlist,"geometry");
+        hide_playlist->setDuration(500);
         hide_playlist->setStartValue(QRect(x,10,250,ui->widget_shadow->height()));
+        hide_playlist->setEndValue(QRect(this->width()-9,10,0,ui->widget_shadow->height()));
+        hide_playlist->setEasingCurve(QEasingCurve::OutQuart);
+        connect(hide_playlist,SIGNAL(finished()),this,SLOT(delete_animes()));
         hide_playlist->start();
         isPlaylistShowing=false;
     }
@@ -1684,7 +1697,12 @@ void MainWindow::on_pushButton_playlist_clicked()
 
 void MainWindow::on_pushButton_hideplaylist_clicked()
 {
-    init_animes();
+    QPropertyAnimation* hide_playlist=new QPropertyAnimation(ui->widget_playlist,"geometry");
+    hide_playlist->setDuration(500);
+    hide_playlist->setStartValue(QRect(ui->widget_playlist->geometry().x(),10,250,ui->widget_shadow->height()));
+    hide_playlist->setEndValue(QRect(this->width()-9,10,0,ui->widget_shadow->height()));
+    hide_playlist->setEasingCurve(QEasingCurve::OutQuart);
+    connect(hide_playlist,SIGNAL(finished()),this,SLOT(delete_animes()));
     hide_playlist->start();
     isPlaylistShowing=false;
 }
@@ -1715,7 +1733,12 @@ void MainWindow::on_pushButton_hideplayer_clicked()
     ui->pushButton_playlist->setGeometry(QRect(851,831,20,20));
 
     if(ui->widget_cover->is_small==false){
-        init_animes();
+        QPropertyAnimation* hide_player=new QPropertyAnimation(ui->widget_player,"geometry");
+        hide_player->setDuration(500);
+        hide_player->setStartValue(QRect(0,ui->widget_title->height(),ui->widget_shadow->geometry().width(),ui->widget_shadow->height()-ui->widget_title->height()));
+        hide_player->setEndValue(QRect(0,ui->widget_shadow->height(),ui->widget_shadow->geometry().width(),0));
+        hide_player->setEasingCurve(QEasingCurve::OutQuart);
+        connect(hide_player,SIGNAL(finished()),this,SLOT(delete_animes()));
         hide_player->start();
         ui->fakehorizontalSlider->setValue(ui->horizontalSlider->value());
     }
