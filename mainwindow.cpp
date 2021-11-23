@@ -2166,3 +2166,9 @@ void MainWindow::changeThemeColor(int seq_playlist,int seq_songlist,int seq_curr
         current_songlist_labels3.at(seq_currentSongInSonglist)->setStyleSheet("color:"+conf.theme_color+";\nbackground-color:rgba(0,0,0,0);\ntext-align:left;");
     }
 }
+
+void MainWindow::on_pushButton_clicked()
+{
+    mv=new LVideoWidget();
+    mv->show();
+}

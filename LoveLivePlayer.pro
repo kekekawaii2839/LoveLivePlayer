@@ -35,7 +35,8 @@ SOURCES += \
     quickselect.cpp \
     qclickwidget.cpp \
     laudioplayer.cpp \
-    animatedscrollarea.cpp
+    animatedscrollarea.cpp \
+    lvideowidget.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -50,12 +51,14 @@ HEADERS += \
     quickselect.h \
     qclickwidget.h \
     laudioplayer.h \
-    animatedscrollarea.h
+    animatedscrollarea.h \
+    lvideowidget.h
 
 FORMS += \
         mainwindow.ui \
     desktoplyricwindow.ui \
-    quickselect.ui
+    quickselect.ui \
+    lvideowidget.ui
 
 RESOURCES += \
     pic.qrc \
@@ -73,9 +76,9 @@ LIBS += C:/Windows/System32/GdiPlus.dll
 LIBS += -lgdi32
 LIBS += -luser32
 
-ICON = icon.ico
+INCLUDEPATH += $$PWD/mpv
+include ($$PWD/mpv/mpv.pri)
 
-DISTFILES += \
-    logo.rc
+ICON = icon.ico
 
 RC_FILE += logo.rc

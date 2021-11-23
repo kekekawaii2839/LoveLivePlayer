@@ -1722,6 +1722,22 @@ background-color: rgba(228, 0, 127, 0);</string>
       </rect>
      </property>
     </widget>
+    <widget class="QPushButton" name="pushButton">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>120</y>
+       <width>93</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(0, 0, 0);</string>
+     </property>
+     <property name="text">
+      <string>TEMP</string>
+     </property>
+    </widget>
    </widget>
    <zorder>widget_shadow</zorder>
    <zorder>widget_title</zorder>

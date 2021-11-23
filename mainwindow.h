@@ -6,6 +6,7 @@
 #include "qclickwidget.h"
 #include "globalvariable.h"
 #include "laudioplayer.h"
+#include "lvideowidget.h"
 
 #include <QMainWindow>
 #include <QUrl>
@@ -62,6 +63,7 @@ private:
     LRC lyric[200];
     LRC lyric_translate[200];
     config conf;
+    LVideoWidget* mv;
 
     /*QPropertyAnimation* show_player;
     QPropertyAnimation* hide_player;
@@ -152,6 +154,7 @@ private slots:
             int seq_playlist=-1,
             int seq_songlist=-3,
             int seq_currentSongInSonglist=-1);
+    void on_pushButton_clicked();
 };
 
 #endif // MAINWINDOW_H
