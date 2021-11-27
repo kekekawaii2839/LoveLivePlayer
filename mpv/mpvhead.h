@@ -13,7 +13,7 @@ extern "C" {
 # endif
 
 #include "qdatetime.h"
-#pragma execution_character_set("utf-8")
+//#pragma execution_character_set("utf-8")
 
 #define TIMEMS          qPrintable(QTime::currentTime().toString("HH:mm:ss zzz"))
 #define TIME            qPrintable(QTime::currentTime().toString("HH:mm:ss"))

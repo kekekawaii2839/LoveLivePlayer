@@ -37,7 +37,6 @@
     </property>
     <property name="font">
      <font>
-      <family>汉仪文黑-85W</family>
       <pointsize>11</pointsize>
       <weight>50</weight>
       <bold>false</bold>
@@ -84,7 +83,6 @@ background-color:rgba(0,0,0,0);</string>
     </property>
     <property name="font">
      <font>
-      <family>汉仪文黑-85W</family>
       <pointsize>13</pointsize>
       <weight>50</weight>
       <bold>false</bold>

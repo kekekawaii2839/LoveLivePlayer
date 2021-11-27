@@ -12,8 +12,9 @@ public:
     AnimatedScrollArea(QWidget* parent=nullptr);
 protected:
     void wheelEvent(QWheelEvent* event);
+    //void paintEvent(QPaintEvent *e);
 private:
-    QPropertyAnimation* ScrollBarAnime;
+    //QPropertyAnimation* ScrollBarAnime;
 };
 
 #endif // ANIMATEDSCROLLAREA_H

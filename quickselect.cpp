@@ -71,6 +71,8 @@ bool QuickSelect::eventFilter(QObject *watched, QEvent *event){
         }
     }
     else if(event->type()==QEvent::MouseButtonRelease) this->hide();
+
+    return QMainWindow::eventFilter(watched,event);
 }
 
 void QuickSelect::restore(){

@@ -74,6 +74,8 @@ private:
     QString title,artist,album;
     HWND hwnd;
     int valid_lyric;//储存有效lyric的数量
+    int current_lyric_index;//LRC数组当前显示的元素的下标
+    int time_change_mode;//0表示正常播放 1表示拖动进度条导致的positionChanged
     QStringList name_list;//播放列表
     QStringList all_list;//储存全部音乐的文件名的列表
     int play_progress;//列表播放进度
@@ -154,7 +156,7 @@ private slots:
             int seq_playlist=-1,
             int seq_songlist=-3,
             int seq_currentSongInSonglist=-1);
-    void on_pushButton_clicked();
+    void on_pushButton_mv_clicked();
 };
 
 #endif // MAINWINDOW_H

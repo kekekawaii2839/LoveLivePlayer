@@ -36,9 +36,6 @@
    </size>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
    <widget class="QWidget" name="widget_shadow" native="true">
     <property name="geometry">
      <rect>
@@ -200,7 +197,7 @@
        <x>120</x>
        <y>817</y>
        <width>300</width>
-       <height>20</height>
+       <height>25</height>
       </rect>
      </property>
      <property name="text">
@@ -1026,6 +1023,19 @@ color:black;</string>
        </rect>
       </property>
      </widget>
+     <widget class="QPushButton" name="pushButton_mv">
+      <property name="geometry">
+       <rect>
+        <x>740</x>
+        <y>510</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>MV!</string>
+      </property>
+     </widget>
      <zorder>fakelabel_time</zorder>
      <zorder>widget_cover_shadow</zorder>
      <zorder>widget_examples</zorder>
@@ -1047,6 +1057,7 @@ color:black;</string>
      <zorder>fakehorizontalSlider</zorder>
      <zorder>fakepushButton_playlist</zorder>
      <zorder>fakewidget_cover</zorder>
+     <zorder>pushButton_mv</zorder>
     </widget>
     <widget class="QWidget" name="widget_songlist" native="true">
      <property name="geometry">
@@ -1720,22 +1731,6 @@ background-color: rgba(228, 0, 127, 0);</string>
        <width>870</width>
        <height>150</height>
       </rect>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton">
-     <property name="geometry">
-      <rect>
-       <x>190</x>
-       <y>120</y>
-       <width>93</width>
-       <height>28</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(0, 0, 0);</string>
-     </property>
-     <property name="text">
-      <string>TEMP</string>
      </property>
     </widget>
    </widget>

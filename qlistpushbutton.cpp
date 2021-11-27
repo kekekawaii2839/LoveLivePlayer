@@ -1,13 +1,11 @@
 ﻿#include "qlistpushbutton.h"
-#include <QMouseEvent>
-#include <QDebug>
 
 QListPushButton::QListPushButton(QWidget* parent)
 {
     this->setParent(parent);
     this->setAttribute(Qt::WA_Hover,true);
-    this->installEventFilter(this);
-    this->ori_stylesheet="";
+    //this->installEventFilter(this);
+    //this->ori_stylesheet="";
     seq=-1;
     isRightClicked=false;
 }
@@ -18,7 +16,7 @@ void QListPushButton::mousePressEvent(QMouseEvent *e){
     emit clicked(seq);
 }
 
-bool QListPushButton::eventFilter(QObject *watched, QEvent *event){
+/*bool QListPushButton::eventFilter(QObject *watched, QEvent *event){
     if(watched==this){
         if(event->type()==QEvent::HoverEnter){
             QString temp=this->ori_stylesheet;
@@ -47,9 +45,8 @@ void QListPushButton::setStyleSheet(const QString &styleSheet,int mode){
         QPushButton::setStyleSheet(styleSheet);
         ori_stylesheet=styleSheet;
     }
-}
+}*/
 
 void QListPushButton::setStyleSheet(const QString &styleSheet){
-    QPushButton::setStyleSheet(styleSheet);
-    ori_stylesheet=styleSheet;
+    QPushButton::setStyleSheet("QListPushButton:hover{background-color:rgb(245,245,245);border:none;}\nQListPushButton{"+styleSheet+"}");
 }

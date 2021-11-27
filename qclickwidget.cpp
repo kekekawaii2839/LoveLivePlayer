@@ -20,6 +20,7 @@ void QClickWidget::mouseReleaseEvent(QMouseEvent *e){
 }
 
 void QClickWidget::paintEvent(QPaintEvent *e){//解决继承后qss失效的问题
+    QWidget::paintEvent(e);
     QStyleOption opt;
     opt.init(this);
     QPainter p(this);

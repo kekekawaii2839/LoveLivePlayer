@@ -14,12 +14,18 @@ class LVideoWidget : public QWidget
 public:
     explicit LVideoWidget(QWidget *parent = 0);
     ~LVideoWidget();
+    Ui::LVideoWidget *ui;
+
+    void setPos(int pos);
+
+protected:
+    void paintEvent(QPaintEvent* e);
 
 private slots:
-    void on_btnOpen_clicked();
+    void on_pushButton_close_clicked();
 
 private:
-    Ui::LVideoWidget *ui;
+
 };
 
 #endif // LVIDEOWIDGET_H

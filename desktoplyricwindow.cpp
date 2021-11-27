@@ -75,6 +75,8 @@ bool DesktopLyricWindow::eventFilter(QObject *watched, QEvent *event){
             event->accept();
         }
     }
+
+    return QMainWindow::eventFilter(watched,event);
 }
 
 void DesktopLyricWindow::on_pushButton_lock_clicked()

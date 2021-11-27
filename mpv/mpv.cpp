@@ -8,7 +8,7 @@ MpvThread::MpvThread(QObject *parent) : QThread(parent)
     stopped = false;
     isPlay = false;
 
-    url = "D:/01.mp4";
+    //url = "D:/01.mp4";
 
     mpvPlayer = NULL;
 
