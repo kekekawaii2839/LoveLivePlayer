@@ -46,6 +46,15 @@ MainWindow::MainWindow(QWidget *parent) :
     //ui->widget_settings->hide();
     ui->label_settings_info->hide();
 
+    AnimatedScrollBar* bar_playlist=new AnimatedScrollBar(ui->listWidget_playlist);
+    ui->listWidget_playlist->setVerticalScrollBar(bar_playlist);
+    ui->listWidget_playlist->setStyleSheet("border:none;");
+    ui->listWidget_playlist->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    AnimatedScrollBar* bar_songlist=new AnimatedScrollBar(ui->listWidget_songlist_detail);
+    ui->listWidget_songlist_detail->setVerticalScrollBar(bar_songlist);
+    ui->listWidget_songlist_detail->setStyleSheet("border:none;");
+    ui->listWidget_songlist_detail->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
     player=new LAudioPlayer();
     player->playlist->setPlaybackMode(QMediaPlaylist::Loop);
     isRandomPlay=false;
@@ -782,7 +791,7 @@ void MainWindow::load_single_song(QString name){
     ui->label_settings_info->setText(info);
 
     //以下是调整播放列表滚动条的值
-    if(isRandomPlay==false){
+    /*if(isRandomPlay==false){
         if(ui->scrollArea->verticalScrollBar()->value()+320<80*play_progress){
             ui->scrollArea->verticalScrollBar()->setValue(80*play_progress-320);
         }
@@ -797,7 +806,7 @@ void MainWindow::load_single_song(QString name){
         else if(ui->scrollArea->verticalScrollBar()->value()>80*random_seq.at(randomplay_progress)){
             ui->scrollArea->verticalScrollBar()->setValue(80*random_seq.at(randomplay_progress));
         }
-    }
+    }*/
 
     for(int i=0;i<200;++i){
         lyric[i].color_num=0;
@@ -2018,10 +2027,20 @@ void MainWindow::addPushbuttonsInPlaylist(){
     font2.setPointSize(8);
     for(int i=0;i<name_list.count();++i){
         player->playlist->addMedia(QUrl(path+name_list.at(i)));
-        QListPushButton* pb_temp=new QListPushButton(ui->scrollAreaWidgetContents);
-        QListPushButton* pb_temp2=new QListPushButton(ui->scrollAreaWidgetContents);
-        pb_temp->setGeometry(QRect(0,i*80+5,220,80));
-        pb_temp2->setGeometry(QRect(0,i*80+50,220,30));
+
+        QWidget* container=new QWidget();
+        container->setBaseSize(QSize(ui->listWidget_playlist->width(),80));
+        playlist_containers.append(container);
+
+        QListWidgetItem* item=new QListWidgetItem(ui->listWidget_playlist);
+        item->setSizeHint(QSize(ui->listWidget_playlist->width(),80));
+        ui->listWidget_playlist->setItemWidget(item,container);
+        ui->listWidget_playlist->addItem(item);
+
+        QListPushButton* pb_temp=new QListPushButton(container);
+        QListPushButton* pb_temp2=new QListPushButton(container);
+        pb_temp->setGeometry(QRect(0,0,220,80));
+        pb_temp2->setGeometry(QRect(0,50,220,30));
         get_meta(path+name_list.at(i),false);
         pb_temp->setDefault(false);
         pb_temp->setVisible(true);
@@ -2046,7 +2065,6 @@ void MainWindow::addPushbuttonsInPlaylist(){
         connect(playlist_buttons.at(i),SIGNAL(clicked(int)),this,SLOT(playlist_buttons_clicked(int)));
         playlist_buttons.at(i)->show();
     }
-    ui->scrollAreaWidgetContents->setMinimumHeight(name_list.count()*80+5);
 }
 
 void MainWindow::addPushbuttonsInSonglist(QStringList content){
@@ -2058,16 +2076,25 @@ void MainWindow::addPushbuttonsInSonglist(QStringList content){
     QFont font1;
     font1.setPointSize(11);
     for(int i=0;i<content.count();++i){
-        QListPushButton* pb_temp=new QListPushButton(ui->scrollAreaWidgetContents_songlist_detail);
-        pb_temp->setGeometry(QRect(15,i*50+160,ui->scrollAreaWidgetContents_songlist_detail->width()-10,50));
+        QWidget* container=new QWidget();
+        container->setBaseSize(QSize(ui->listWidget_songlist_detail->width(),50));
+        songlist_detail_containers.append(container);
+
+        QListPushButton* pb_temp=new QListPushButton(container);
+        pb_temp->setGeometry(QRect(15,0,ui->listWidget_songlist_detail->width()-35,50));
         pb_temp->setDefault(false);
         pb_temp->setStyleSheet("border-color:rgba(0,0,0,0);\nbackground-color:rgba(0,0,0,0);\ntext-align:left;");
         pb_temp->setAttribute(Qt::WA_Hover,true);
         pb_temp->seq=i;
         current_songlist_buttons.append(pb_temp);
 
-        QLabel* label_song=new QLabel(ui->scrollAreaWidgetContents_songlist_detail);
-        label_song->setGeometry(QRect(20,i*50+160,pb_temp->width()/3,50));
+        QListWidgetItem* item=new QListWidgetItem(ui->listWidget_songlist_detail);
+        item->setSizeHint(QSize(ui->listWidget_songlist_detail->width(),50));
+        ui->listWidget_songlist_detail->setItemWidget(item,container);
+        ui->listWidget_songlist_detail->addItem(item);
+
+        QLabel* label_song=new QLabel(container);
+        label_song->setGeometry(QRect(20,0,pb_temp->width()/3,50));
         label_song->setFont(font1);
         label_song->setStyleSheet("color:black;\nbackground-color:rgba(0,0,0,0);\ntext-align:left;");
         get_meta(QApplication::applicationDirPath()+"/songs/"+content.at(i),false);
@@ -2075,16 +2102,16 @@ void MainWindow::addPushbuttonsInSonglist(QStringList content){
         label_song->setAttribute(Qt::WA_TransparentForMouseEvents,true);
         current_songlist_labels.append(label_song);
 
-        QLabel* label_song2=new QLabel(ui->scrollAreaWidgetContents_songlist_detail);
-        label_song2->setGeometry(QRect(120+pb_temp->width()/3,i*50+160,pb_temp->width()/5,50));
+        QLabel* label_song2=new QLabel(container);
+        label_song2->setGeometry(QRect(120+pb_temp->width()/3,0,pb_temp->width()/5,50));
         label_song2->setFont(font1);
         label_song2->setStyleSheet("color:black;\nbackground-color:rgba(0,0,0,0);\ntext-align:left;");
         label_song2->setText(adjust_text_overlength(" "+artist,label_song2,1));
         label_song2->setAttribute(Qt::WA_TransparentForMouseEvents,true);
         current_songlist_labels2.append(label_song2);
 
-        QLabel* label_song3=new QLabel(ui->scrollAreaWidgetContents_songlist_detail);
-        label_song3->setGeometry(QRect(label_song2->x()+label_song2->width()+110,i*50+160,pb_temp->width()/4,50));
+        QLabel* label_song3=new QLabel(container);
+        label_song3->setGeometry(QRect(label_song2->x()+label_song2->width()+110,0,pb_temp->width()/4,50));
         label_song3->setFont(font1);
         label_song3->setStyleSheet("color:black;\nbackground-color:rgba(0,0,0,0);\ntext-align:left;");
         label_song3->setText(adjust_text_overlength(" "+album,label_song3,1));
@@ -2092,9 +2119,6 @@ void MainWindow::addPushbuttonsInSonglist(QStringList content){
         current_songlist_labels3.append(label_song3);
 
         pb_temp->lower();
-        label_song->raise();
-        label_song2->raise();
-        label_song3->raise();
         label_song->show();
         label_song2->show();
         label_song3->show();
@@ -2103,26 +2127,11 @@ void MainWindow::addPushbuttonsInSonglist(QStringList content){
         connect(current_songlist_buttons.at(i),SIGNAL(dblclicked(int)),this,SLOT(current_songlist_buttons_clicked(int)));
         current_songlist_buttons.at(i)->show();
     }
-    ui->scrollAreaWidgetContents_songlist_detail->setMinimumHeight(current_songlist_buttons.count()*50+160);
 }
 
 void MainWindow::clearItemsInCurrentSonglist(){
-    for(int i=0;i<current_songlist_buttons.count();++i){
-        current_songlist_buttons.at(i)->setVisible(false);
-        current_songlist_buttons.at(i)->deleteLater();
-    }
-    for(int i=0;i<current_songlist_labels.count();++i){
-        current_songlist_labels.at(i)->setVisible(false);
-        current_songlist_labels.at(i)->deleteLater();
-    }
-    for(int i=0;i<current_songlist_labels2.count();++i){
-        current_songlist_labels2.at(i)->setVisible(false);
-        current_songlist_labels2.at(i)->deleteLater();
-    }
-    for(int i=0;i<current_songlist_labels3.count();++i){
-        current_songlist_labels3.at(i)->setVisible(false);
-        current_songlist_labels3.at(i)->deleteLater();
-    }
+    ui->listWidget_songlist_detail->clear();
+    songlist_detail_containers.clear();
     current_songlist_buttons.clear();
     current_songlist_labels.clear();
     current_songlist_labels2.clear();

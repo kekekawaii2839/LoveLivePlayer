@@ -287,7 +287,7 @@ background-color: rgba(228, 0, 127, 0);</string>
        <string/>
       </property>
      </widget>
-     <widget class="AnimatedScrollArea" name="scrollArea_settings">
+     <widget class="QScrollArea" name="scrollArea_settings">
       <property name="geometry">
        <rect>
         <x>200</x>
@@ -1068,173 +1068,7 @@ color:black;</string>
        <height>635</height>
       </rect>
      </property>
-     <widget class="AnimatedScrollArea" name="scrollArea_songlist_detail">
-      <property name="geometry">
-       <rect>
-        <x>300</x>
-        <y>0</y>
-        <width>1180</width>
-        <height>635</height>
-       </rect>
-      </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
-      </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents_songlist_detail">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>1178</width>
-         <height>633</height>
-        </rect>
-       </property>
-       <widget class="QLabel" name="label_songlist_title">
-        <property name="geometry">
-         <rect>
-          <x>50</x>
-          <y>30</y>
-          <width>200</width>
-          <height>50</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>20</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>我喜欢</string>
-        </property>
-       </widget>
-       <widget class="Line" name="line_4">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>150</y>
-          <width>1180</width>
-          <height>3</height>
-         </rect>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_no_songlist">
-        <property name="geometry">
-         <rect>
-          <x>495</x>
-          <y>200</y>
-          <width>311</width>
-          <height>131</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>15</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>暂无歌单，快去创建一个吧！</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_no_song_in_songlist">
-        <property name="geometry">
-         <rect>
-          <x>480</x>
-          <y>200</y>
-          <width>350</width>
-          <height>131</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>15</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>歌单是空的，快去添加歌曲吧！</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_playall">
-        <property name="geometry">
-         <rect>
-          <x>380</x>
-          <y>40</y>
-          <width>93</width>
-          <height>28</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>PlayAll</string>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_songlist_artist">
-        <property name="geometry">
-         <rect>
-          <x>520</x>
-          <y>120</y>
-          <width>40</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>11</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>歌手</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_songlist_songname">
-        <property name="geometry">
-         <rect>
-          <x>30</x>
-          <y>120</y>
-          <width>40</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>11</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>歌曲</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_songlist_album">
-        <property name="geometry">
-         <rect>
-          <x>860</x>
-          <y>120</y>
-          <width>40</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>11</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>专辑</string>
-        </property>
-       </widget>
-      </widget>
-     </widget>
-     <widget class="AnimatedScrollArea" name="scrollArea_songlists">
+     <widget class="QScrollArea" name="scrollArea_songlists">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -1437,6 +1271,162 @@ background-color: rgba(0,0,0,0);</string>
        <enum>Qt::Vertical</enum>
       </property>
      </widget>
+     <widget class="QPushButton" name="pushButton_playall">
+      <property name="geometry">
+       <rect>
+        <x>680</x>
+        <y>40</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>PlayAll</string>
+      </property>
+      <property name="flat">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_songlist_album">
+      <property name="geometry">
+       <rect>
+        <x>1160</x>
+        <y>120</y>
+        <width>40</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>专辑</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_songlist_artist">
+      <property name="geometry">
+       <rect>
+        <x>820</x>
+        <y>120</y>
+        <width>40</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>歌手</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_no_song_in_songlist">
+      <property name="geometry">
+       <rect>
+        <x>780</x>
+        <y>200</y>
+        <width>350</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>歌单是空的，快去添加歌曲吧！</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="Line" name="line_4">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>150</y>
+        <width>1180</width>
+        <height>3</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_songlist_title">
+      <property name="geometry">
+       <rect>
+        <x>350</x>
+        <y>30</y>
+        <width>200</width>
+        <height>50</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>我喜欢</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_songlist_songname">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>120</y>
+        <width>40</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>歌曲</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_no_songlist">
+      <property name="geometry">
+       <rect>
+        <x>795</x>
+        <y>200</y>
+        <width>311</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>暂无歌单，快去创建一个吧！</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="listWidget_songlist_detail">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>151</y>
+        <width>1179</width>
+        <height>485</height>
+       </rect>
+      </property>
+      <property name="verticalScrollMode">
+       <enum>QAbstractItemView::ScrollPerPixel</enum>
+      </property>
+     </widget>
     </widget>
     <zorder>widget_songlist</zorder>
     <zorder>widget_cover</zorder>
@@ -1489,41 +1479,6 @@ background-color: rgba(0,0,0,0);</string>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-    </widget>
-    <widget class="AnimatedScrollArea" name="scrollArea">
-     <property name="geometry">
-      <rect>
-       <x>1</x>
-       <y>100</y>
-       <width>249</width>
-       <height>710</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
-     <property name="widgetResizable">
-      <bool>true</bool>
-     </property>
-     <widget class="QWidget" name="scrollAreaWidgetContents">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>247</width>
-        <height>708</height>
-       </rect>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>700</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-     </widget>
     </widget>
     <widget class="QPushButton" name="pushButton_hideplaylist">
      <property name="geometry">
@@ -1589,6 +1544,19 @@ background-color: rgba(0,0,0,0);</string>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QListWidget" name="listWidget_playlist">
+     <property name="geometry">
+      <rect>
+       <x>1</x>
+       <y>101</y>
+       <width>249</width>
+       <height>710</height>
+      </rect>
+     </property>
+     <property name="verticalScrollMode">
+      <enum>QAbstractItemView::ScrollPerPixel</enum>
      </property>
     </widget>
    </widget>
@@ -1781,12 +1749,6 @@ background-color: rgba(228, 0, 127, 0);</string>
    <class>QListPushButton</class>
    <extends>QPushButton</extends>
    <header>qlistpushbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>AnimatedScrollArea</class>
-   <extends>QScrollArea</extends>
-   <header>animatedscrollarea.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

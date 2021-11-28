@@ -1,19 +1,18 @@
-﻿#include "animatedscrollarea.h"
+﻿#include "animatedscrollbar.h"
 
 #include <QDebug>
 
-AnimatedScrollArea::AnimatedScrollArea(QWidget* parent)
+AnimatedScrollBar::AnimatedScrollBar(QWidget* parent)
 {
     this->setParent(parent);
 }
 
-void AnimatedScrollArea::wheelEvent(QWheelEvent *event){
+void AnimatedScrollBar::wheelEvent(QWheelEvent *event){
     int deg=event->delta();//滚动的角度 *8就是滚动距离
-    int value=this->verticalScrollBar()->value();
+    int value=this->value();
     //qDebug()<<"deg="<<deg<<"  value="<<value;
 
-    QScrollBar* scrollbar=this->verticalScrollBar();
-    QPropertyAnimation* ScrollBarAnime=new QPropertyAnimation(scrollbar,"value");
+    QPropertyAnimation* ScrollBarAnime=new QPropertyAnimation(this,"value");
     ScrollBarAnime->setDuration(700);
     ScrollBarAnime->setEasingCurve(QEasingCurve::OutQuad);
 

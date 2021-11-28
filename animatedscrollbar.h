@@ -1,15 +1,15 @@
-﻿#ifndef ANIMATEDSCROLLAREA_H
-#define ANIMATEDSCROLLAREA_H
+﻿#ifndef ANIMATEDSCROLLBAR_H
+#define ANIMATEDSCROLLBAR_H
 
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QWheelEvent>
 #include <QPropertyAnimation>
 
-class AnimatedScrollArea:public QScrollArea
+class AnimatedScrollBar:public QScrollBar
 {
 public:
-    AnimatedScrollArea(QWidget* parent=nullptr);
+    AnimatedScrollBar(QWidget* parent=nullptr);
 protected:
     void wheelEvent(QWheelEvent* event);
     //void paintEvent(QPaintEvent *e);
@@ -17,4 +17,4 @@ private:
     //QPropertyAnimation* ScrollBarAnime;
 };
 
-#endif // ANIMATEDSCROLLAREA_H
+#endif // ANIMATEDSCROLLBAR_H

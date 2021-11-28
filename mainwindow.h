@@ -7,6 +7,7 @@
 #include "globalvariable.h"
 #include "laudioplayer.h"
 #include "lvideowidget.h"
+#include "animatedscrollbar.h"
 
 #include <QMainWindow>
 #include <QUrl>
@@ -97,6 +98,8 @@ private:
     QList<QLabel*> current_songlist_labels;
     QList<QLabel*> current_songlist_labels2;
     QList<QLabel*> current_songlist_labels3;
+    QList<QWidget*> songlist_detail_containers;
+    QList<QWidget*> playlist_containers;
     QGraphicsOpacityEffect* effect_for_title_bg;
 
 private slots:
