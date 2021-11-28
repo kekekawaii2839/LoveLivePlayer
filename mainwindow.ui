@@ -629,9 +629,9 @@ border:1px solid black;</string>
      <widget class="QPushButton" name="pushButton_lyric_html">
       <property name="geometry">
        <rect>
-        <x>860</x>
+        <x>830</x>
         <y>250</y>
-        <width>441</width>
+        <width>500</width>
         <height>101</height>
        </rect>
       </property>

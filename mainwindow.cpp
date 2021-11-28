@@ -1855,7 +1855,8 @@ void MainWindow::current_songlist_buttons_clicked(int seq){
 void MainWindow::on_pushButton_playall_clicked()
 {
     //qDebug()<<"on_pushButton_playall_clicked!";
-    for(int i=0;i<playlist_buttons.count();++i){
+    ui->listWidget_playlist->clear();
+    /*for(int i=0;i<playlist_buttons.count();++i){
         playlist_buttons.at(i)->setVisible(false);
         playlist_buttons.at(i)->hide();
         disconnect(playlist_buttons.at(i),SIGNAL(clicked(int)),this,SLOT(playlist_buttons_clicked(int)));
@@ -1865,7 +1866,8 @@ void MainWindow::on_pushButton_playall_clicked()
         playlist_singers_buttons.at(i)->setVisible(false);
         playlist_singers_buttons.at(i)->hide();
         playlist_singers_buttons.at(i)->deleteLater();
-    }
+    }*/
+    playlist_containers.clear();
     playlist_buttons.clear();
     playlist_singers_buttons.clear();
     name_list.clear();
