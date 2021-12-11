@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1500</width>
-    <height>900</height>
+    <width>1482</width>
+    <height>882</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -36,11 +36,16 @@
    </size>
   </property>
   <widget class="QWidget" name="centralWidget">
+   <property name="styleSheet">
+    <string notr="true">#centralWidget{
+	background-color: rgb(0, 0, 0);
+}</string>
+   </property>
    <widget class="QWidget" name="widget_shadow" native="true">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
+      <x>1</x>
+      <y>1</y>
       <width>1480</width>
       <height>880</height>
      </rect>
@@ -704,7 +709,7 @@ background-color:rgba(0,0,0,0);</string>
        <string>暂无翻译</string>
       </property>
      </widget>
-     <widget class="ScrollLabel" name="label_info_title">
+     <widget class="QLabel" name="label_info_title">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -1417,14 +1422,11 @@ background-color: rgba(0,0,0,0);</string>
      <widget class="QListWidget" name="listWidget_songlist_detail">
       <property name="geometry">
        <rect>
-        <x>300</x>
+        <x>301</x>
         <y>151</y>
-        <width>1179</width>
-        <height>485</height>
+        <width>1180</width>
+        <height>484</height>
        </rect>
-      </property>
-      <property name="verticalScrollMode">
-       <enum>QAbstractItemView::ScrollPerPixel</enum>
       </property>
      </widget>
     </widget>
@@ -1445,8 +1447,8 @@ background-color: rgba(0,0,0,0);</string>
    <widget class="QWidget" name="widget_playlist" native="true">
     <property name="geometry">
      <rect>
-      <x>1501</x>
-      <y>10</y>
+      <x>1483</x>
+      <y>1</y>
       <width>250</width>
       <height>880</height>
      </rect>
@@ -1563,8 +1565,8 @@ background-color: rgba(0,0,0,0);</string>
    <widget class="QTitleWidget" name="widget_title" native="true">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
+      <x>1</x>
+      <y>1</y>
       <width>1480</width>
       <height>150</height>
      </rect>

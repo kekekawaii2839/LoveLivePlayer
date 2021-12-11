@@ -5,6 +5,7 @@ QSliderPro::QSliderPro(QWidget* parent)
 {
     this->setParent(parent);
     isHorizontal=true;
+    Interval=300;
 }
 
 QSliderPro::~QSliderPro(){
@@ -22,4 +23,17 @@ void QSliderPro::mouseReleaseEvent(QMouseEvent *event){
     }
     setValue(pos*(maximum()-minimum())-minimum());
     emit clicked();
+}
+
+void QSliderPro::setInterval(int ms){
+    Interval=ms;
+}
+
+void QSliderPro::setValue(int value){
+    if(value>=this->value()+Interval){
+        QSlider::setValue(value);
+    }
+    else if(value<this->value()){
+        QSlider::setValue(value);
+    }
 }

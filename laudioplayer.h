@@ -41,11 +41,11 @@ public Q_SLOTS:
     State LState();
     QMediaContent LCurrentMedia();
 
-    void SaveHDCToFile(libZPlay::TID3InfoExW, HWND);
+    //void SaveHDCToFile(libZPlay::TID3InfoExW, HWND);
 private slots:
     void setPlayerIndex(int);
 signals:
-    AlbumPicReady();
+    //AlbumPicReady();
     positionChanged(int);
 };
 

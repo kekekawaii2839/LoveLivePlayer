@@ -36,7 +36,8 @@ SOURCES += \
     qclickwidget.cpp \
     laudioplayer.cpp \
     lvideowidget.cpp \
-    animatedscrollbar.cpp
+    animatedscrollbar.cpp \
+    songinfo.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -52,7 +53,8 @@ HEADERS += \
     qclickwidget.h \
     laudioplayer.h \
     lvideowidget.h \
-    animatedscrollbar.h
+    animatedscrollbar.h \
+    songinfo.h
 
 FORMS += \
         mainwindow.ui \

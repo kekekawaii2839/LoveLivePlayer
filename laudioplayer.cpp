@@ -141,7 +141,7 @@ void LAudioPlayer::LSetPosition(int pos){
     //qDebug()<<"LSetPosition()!"<<"  pos="<<pos<<"  currentTime.ms="<<currentTime.ms<<"  setTime.ms="<<setTime.ms;
 }
 
-void LAudioPlayer::SaveHDCToFile(libZPlay::TID3InfoExW id3_info,HWND hwnd){
+/*void LAudioPlayer::SaveHDCToFile(libZPlay::TID3InfoExW id3_info,HWND hwnd){
     libZPlay::TID3PictureW pic;
     HDC hdc=GetDC(hwnd);
     HDC memDc=CreateCompatibleDC(hdc);
@@ -160,4 +160,4 @@ void LAudioPlayer::SaveHDCToFile(libZPlay::TID3InfoExW id3_info,HWND hwnd){
     DeleteDC(hdc);
 
     emit AlbumPicReady();
-}
+}*/

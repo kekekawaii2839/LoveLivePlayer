@@ -11,8 +11,14 @@ public:
     bool isHorizontal;
     ~QSliderPro(void);
 
+    void setInterval(int ms);//压低刷新频率以减小cpu占用
+    void setValue(int value);
+
 protected:
     void mouseReleaseEvent(QMouseEvent* event);
+
+private:
+    int Interval;
 
 signals:
     void clicked();

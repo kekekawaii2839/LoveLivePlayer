@@ -6,7 +6,7 @@
 ScrollLabel::ScrollLabel(QWidget* parent)
 {
     this->setParent(parent);
-    timerid=this->startTimer(20);
+    timerid=this->startTimer(40);
 }
 
 void ScrollLabel::paintEvent(QPaintEvent *event){
@@ -28,9 +28,9 @@ void ScrollLabel::timerEvent(QTimerEvent *event){
     }
 
     if(m_strText!=text()){
-        m_strText=text();
         m_nCurrentIndex=0;
         m_strDrawText="";
+        m_strText=text();
         m_nTextWidth=fontMetrics().width(m_strText);
     }
 
@@ -38,7 +38,7 @@ void ScrollLabel::timerEvent(QTimerEvent *event){
         m_strDrawText+=m_strText;
     }
 
-    m_nCurrentIndex++;
+    m_nCurrentIndex+=1;
     if(m_nCurrentIndex==m_nTextWidth){
         m_nCurrentIndex=0;
         m_strDrawText="";
