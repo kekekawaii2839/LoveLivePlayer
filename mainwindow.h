@@ -87,6 +87,7 @@ private:
     QStringList songlist;//歌单文件名列表
     QStringList songlist_detail;//当前歌单中音频文件的完整绝对路径
     int current_songlist_seq;//现在选中的歌单在songlist中序号 -2代表全部音乐 -1代表我喜欢
+    int playing_songlist_seq;//正在播放的歌单序号
     int current_songlist_detail_seq;//当前选中的歌单中正在播放的歌曲的序号 -1表示无正在播放
     QList<QListPushButton*> songlist_buttons;
     QList<QListPushButton*> current_songlist_buttons;
@@ -94,7 +95,7 @@ private:
     QList<QLabel*> current_songlist_labels2;
     QList<QLabel*> current_songlist_labels3;
     QList<QWidget*> songlist_detail_containers;
-    //LScrollArea* songlist_detail;
+    QListPushButton* play_singlesong_songlist;//鼠标悬浮时在当前歌单中显示的播放小按钮
 
     QStringList name_list;//播放列表
     QStringList all_list;//储存全部音乐的文件名的列表
@@ -147,6 +148,8 @@ private slots:
     void on_pushButton_hideplayer_clicked();
     void songlist_buttons_clicked(int);
     void current_songlist_buttons_clicked(int);
+    void current_songlist_buttons_hoverEnter(int);
+    void current_songlist_buttons_hoverLeave(int);
     void on_pushButton_playall_clicked();
     void on_pushButton_allmusic_clicked();
     void on_pushButton_mylike_clicked();

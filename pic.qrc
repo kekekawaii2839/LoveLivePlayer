@@ -20,5 +20,6 @@
         <file>playlist.png</file>
         <file>like.png</file>
         <file>note.png</file>
+        <file>play_small.png</file>
     </qresource>
 </RCC>

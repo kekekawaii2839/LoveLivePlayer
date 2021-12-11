@@ -19,10 +19,12 @@ public:
     void setStyleSheet(const QString &styleSheet);//重载 防止QtCreator自动生成ui_mainwindow.h时报错
 protected:
     void mousePressEvent(QMouseEvent *e);
-    //bool eventFilter(QObject *watched, QEvent *event);
+    bool eventFilter(QObject *watched, QEvent *event);
 signals:
     clicked(int);
     dblclicked(int);
+    hoverEnter(int);
+    hoverLeave(int);
 };
 
 #endif // QLISTPUSHBUTTON_H

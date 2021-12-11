@@ -1428,6 +1428,12 @@ background-color: rgba(0,0,0,0);</string>
         <height>484</height>
        </rect>
       </property>
+      <property name="verticalScrollMode">
+       <enum>QAbstractItemView::ScrollPerPixel</enum>
+      </property>
+      <property name="horizontalScrollMode">
+       <enum>QAbstractItemView::ScrollPerPixel</enum>
+      </property>
      </widget>
     </widget>
     <zorder>widget_songlist</zorder>

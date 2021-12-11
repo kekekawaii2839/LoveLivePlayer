@@ -5,7 +5,7 @@ QSliderPro::QSliderPro(QWidget* parent)
 {
     this->setParent(parent);
     isHorizontal=true;
-    Interval=300;
+    Interval=150;
 }
 
 QSliderPro::~QSliderPro(){

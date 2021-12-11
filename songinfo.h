@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QDebug>
+#include <QApplication>
 
 #include <windows.h>
 #include <QtWinExtras/QtWin>
@@ -21,6 +22,7 @@ public:
     QString MvAddr;
     HWND hwnd;
     libZPlay::ZPlay* zplayer;
+    QString getRealCoverAddr();
 
 private slots:
     void get_meta(bool);
