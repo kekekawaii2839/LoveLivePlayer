@@ -15,6 +15,8 @@ MainWindow::MainWindow(QWidget *parent) :
     setMouseTracking(true);
     installEventFilter(this);//安装事件过滤器
 
+    QTextCodec* codec=QTextCodec::codecForName("UTF-8");
+    QTextCodec::setCodecForLocale(codec);
     //fuckkkkkk!!!!!!
     /*QGraphicsDropShadowEffect* shadow=new QGraphicsDropShadowEffect(this);
     shadow->setOffset(0,0);
@@ -744,17 +746,17 @@ void MainWindow::load_single_song(QString name){
     //以下获取歌曲元数据并提取封面
     //get_meta(path_audio,true);
     SongInfo* infoo=infos.value(path_audio);
-    ui->label_info_title->setText(adjust_text_overlength(infoo->title,ui->label_info_title,1));
-    ui->label_info_artist->setText(adjust_text_overlength("歌手："+infoo->artist,ui->label_info_artist,1));
-    ui->label_info_album->setText(adjust_text_overlength("专辑："+infoo->album,ui->label_info_album,1));
-    ui->widget_cover->setStyleSheet("border-image:url("+infoo->CoverAddr+");");
-    ui->fakewidget_cover->setStyleSheet("border-image:url("+infoo->CoverAddr+");");
+    ui->label_info_title->setText(adjust_text_overlength(infoo->Ltitle(),ui->label_info_title,1));
+    ui->label_info_artist->setText(adjust_text_overlength("歌手："+infoo->Lartist(),ui->label_info_artist,1));
+    ui->label_info_album->setText(adjust_text_overlength("专辑："+infoo->Lalbum(),ui->label_info_album,1));
+    ui->widget_cover->setStyleSheet("border-image:url("+infoo->getRealCoverAddr()+");");
+    ui->fakewidget_cover->setStyleSheet("border-image:url("+infoo->getRealCoverAddr()+");");
 
     //以下是调整托盘的标题
-    mSysTrayIcon->setToolTip(title+" - "+artist);//当鼠标移动到托盘上的图标时，会显示此处设置的内容
+    mSysTrayIcon->setToolTip(infoo->Ltitle()+" - "+infoo->Lartist());//当鼠标移动到托盘上的图标时，会显示此处设置的内容
 
     //以下是更改设置中滚动标题的内容
-    QString info=infoo->title+" - "+infoo->artist+"  ";
+    QString info=infoo->Ltitle()+" - "+infoo->Lartist()+"  ";
     ui->label_settings_info->setText(info);
 
     //以下是调整播放列表滚动条的值
@@ -963,7 +965,7 @@ void MainWindow::player_state_change(QMediaPlayer::State state){
 QString MainWindow::adjust_text_overlength(QString text,QWidget* obj,int mode){//自动换行 但不修改含html标签的字符串
     if(mode==0){//自动换行模式
         if(!text.contains("<")){
-            QString result=text;
+            QString result=text.toUtf8();
             QString final;
             QStringList list=result.split("\n");
             result=text;
@@ -1805,7 +1807,7 @@ void MainWindow::songlist_buttons_clicked(int seq){
                 for(int i=0;i<list.count();++i){
                     if(list.at(i).contains("\r")) list[i].replace("\r","");
                     SongInfo* te=infos.value(QApplication::applicationDirPath()+"/songs/"+list.at(i));
-                    content.append(te->AudioAddr);
+                    content.append(te->LAudioAddr());
                 }
                 songlist_detail=content;
                 addPushbuttonsInSonglist(content);
@@ -1949,7 +1951,7 @@ void MainWindow::on_pushButton_allmusic_clicked()
     for(int i=0;i<all_list.count();++i){
         if(all_list.at(i).contains("\r")) all_list[i].replace("\r","");
         SongInfo* te=infos.value(QApplication::applicationDirPath()+"/songs/"+all_list.at(i));
-        content.append(te->AudioAddr);
+        content.append(te->LAudioAddr());
     }
     songlist_detail=content;
     addPushbuttonsInSonglist(content);
@@ -1982,7 +1984,7 @@ void MainWindow::on_pushButton_mylike_clicked()
             for(int i=0;i<list.count();++i){
                 if(list.at(i).contains("\r")) list[i].replace("\r","");
                 SongInfo* te=infos.value(QApplication::applicationDirPath()+"/songs/"+list.at(i));
-                content.append(te->AudioAddr);
+                content.append(te->LAudioAddr());
             }
             songlist_detail=content;
             addPushbuttonsInSonglist(content);
@@ -2074,8 +2076,8 @@ void MainWindow::addPushbuttonsInPlaylist(){
         pb_temp2->setStyleSheet("color:#a3a3a3;\nborder-color:rgba(255,255,255,0);\nbackground-color:rgba(255,255,255,0);\ntext-align:left;");
         pb_temp2->setFont(font2);
         pb_temp2->setAttribute(Qt::WA_TransparentForMouseEvents,true);
-        pb_temp->setText(adjust_text_overlength(" "+infoo->title,pb_temp,1));
-        pb_temp2->setText(adjust_text_overlength(" "+infoo->artist,pb_temp2,1));
+        pb_temp->setText(adjust_text_overlength(" "+infoo->Ltitle(),pb_temp,1));
+        pb_temp2->setText(adjust_text_overlength(" "+infoo->Lartist(),pb_temp2,1));
         pb_temp->seq=i;
         pb_temp2->seq=i;
         playlist_buttons.append(pb_temp);
@@ -2125,10 +2127,11 @@ void MainWindow::addPushbuttonsInSonglist(QStringList content){
         ui->listWidget_songlist_detail->addItem(item);
 
         QLabel* label_song=new QLabel(container);
+
         label_song->setGeometry(QRect(30,0,300,50));
         label_song->setFont(font1);
         label_song->setStyleSheet("color:black;\nbackground-color:rgba(0,0,0,0);\ntext-align:left;");
-        label_song->setText(adjust_text_overlength(info->title,label_song,1));
+        label_song->setText(adjust_text_overlength(info->Ltitle(),label_song,1));
         label_song->setAttribute(Qt::WA_TransparentForMouseEvents,true);
         current_songlist_labels.append(label_song);
 
@@ -2136,7 +2139,7 @@ void MainWindow::addPushbuttonsInSonglist(QStringList content){
         label_song2->setGeometry(QRect(140+pb_temp->width()/3,0,pb_temp->width()/5,50));
         label_song2->setFont(font1);
         label_song2->setStyleSheet("color:black;\nbackground-color:rgba(0,0,0,0);\ntext-align:left;");
-        label_song2->setText(adjust_text_overlength(info->artist,label_song2,1));
+        label_song2->setText(adjust_text_overlength(info->Lartist(),label_song2,1));
         label_song2->setAttribute(Qt::WA_TransparentForMouseEvents,true);
         current_songlist_labels2.append(label_song2);
 
@@ -2144,7 +2147,7 @@ void MainWindow::addPushbuttonsInSonglist(QStringList content){
         label_song3->setGeometry(QRect(label_song2->x()+label_song2->width()+110,0,pb_temp->width()/4,50));
         label_song3->setFont(font1);
         label_song3->setStyleSheet("color:black;\nbackground-color:rgba(0,0,0,0);\ntext-align:left;");
-        label_song3->setText(adjust_text_overlength(info->album,label_song3,1));
+        label_song3->setText(adjust_text_overlength(info->Lalbum(),label_song3,1));
         label_song3->setAttribute(Qt::WA_TransparentForMouseEvents,true);
         current_songlist_labels3.append(label_song3);
 

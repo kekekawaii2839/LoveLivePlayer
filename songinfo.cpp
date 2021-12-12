@@ -1,7 +1,11 @@
-﻿#include "songinfo.h"
+﻿#pragma execution_character_set("utf-8")
+#include "songinfo.h"
 
 SongInfo::SongInfo(QString addr,HWND a)//addr是音频文件的完整绝对路径
 {
+    QTextCodec* codec=QTextCodec::codecForName("UTF-8");//设置编码
+    QTextCodec::setCodecForLocale(codec);
+
     hwnd=a;
     QFileInfo j(addr);
     if(j.isFile()){
@@ -13,8 +17,9 @@ SongInfo::SongInfo(QString addr,HWND a)//addr是音频文件的完整绝对路�
         qDebug()<<jj.absoluteFilePath();
         if(jj.isFile()){//info文件存在则读取
             QFile info(_t);
-            if(info.open(QIODevice::ReadOnly)){
-                QString t=info.readAll();
+            if(info.open(QIODevice::ReadOnly|QIODevice::Text)){
+                QString t=codec->toUnicode(info.readAll());
+                qDebug()<<"t:"<<QString::fromUtf8(t.toUtf8())<<"\n|||\n";
                 QStringList content=t.split("\n");
                 for(int i=0;i<content.count();++i){
                     if(content.at(i).contains("\r")) content[i].replace("\r","");
@@ -25,11 +30,11 @@ SongInfo::SongInfo(QString addr,HWND a)//addr是音频文件的完整绝对路�
                 CoverAddr=content.at(3);
                 MvAddr=content.at(4);
 
-                QFileInfo pic(CoverAddr);
+                QFileInfo pic(getRealCoverAddr());
                 get_meta(!pic.isFile());
             }
             else{
-                QFileInfo pic(CoverAddr);
+                QFileInfo pic(getRealCoverAddr());
                 get_meta(!pic.isFile());
                 QString tt=addr;
                 QFileInfo mv(tt.replace(".mp3",".mp4").replace("/songs/","/mv/"));
@@ -40,7 +45,7 @@ SongInfo::SongInfo(QString addr,HWND a)//addr是音频文件的完整绝对路�
             info.close();
         }
         else{//info文件不存在则写入
-            QFileInfo pic(CoverAddr);
+            QFileInfo pic(getRealCoverAddr());
             get_meta(!pic.isFile());
             QString tt=addr;
             QFileInfo mv(tt.replace(".mp3",".mp4").replace("/songs/","/mv/"));
@@ -102,7 +107,7 @@ void SongInfo::SaveHDCToFile(libZPlay::TID3InfoExW id3_info,HWND hwnd){
 
     QPixmap pixmap=QtWin::fromHBITMAP(hBmp,QtWin::HBitmapNoAlpha);
     QImage img=pixmap.toImage();
-    img.save(CoverAddr,"PNG",100);
+    img.save(getRealCoverAddr(),"PNG",100);
     SelectObject(memDc,(HBITMAP)NULL);
     DeleteDC(memDc);
     DeleteObject(hBmp);
@@ -110,10 +115,41 @@ void SongInfo::SaveHDCToFile(libZPlay::TID3InfoExW id3_info,HWND hwnd){
 }
 
 void SongInfo::writeInfo(){
+    QTextCodec* codec=QTextCodec::codecForName("UTF-8");//设置编码
+    QTextCodec::setCodecForLocale(codec);
     QFile jj(AudioAddr.replace(".mp3",".info").replace("/songs/","/infos/"));
-    if(jj.open(QIODevice::WriteOnly)){
+    if(jj.open(QIODevice::WriteOnly|QIODevice::Text)){
         QString temp=title+"\n"+artist+"\n"+album+"\n"+CoverAddr+"\n"+MvAddr+"\n";
-        jj.write(temp.toUtf8());
+        jj.write(codec->fromUnicode(temp));
     }
     jj.close();
+}
+
+QString SongInfo::getRealCoverAddr(){
+    QString c=getCoverAddr();
+    c.replace(".png","");
+    c.replace(QApplication::applicationDirPath()+"/infos/","");
+    c=c.toLocal8Bit().toBase64();
+    c=QApplication::applicationDirPath()+"/infos/"+c+".png";
+    return c;
+}
+
+QString SongInfo::getCoverAddr(){
+    return CoverAddr;
+}
+
+QString SongInfo::Ltitle(){
+    return title;
+}
+
+QString SongInfo::Lartist(){
+    return artist;
+}
+
+QString SongInfo::Lalbum(){
+    return album;
+}
+
+QString SongInfo::LAudioAddr(){
+    return AudioAddr;
 }

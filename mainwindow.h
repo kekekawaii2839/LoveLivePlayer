@@ -34,6 +34,7 @@
 #include <QPropertyAnimation>
 #include <QMessageBox>
 #include <QMap>
+#include <QString>
 
 namespace Ui {
 class MainWindow;
