@@ -81,10 +81,6 @@ LIBS += -luser32
 INCLUDEPATH += $$PWD/mpv
 include ($$PWD/mpv/mpv.pri)
 
-ICON = icon.ico
-
-RC_FILE += logo.rc
-
 CONFIG += resources_big #解决qrc文件中资源文件过大导致无法编译的错误
 
 VERSION = 1.21.9.7#版本信息 major.minor.patch.build
@@ -96,5 +92,7 @@ QMAKE_TARGET_PRODUCT = "LoveLivePlayer"#产品名称
 QMAKE_TARGET_DESCRIPTION = "by 33ba6_2839 in HopUp Tech"#文件说明
 
 QMAKE_TARGET_COPYRIGHT = ""#版权信息
+
+RC_ICONS = icon.ico
 
 RC_LANG = 0x0004#语言:中文(简体)
