@@ -46,3 +46,8 @@ void ScrollLabel::timerEvent(QTimerEvent *event){
 
     update(rect());
 }
+
+void ScrollLabel::setText(const QString text){
+    QLabel::setText(text);
+    update(rect());//解决更换文字时不刷新的bug
+}

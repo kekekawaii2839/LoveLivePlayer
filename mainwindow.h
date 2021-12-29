@@ -32,9 +32,12 @@
 #include <QAction>
 #include <QScrollBar>
 #include <QPropertyAnimation>
+#include <QParallelAnimationGroup>
+#include <QSequentialAnimationGroup>
 #include <QMessageBox>
 #include <QMap>
 #include <QString>
+#include <QPainterPath>
 
 namespace Ui {
 class MainWindow;
@@ -62,6 +65,7 @@ private:
     Ui::MainWindow *ui;
     QSystemTrayIcon* mSysTrayIcon;
     DesktopLyricWindow dd;
+    QTimer* t;
 
     LAudioPlayer* player;
     int duration;

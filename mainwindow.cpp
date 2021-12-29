@@ -15,7 +15,17 @@ MainWindow::MainWindow(QWidget *parent) :
     setMouseTracking(true);
     installEventFilter(this);//安装事件过滤器
 
-    QTextCodec* codec=QTextCodec::codecForName("UTF-8");
+    t=new QTimer(this);
+    connect(t,&QTimer::timeout,this,[=](){
+        QPainterPath path;
+        path.addRoundedRect(ui->centralWidget->rect(),11,11);//解决plalist等进出动画超出圆角的问题
+        QRegion mask(path.toFillPolygon().toPolygon());
+        ui->centralWidget->setMask(mask);
+    });
+    t->setSingleShot(true);
+    t->start(10);
+
+    QTextCodec* codec=QTextCodec::codecForName("System");
     QTextCodec::setCodecForLocale(codec);
     //fuckkkkkk!!!!!!
     /*QGraphicsDropShadowEffect* shadow=new QGraphicsDropShadowEffect(this);
@@ -744,13 +754,12 @@ void MainWindow::load_single_song(QString name){
     temp.close();
 
     //以下获取歌曲元数据并提取封面
-    //get_meta(path_audio,true);
     SongInfo* infoo=infos.value(path_audio);
     ui->label_info_title->setText(adjust_text_overlength(infoo->Ltitle(),ui->label_info_title,1));
     ui->label_info_artist->setText(adjust_text_overlength("歌手："+infoo->Lartist(),ui->label_info_artist,1));
     ui->label_info_album->setText(adjust_text_overlength("专辑："+infoo->Lalbum(),ui->label_info_album,1));
-    ui->widget_cover->setStyleSheet("border-image:url("+infoo->getRealCoverAddr()+");");
-    ui->fakewidget_cover->setStyleSheet("border-image:url("+infoo->getRealCoverAddr()+");");
+    ui->widget_cover->setStyleSheet("border-image:url("+infoo->getRealCoverAddr()+");border-radius:8px;background-color:transparent;");
+    ui->fakewidget_cover->setStyleSheet("border-image:url("+infoo->getRealCoverAddr()+");border-radius:8px;background-color:transparent;");
 
     //以下是调整托盘的标题
     mSysTrayIcon->setToolTip(infoo->Ltitle()+" - "+infoo->Lartist());//当鼠标移动到托盘上的图标时，会显示此处设置的内容
@@ -777,6 +786,7 @@ void MainWindow::load_single_song(QString name){
         }
     }
 
+    current_lyric_index=0;
     for(int i=0;i<200;++i){
         lyric[i].color_num=0;
         lyric[i].text="";
@@ -1267,10 +1277,10 @@ void MainWindow::get_config(QString id){
     con.close();
     //qDebug()<<"conf.theme_color:"<<conf.theme_color<<"\nconf.title:"<<conf.title<<"\nconf.num:"<<conf.num<<"\nconf.icon_addr:"<<conf.icon_addr;
 
-    ui->widget_title->setStyleSheet("background-color:"+conf.theme_color+";");
-    ui->horizontalSlider->setStyleSheet("QSlider::groove:horizontal {\nborder: 1px solid #d9d9d9;\nborder-radius:0.5px;\nheight: 3px;\nbackground-color:#d9d9d9;\nmargin: 2px 0;\n}\n\nQSlider::handle:horizontal {\nbackground-color:"+conf.theme_color+";\nwidth: 10px;\nmargin: -4px 0;\nborder-radius: 5px;\n}\n\nQSlider::sub-page:horizontal {\nbackground-color:"+conf.theme_color+";\nmargin:2px 0;\nborder-radius:1px;\n}");
-    ui->fakehorizontalSlider->setStyleSheet("QSlider::groove:horizontal {\nborder: 1px solid #d9d9d9;\nborder-radius:0.5px;\nheight: 3px;\nbackground-color:#d9d9d9;\nmargin: 2px 0;\n}\n\nQSlider::handle:horizontal {\nbackground-color:"+conf.theme_color+";\nwidth: 10px;\nmargin: -4px 0;\nborder-radius: 5px;\n}\n\nQSlider::sub-page:horizontal {\nbackground-color:"+conf.theme_color+";\nmargin:2px 0;\nborder-radius:1px;\n}");
-    ui->Slider_volume->setStyleSheet("QSlider::groove:vertical {\nborder: 1px solid #d9d9d9;\nwidth: 3px;\nbackground-color:#d9d9d9;\nmargin: 0 2px;\n}\n\nQSlider::handle:vertical {\nbackground-color:"+conf.theme_color+";\nheight:10px;\nmargin: 0 -4px;\nborder-radius: 5px;\n}\n\nQSlider::add-page:vertical {\nbackground-color:"+conf.theme_color+";\nmargin:0 2px;\n}");
+    ui->widget_title->setStyleSheet("background-color:"+conf.theme_color+";\nborder-top-left-radius:12px;\nborder-top-right-radius:12px;");
+    ui->horizontalSlider->setStyleSheet("QSlider::groove:horizontal{\nborder: 1px solid #d9d9d9;\nborder-radius:1.5px;\nheight: 3px;\nbackground-color:#d9d9d9;\nmargin: 2px 0;\n}\n\nQSlider::handle:horizontal {\nbackground-color:"+conf.theme_color+";\nwidth: 10px;\nmargin: -4px 0;\nborder-radius: 5px;\n}\n\nQSlider::sub-page:horizontal{\nbackground-color:"+conf.theme_color+";\nmargin:2px 0;\nborder-radius:1.5px;\n}");
+    ui->fakehorizontalSlider->setStyleSheet(ui->horizontalSlider->styleSheet());
+    ui->Slider_volume->setStyleSheet("QSlider::groove:vertical{\nborder: 1px solid #d9d9d9;\nwidth: 3px;\nbackground-color:#d9d9d9;\nmargin: 0 2px;\n}\n\nQSlider::handle:vertical {\nbackground-color:"+conf.theme_color+";\nheight:10px;\nmargin: 0 -4px;\nborder-radius: 5px;\n}\n\nQSlider::add-page:vertical {\nbackground-color:"+conf.theme_color+";\nmargin:0 2px;\n}");
     this->setStyleSheet("QScrollBar:vertical{\nbackground:#f5f5f5;\nwidth:10px;\n}\nQScrollBar::handle:vertical{\nbackground:"+conf.theme_color+";\nborder-radius:5px;\n}\nQScrollBar::add-line:vertical{\nbackground:#f5f5f5;\nheight:20px;\nsubcontrol-position:bottom;\nsubcontrol-origin: margin;\n}\n\nQScrollBar::sub-line:vertical {\nbackground: #f5f5f5;\nheight: 20px;\nsubcontrol-position: top;\nsubcontrol-origin: margin;\n}\n\nQScrollArea{\nborder:0px;\n}");
     this->setWindowTitle(conf.title);
     if(conf.icon_addr!=QApplication::applicationDirPath()+"/resources/none"){
@@ -1280,7 +1290,7 @@ void MainWindow::get_config(QString id){
         ui->widget_icon->setStyleSheet("background-color:rgba(255,255,255,0);");
     }
     if(conf.bg_addr!=QApplication::applicationDirPath()+"/resources/none"){
-        ui->widget_title_bg->setStyleSheet("border-image: url("+conf.bg_addr+");");
+        ui->widget_title_bg->setStyleSheet("background-color:rgba(0,0,0,0);\nborder-image: url("+conf.bg_addr+");\nborder-top:0px;\nborder-bottom:0px;");
     }
     else{
         ui->widget_title_bg->setStyleSheet("background-color:rgba(255,255,255,0);");
@@ -1387,20 +1397,38 @@ void MainWindow::read_userdata(){
     if(data.open(QIODevice::ReadOnly)){
         QString temp=data.readAll();
         QStringList list=temp.split("\n");
-        ui->Slider_volume->setValue(list.at(0).toInt());
-        isAutoPlay=list.at(1).toInt();
-        isTray=list.at(2).toInt();
+        if(list.count()==10){
+            ui->Slider_volume->setValue(list.at(0).toInt());
+            isAutoPlay=list.at(1).toInt();
+            isTray=list.at(2).toInt();
 
-        dd.is_locked=list.at(3).toInt();
-        QStringList xy=list.at(4).split(" ");
-        dd.move(xy.at(0).toInt(),xy.at(1).toInt());
-        isAutoShowDesktopLyric=list.at(5).toInt();
+            dd.is_locked=list.at(3).toInt();
+            QStringList xy=list.at(4).split(" ");
+            dd.move(xy.at(0).toInt(),xy.at(1).toInt());
+            isAutoShowDesktopLyric=list.at(5).toInt();
 
-        playmode=list.at(6).toInt();
-        index=list.at(7).toInt();
-        last_songlist=list.at(8);
+            playmode=list.at(6).toInt();
+            index=list.at(7).toInt();
+            last_songlist=list.at(8);
 
-        isLog=list.at(9).toInt();
+            isLog=list.at(9).toInt();
+        }
+        else{
+            qDebug()<<"userdata error!";
+            ui->Slider_volume->setValue(0);
+            isAutoPlay=false;
+            isTray=false;
+
+            dd.is_locked=true;
+            dd.move(QPoint(0,0));
+            isAutoShowDesktopLyric=false;
+
+            playmode=0;
+            index=0;
+            last_songlist="allmusic";
+
+            isLog=false;
+        }
     }
     data.close();
     if(isAutoPlay==true){
@@ -1454,6 +1482,10 @@ void MainWindow::read_userdata(){
     }
 
     addPushbuttonsInPlaylist();
+    if(index>=name_list.count()){
+        qDebug()<<"_last playlist index error!";
+        index=0;
+    }
     play_progress=index;
     for(int i=0;i<playmode;++i){
         on_pushButton_playmode_clicked();
@@ -1507,6 +1539,9 @@ void MainWindow::on_pushButton_settings_return_clicked()
 
 void MainWindow::Show_player(){
     if(ui->widget_cover->is_small==false){//???????
+        ui->fakehorizontalSlider->show();
+        ui->fakehorizontalSlider->setValue(ui->horizontalSlider->value());
+
         QPropertyAnimation* show_player=new QPropertyAnimation(ui->widget_player,"geometry");
         show_player->setDuration(500);
         show_player->setStartValue(QRect(0,ui->widget_shadow->height(),ui->widget_shadow->width(),0));
@@ -1520,6 +1555,8 @@ void MainWindow::Show_player(){
 }
 
 void MainWindow::Show_player_next(){
+    ui->fakehorizontalSlider->hide();
+
     ui->label_settings_info->hide();
     ui->horizontalSlider->setGeometry(QRect(50,ui->widget_shadow->height()-60,1100,22));
     ui->label_time->move(1180,811);
@@ -1707,42 +1744,85 @@ void MainWindow::on_checkBox_quickselect_clicked(bool checked)
 
 void MainWindow::on_pushButton_playlist_clicked()
 {
-    int x=ui->widget_playlist->geometry().x();
-
     if(isPlaylistShowing==false){
-        QPropertyAnimation* show_playlist=new QPropertyAnimation(ui->widget_playlist,"geometry");
-        show_playlist->setDuration(500);
-        show_playlist->setStartValue(QRect(x,1,0,ui->widget_shadow->height()));
-        show_playlist->setEndValue(QRect(this->width()-1-250,1,250,ui->widget_shadow->height()));
-        show_playlist->setEasingCurve(QEasingCurve::OutQuart);
-        show_playlist->start();
+        QGraphicsOpacityEffect* opacity=new QGraphicsOpacityEffect(ui->widget_playlist);
+        opacity->setOpacity(0);
+        ui->widget_playlist->setGraphicsEffect(opacity);
+
+        QParallelAnimationGroup *inGroup=new QParallelAnimationGroup(ui->widget_playlist);
+
+        QPropertyAnimation* slideInAni=new QPropertyAnimation(ui->widget_playlist,"pos");
+        slideInAni->setDuration(1000);
+        slideInAni->setStartValue(ui->widget_playlist->pos());
+        slideInAni->setEndValue(QPoint(this->width()-251,1));
+        slideInAni->setEasingCurve(QEasingCurve::InOutExpo);
+
+        QPropertyAnimation* fadeInAni=new QPropertyAnimation(opacity,"opacity",ui->widget_playlist);
+        fadeInAni->setStartValue(0);
+        fadeInAni->setEndValue(0.99);//设置为1会出现bug
+        fadeInAni->setDuration(750);
+
+        inGroup->addAnimation(slideInAni);
+        inGroup->addAnimation(fadeInAni);
+        //border->raise();
+        inGroup->start();
+
         isPlaylistShowing=true;
     }
     else{
-        QPropertyAnimation* hide_playlist=new QPropertyAnimation(ui->widget_playlist,"geometry");
-        hide_playlist->setDuration(500);
-        hide_playlist->setStartValue(QRect(x,1,250,ui->widget_shadow->height()));
-        hide_playlist->setEndValue(QRect(this->width(),1,0,ui->widget_shadow->height()));
-        hide_playlist->setEasingCurve(QEasingCurve::OutQuart);
-        hide_playlist->start();
+        QGraphicsOpacityEffect* opacity=new QGraphicsOpacityEffect(ui->widget_playlist);
+        opacity->setOpacity(0.99);
+        ui->widget_playlist->setGraphicsEffect(opacity);
+
+        QParallelAnimationGroup *outGroup=new QParallelAnimationGroup(ui->widget_playlist);
+
+        QPropertyAnimation* slideOutAni=new QPropertyAnimation(ui->widget_playlist,"pos");
+        slideOutAni->setDuration(1000);
+        slideOutAni->setStartValue(ui->widget_playlist->pos());
+        slideOutAni->setEndValue(QPoint(this->width()-1,1));
+        slideOutAni->setEasingCurve(QEasingCurve::InOutExpo);
+
+        QPropertyAnimation* fadeOutAni=new QPropertyAnimation(opacity,"opacity",ui->widget_playlist);
+        fadeOutAni->setStartValue(0.99);
+        fadeOutAni->setEndValue(0);
+        fadeOutAni->setDuration(750);
+
+        outGroup->addAnimation(slideOutAni);
+        outGroup->addAnimation(fadeOutAni);
+        outGroup->start();
+
         isPlaylistShowing=false;
     }
 }
 
 void MainWindow::on_pushButton_hideplaylist_clicked()
 {
-    QPropertyAnimation* hide_playlist=new QPropertyAnimation(ui->widget_playlist,"geometry");
-    hide_playlist->setDuration(500);
-    hide_playlist->setStartValue(QRect(ui->widget_playlist->geometry().x(),1,250,ui->widget_shadow->height()));
-    hide_playlist->setEndValue(QRect(this->width(),1,0,ui->widget_shadow->height()));
-    hide_playlist->setEasingCurve(QEasingCurve::OutQuart);
-    hide_playlist->start();
+    QGraphicsOpacityEffect* opacity=new QGraphicsOpacityEffect(ui->widget_playlist);
+    opacity->setOpacity(0.99);
+    ui->widget_playlist->setGraphicsEffect(opacity);
+
+    QParallelAnimationGroup *outGroup=new QParallelAnimationGroup(ui->widget_playlist);
+
+    QPropertyAnimation* slideOutAni=new QPropertyAnimation(ui->widget_playlist,"pos");
+    slideOutAni->setDuration(1000);
+    slideOutAni->setStartValue(ui->widget_playlist->pos());
+    slideOutAni->setEndValue(QPoint(this->width()-1,1));
+    slideOutAni->setEasingCurve(QEasingCurve::InOutExpo);
+
+    QPropertyAnimation* fadeOutAni=new QPropertyAnimation(opacity,"opacity",ui->widget_playlist);
+    fadeOutAni->setStartValue(0.99);
+    fadeOutAni->setEndValue(0);
+    fadeOutAni->setDuration(750);
+
+    outGroup->addAnimation(slideOutAni);
+    outGroup->addAnimation(fadeOutAni);
+    outGroup->start();
+
     isPlaylistShowing=false;
 }
 
 void MainWindow::on_pushButton_hideplayer_clicked()
 {
-    //ui->horizontalSlider->setParent(ui->widget_shadow);
     ui->horizontalSlider->setGeometry(QRect(0,ui->widget_shadow->height()-95,1480,22));
     ui->label_time->setParent(ui->widget_shadow);
     ui->label_time->move(1290,820);
@@ -1763,13 +1843,15 @@ void MainWindow::on_pushButton_hideplayer_clicked()
     ui->pushButton_playlist->setGeometry(QRect(851,831,20,20));
 
     if(ui->widget_cover->is_small==false){
+        ui->fakehorizontalSlider->show();
+        ui->fakehorizontalSlider->setValue(ui->horizontalSlider->value());
+
         QPropertyAnimation* hide_player=new QPropertyAnimation(ui->widget_player,"geometry");
         hide_player->setDuration(500);
         hide_player->setStartValue(QRect(0,ui->widget_title->height(),ui->widget_shadow->geometry().width(),ui->widget_shadow->height()-ui->widget_title->height()));
         hide_player->setEndValue(QRect(0,ui->widget_shadow->height(),ui->widget_shadow->geometry().width(),0));
         hide_player->setEasingCurve(QEasingCurve::OutQuart);
         hide_player->start();
-        ui->fakehorizontalSlider->setValue(ui->horizontalSlider->value());
     }
 
     if(whatInMainPage==0){
@@ -2232,6 +2314,8 @@ void MainWindow::changeThemeColor(int seq_playlist,int seq_songlist,int seq_curr
 
 void MainWindow::on_pushButton_mv_clicked()
 {
+    //t->stop();
+
     mv=new LVideoWidget(this);
     mv->setGeometry(1,151,1480,730);
     QString url=QApplication::applicationDirPath()+"/mv/"+name_list.at(play_progress);
@@ -2242,4 +2326,8 @@ void MainWindow::on_pushButton_mv_clicked()
     player->LPause();
     mv->ui->playWidget->open();
     mv->show();
+
+    /*connect(mv,&LVideoWidget::closed,this,[=]{
+        t->start();
+    });*/
 }

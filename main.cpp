@@ -62,6 +62,7 @@ int main(int argc, char *argv[])
     file.close();
 
     int fontID=QFontDatabase::addApplicationFont(":/new/fonts/DroidSansChinese.ttf");
+    //int fontID=QFontDatabase::addApplicationFont(":/new/fonts/PingFang Bold.ttf");
     font_string=QFontDatabase::applicationFontFamilies(fontID).at(0);
     QFont font(font_string);
     QApplication::setFont(font);

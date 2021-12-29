@@ -38,7 +38,9 @@
   <widget class="QWidget" name="centralWidget">
    <property name="styleSheet">
     <string notr="true">#centralWidget{
-	background-color: rgb(0, 0, 0);
+	background-color:white;
+	border:1px solid #686868;
+	border-radius:11px;
 }</string>
    </property>
    <widget class="QWidget" name="widget_shadow" native="true">
@@ -51,7 +53,7 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgba(255, 255, 255, 255);</string>
+     <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
     </property>
     <widget class="QClickWidget" name="widget_cover" native="true">
      <property name="geometry">
@@ -204,9 +206,6 @@
        <width>300</width>
        <height>25</height>
       </rect>
-     </property>
-     <property name="text">
-      <string/>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_DesktopLyric">
@@ -574,20 +573,32 @@ background-color: rgba(228, 0, 127, 0);</string>
        <height>730</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">#widget_player{
+	background-color:white;
+	border-top-left-radius:0px;
+	border-bottom-left-radius:12px;
+	border-top-right-radius:0px;
+	border-bottom-right-radius:12px;
+}</string>
+     </property>
      <widget class="QWidget" name="widget_cover_shadow" native="true">
       <property name="geometry">
        <rect>
-        <x>123</x>
-        <y>143</y>
-        <width>314</width>
-        <height>314</height>
+        <x>129</x>
+        <y>149</y>
+        <width>302</width>
+        <height>302</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <stylestrategy>PreferAntialias</stylestrategy>
+       </font>
+      </property>
       <property name="styleSheet">
-       <string notr="true">border-top:7px solid qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 rgba(255, 255, 255, 1), stop:1 rgba(180, 180, 180, 1));
-border-bottom:7px solid qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 rgba(180, 180, 180, 1), stop:1 rgba(255, 255, 255, 1));
-border-left:7px solid qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:0,stop:0 rgba(255, 255, 255, 1), stop:1 rgba(180, 180, 180, 1));
-border-right:7px solid qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:0,stop:0 rgba(180, 180, 180, 1), stop:1 rgba(255, 255, 255, 1));</string>
+       <string notr="true">border:1px solid #686868;
+border-radius:8px;</string>
       </property>
      </widget>
      <widget class="QWidget" name="widget_examples" native="true">
@@ -1272,6 +1283,9 @@ background-color: rgba(0,0,0,0);</string>
         <height>635</height>
        </rect>
       </property>
+      <property name="midLineWidth">
+       <number>1</number>
+      </property>
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
@@ -1353,10 +1367,13 @@ background-color: rgba(0,0,0,0);</string>
       <property name="geometry">
        <rect>
         <x>300</x>
-        <y>150</y>
+        <y>149</y>
         <width>1180</width>
         <height>3</height>
        </rect>
+      </property>
+      <property name="midLineWidth">
+       <number>1</number>
       </property>
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -1428,6 +1445,9 @@ background-color: rgba(0,0,0,0);</string>
         <height>484</height>
        </rect>
       </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::NoSelection</enum>
+      </property>
       <property name="verticalScrollMode">
        <enum>QAbstractItemView::ScrollPerPixel</enum>
       </property>
@@ -1460,7 +1480,14 @@ background-color: rgba(0,0,0,0);</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgba(255, 255, 255, 255);</string>
+     <string notr="true">#widget_playlist{
+	background-color: rgba(255, 255, 255, 255);
+	border-top-left-radius:12px;
+	border-bottom-left-radius:12px;
+	border-top-right-radius:12px;
+	border-bottom-right-radius:12px;
+	border-left:1px solid #686868;
+}</string>
     </property>
     <widget class="QLabel" name="label_playlist">
      <property name="geometry">
@@ -1473,19 +1500,6 @@ background-color: rgba(0,0,0,0);</string>
      </property>
      <property name="text">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;播放列表&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#a3a3a3;&quot;&gt;共0首歌曲&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="Line" name="line">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>3</width>
-       <height>880</height>
-      </rect>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_hideplaylist">
@@ -1537,6 +1551,9 @@ background-color: rgba(0,0,0,0);</string>
        <height>3</height>
       </rect>
      </property>
+     <property name="midLineWidth">
+      <number>0</number>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -1550,6 +1567,9 @@ background-color: rgba(0,0,0,0);</string>
        <height>3</height>
       </rect>
      </property>
+     <property name="midLineWidth">
+      <number>0</number>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -1562,6 +1582,9 @@ background-color: rgba(0,0,0,0);</string>
        <width>249</width>
        <height>710</height>
       </rect>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::NoSelection</enum>
      </property>
      <property name="verticalScrollMode">
       <enum>QAbstractItemView::ScrollPerPixel</enum>
@@ -1577,8 +1600,10 @@ background-color: rgba(0,0,0,0);</string>
       <height>150</height>
      </rect>
     </property>
-    <property name="styleSheet">
-     <string notr="true"/>
+    <property name="font">
+     <font>
+      <stylestrategy>PreferAntialias</stylestrategy>
+     </font>
     </property>
     <widget class="QWidget" name="widget_icon" native="true">
      <property name="geometry">
@@ -1702,9 +1727,9 @@ background-color: rgba(228, 0, 127, 0);</string>
     <widget class="QWidget" name="widget_title_bg" native="true">
      <property name="geometry">
       <rect>
-       <x>320</x>
+       <x>400</x>
        <y>0</y>
-       <width>870</width>
+       <width>710</width>
        <height>150</height>
       </rect>
      </property>

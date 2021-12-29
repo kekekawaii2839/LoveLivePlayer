@@ -26,6 +26,8 @@ private slots:
 
 private:
 
+signals:
+    closed();
 };
 
 #endif // LVIDEOWIDGET_H

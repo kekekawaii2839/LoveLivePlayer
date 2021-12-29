@@ -28,6 +28,7 @@ void LVideoWidget::paintEvent(QPaintEvent *e){//解决继承后qss失效的问�
 void LVideoWidget::on_pushButton_close_clicked(){
     ui->playWidget->setUrl("");
     ui->playWidget->close();
+    emit closed();
     this->close();
 }
 

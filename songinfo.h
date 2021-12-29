@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QApplication>
 #include <QTextCodec>
+#include <QTextStream>
 
 #include <windows.h>
 #include <QtWinExtras/QtWin>

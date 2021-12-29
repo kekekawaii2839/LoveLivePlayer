@@ -14,6 +14,8 @@ public:
         timerid=this->startTimer(nInterVal);
     }
 
+    void setText(const QString);
+
 protected:
     void paintEvent(QPaintEvent *event);
     void timerEvent(QTimerEvent *event);
