@@ -10,6 +10,7 @@ LAudioPlayer::LAudioPlayer(QObject *parent)
 
     timer=new QTimer();
     timer->setInterval(NotifyInterval);
+    //zplayer->SetRate(101);//不可等于100
     connect(timer,SIGNAL(timeout()),this,SLOT(LUpdate()));
     connect(playlist,SIGNAL(currentMediaChanged(QMediaContent)),this,SLOT(LSetMedia(QMediaContent)));
     connect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(setPlayerIndex(int)));
@@ -76,9 +77,14 @@ void LAudioPlayer::LUpdate(){
     libZPlay::TStreamTime pos;
     zplayer->GetPosition(&pos);
     emit positionChanged(pos.ms);
-    //qDebug()<<"pos.ms="<<pos.ms;
-    //qDebug()<<"duration="<<duration;
-    if(pos.ms+100>=duration&&duration!=0){//zplayer的pos最小间隔貌似是50ms,而且最后一个应该更新的pos反而不更新
+    qDebug()<<"pos.ms="<<pos.ms;
+    qDebug()<<"duration="<<duration;
+
+    libZPlay::TStreamStatus status;
+    zplayer->GetStatus(&status);
+    qDebug()<<status.fPlay<<status.fPause;
+
+    if((pos.ms+51>=duration&&duration!=0)||(status.fPlay==0&&duration!=0&&pos.ms==0)){//zplayer的pos最小间隔貌似是50ms,而且最后一个应该更新的pos反而不更新
         qDebug()<<"end!";
         last_duration=0;
         duration=0;
@@ -91,14 +97,12 @@ void LAudioPlayer::LUpdate(){
         this->LSetMedia(playlist->currentMedia());
         this->LPlay();
     }*/
-
     zplayer->GetStreamInfo(&info);
     duration=info.Length.ms;
     if(last_duration!=duration){
         last_duration=duration;
         emit durationChanged(duration);
     }
-
     //qDebug()<<"LUpdate()!";
 }
 
@@ -140,24 +144,3 @@ void LAudioPlayer::LSetPosition(int pos){
 
     //qDebug()<<"LSetPosition()!"<<"  pos="<<pos<<"  currentTime.ms="<<currentTime.ms<<"  setTime.ms="<<setTime.ms;
 }
-
-/*void LAudioPlayer::SaveHDCToFile(libZPlay::TID3InfoExW id3_info,HWND hwnd){
-    libZPlay::TID3PictureW pic;
-    HDC hdc=GetDC(hwnd);
-    HDC memDc=CreateCompatibleDC(hdc);
-    HBITMAP hBmp=CreateCompatibleBitmap(hdc,id3_info.Picture.Width,id3_info.Picture.Height);
-    SelectObject(memDc,hBmp);
-
-    pic=id3_info.Picture;
-    zplayer->DrawBitmapToHDC(memDc,0,0,id3_info.Picture.Width,id3_info.Picture.Height,id3_info.Picture.hBitmap);
-
-    QPixmap pixmap=QtWin::fromHBITMAP(hBmp,QtWin::HBitmapNoAlpha);
-    QImage img=pixmap.toImage();
-    img.save("album.png","PNG",100);
-    SelectObject(memDc,(HBITMAP)NULL);
-    DeleteDC(memDc);
-    DeleteObject(hBmp);
-    DeleteDC(hdc);
-
-    emit AlbumPicReady();
-}*/

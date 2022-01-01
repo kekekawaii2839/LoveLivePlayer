@@ -21,12 +21,12 @@ public:
 private:
     libZPlay::ZPlay* zplayer;
     QTimer* timer;
-    int NotifyInterval=1;//默认10ms一刷新
+    int NotifyInterval=1;//默认1ms一刷新
 
     libZPlay::TStreamInfo info;
     QMediaPlayer::State L_State;//zplayer->GetStatus();?
     QMediaPlayer::MediaStatus L_MediaStatus;
-    int duration,last_duration;
+    unsigned int duration,last_duration;
 public Q_SLOTS:
     void LPlay();
     void LPause();

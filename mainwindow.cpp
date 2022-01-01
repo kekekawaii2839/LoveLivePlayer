@@ -1397,8 +1397,10 @@ void MainWindow::read_userdata(){
     if(data.open(QIODevice::ReadOnly)){
         QString temp=data.readAll();
         QStringList list=temp.split("\n");
-        if(list.count()==10){
+        //qDebug()<<"list.count()="<<list.count();
+        if(list.count()==10+1){
             ui->Slider_volume->setValue(list.at(0).toInt());
+            ui->label_volume->setText(QString::number(ui->Slider_volume->value()));
             isAutoPlay=list.at(1).toInt();
             isTray=list.at(2).toInt();
 
