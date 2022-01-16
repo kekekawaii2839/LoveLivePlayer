@@ -66,6 +66,7 @@ private:
     QSystemTrayIcon* mSysTrayIcon;
     DesktopLyricWindow dd;
     QTimer* t;
+    bool isInitiated;
 
     LAudioPlayer* player;
     int duration;

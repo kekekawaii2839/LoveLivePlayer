@@ -601,16 +601,6 @@ background-color: rgba(228, 0, 127, 0);</string>
 border-radius:8px;</string>
       </property>
      </widget>
-     <widget class="QWidget" name="widget_examples" native="true">
-      <property name="geometry">
-       <rect>
-        <x>515</x>
-        <y>150</y>
-        <width>240</width>
-        <height>300</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QLabel" name="label_singers">
       <property name="enabled">
        <bool>true</bool>
@@ -622,6 +612,18 @@ border-radius:8px;</string>
         <width>330</width>
         <height>90</height>
        </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>330</width>
+        <height>90</height>
+       </size>
       </property>
       <property name="font">
        <font>
@@ -1052,9 +1054,31 @@ color:black;</string>
        <string>MV!</string>
       </property>
      </widget>
+     <widget class="QScrollArea" name="scrollArea_examples">
+      <property name="geometry">
+       <rect>
+        <x>515</x>
+        <y>150</y>
+        <width>252</width>
+        <height>300</height>
+       </rect>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidget_examples">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>250</width>
+         <height>298</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
      <zorder>fakelabel_time</zorder>
      <zorder>widget_cover_shadow</zorder>
-     <zorder>widget_examples</zorder>
      <zorder>pushButton_lyric_html</zorder>
      <zorder>pushButton_lyric</zorder>
      <zorder>label_singers</zorder>
@@ -1074,6 +1098,7 @@ color:black;</string>
      <zorder>fakepushButton_playlist</zorder>
      <zorder>fakewidget_cover</zorder>
      <zorder>pushButton_mv</zorder>
+     <zorder>scrollArea_examples</zorder>
     </widget>
     <widget class="QWidget" name="widget_songlist" native="true">
      <property name="geometry">

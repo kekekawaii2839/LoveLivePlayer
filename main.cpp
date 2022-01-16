@@ -10,6 +10,7 @@ LRESULT CALLBACK keyProc(int nCode,WPARAM wParam,LPARAM lParam){//键盘钩子�
     KBDLLHOOKSTRUCT *pkbhs=(KBDLLHOOKSTRUCT*)lParam;
     if(nCode == HC_ACTION){
         if(wParam==WM_KEYUP){
+            qDebug()<<"pkbhs->vkCode="<<pkbhs->vkCode;
             if(pkbhs->vkCode == VK_MEDIA_PLAY_PAUSE){
                 qDebug() << "VK_MEDIA_PLAY_PAUSE";
                 w->on_pushButton_play_clicked();

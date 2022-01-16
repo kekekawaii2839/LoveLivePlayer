@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    isInitiated=false;
     this->setAttribute(Qt::WA_TranslucentBackground,true);
     ui->setupUi(this);
     hwnd=(HWND)this->window()->winId();
@@ -157,6 +158,7 @@ MainWindow::MainWindow(QWidget *parent) :
     songlist_detail->setGeometry(301,151,1179,484);*/
 
     read_userdata();
+    isInitiated=true;
 }
 
 MainWindow::~MainWindow()
@@ -456,12 +458,16 @@ void MainWindow::time_change(int time){
                         ui->label_singers->show();
                     }
                     ui->label_singers->setText(singers);
+                    ui->label_singers->adjustSize();
                 }
                 current_lyric_index=valid_lyric-1;
                 break;
             }
         }
     }
+
+    ui->label_singers->adjustSize();
+    ui->label_singers->move(910,250-ui->label_singers->height());
 }
 
 void MainWindow::get_duration(qint64 time){
@@ -624,7 +630,7 @@ bool MainWindow::read_lyric(QString path,int mode){
                 lrc_time=mat.captured(1).toInt()*60000+mat.captured(2).toInt()*1000+mat.captured(3).mid(1).toInt()*10;
                 text=list.at(i).right(QString(list.at(i)).length()-mat.capturedLength());
 
-                for(int k=0;k<9;++k){
+                for(int k=0;k<30;++k){
                     lyric[i].color[k]=false;
                 }
                 if(text!=""){
@@ -794,7 +800,7 @@ void MainWindow::load_single_song(QString name){
         lyric_translate[i].color_num=0;
         lyric_translate[i].text="";
         lyric_translate[i].time=-1;
-        for(int ii=0;ii<9;++ii){
+        for(int ii=0;ii<30;++ii){
             lyric[i].color[ii]=false;
             lyric_translate[i].color[ii]=false;
         }
@@ -845,7 +851,7 @@ void MainWindow::change_song(QMediaPlayer::MediaStatus status){
                 lyric[i].time=-1;
                 lyric[i].text="";
                 lyric[i].color_num=0;
-                for(int u=0;u<9;++u){
+                for(int u=0;u<30;++u){
                     lyric[i].color[u]=false;
                 }
             }
@@ -873,7 +879,7 @@ void MainWindow::change_song(QMediaPlayer::MediaStatus status){
                 lyric[i].time=-1;
                 lyric[i].text="";
                 lyric[i].color_num=0;
-                for(int u=0;u<9;++u){
+                for(int u=0;u<30;++u){
                     lyric[i].color[u]=false;
                 }
             }
@@ -1308,11 +1314,17 @@ void MainWindow::get_config(QString id){
         groupboxes.removeFirst();
     }
     if(conf.member.at(0)!=" "){//.config文件最后有一个空的换行导致conf.member至少有一个元素
-        int up_margin=(ui->widget_examples->height()-qRound(conf.member.count()*1.0/2)*50)/2;
-        if(up_margin<0) up_margin=0;
+        int up_margin=(300-qRound(conf.member.count()*1.0/2)*50)/2;//将歌手色彩显示居中
+        if(up_margin<0){
+            up_margin=0;
+            ui->scrollAreaWidget_examples->setMinimumHeight((qRound(conf.member.count()*1.0/2)-1)*50);
+        }
+        else{
+            ui->scrollAreaWidget_examples->setMinimumHeight(300);
+        }
         QFont font(font_string,10);
         for(int i=0;i<conf.num;++i){
-            QGroupBox* tempbox=new QGroupBox(ui->widget_examples);
+            QGroupBox* tempbox=new QGroupBox(ui->scrollAreaWidget_examples);
             tempbox->setGeometry(QRect((i-i/2*2)*120,i/2*50+up_margin,120,50));
             tempbox->setStyleSheet("border:none;");
             QLabel* tempblock=new QLabel(tempbox);

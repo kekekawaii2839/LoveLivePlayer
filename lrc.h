@@ -11,7 +11,7 @@ public:
     int time;
     QString text;
     int color_num;
-    bool color[9];
+    bool color[30];
 };
 
 #endif // LRC_H

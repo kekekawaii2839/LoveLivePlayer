@@ -77,12 +77,12 @@ void LAudioPlayer::LUpdate(){
     libZPlay::TStreamTime pos;
     zplayer->GetPosition(&pos);
     emit positionChanged(pos.ms);
-    qDebug()<<"pos.ms="<<pos.ms;
-    qDebug()<<"duration="<<duration;
+    //qDebug()<<"pos.ms="<<pos.ms;
+    //qDebug()<<"duration="<<duration;
 
     libZPlay::TStreamStatus status;
     zplayer->GetStatus(&status);
-    qDebug()<<status.fPlay<<status.fPause;
+    //qDebug()<<status.fPlay<<status.fPause;
 
     if((pos.ms+51>=duration&&duration!=0)||(status.fPlay==0&&duration!=0&&pos.ms==0)){//zplayer的pos最小间隔貌似是50ms,而且最后一个应该更新的pos反而不更新
         qDebug()<<"end!";
