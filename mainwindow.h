@@ -72,6 +72,7 @@ private:
     int duration;
     LRC lyric[200];
     LRC lyric_translate[200];
+    LRC lyric_romaji[200];
     config conf;
     LVideoWidget* mv;
     QMap<QString,SongInfo*> infos;
@@ -81,7 +82,7 @@ private:
     HWND hwnd;
     int valid_lyric;//储存有效lyric的数量
     int current_lyric_index;//LRC数组当前显示的元素的下标
-    int time_change_mode;//0表示正常播放 1表示拖动进度条导致的positionChanged
+    //int time_change_mode;//0表示正常播放 1表示拖动进度条导致的positionChanged
     QList<QGroupBox*> groupboxes;
     QIcon* empty_icon;
     bool isRandomPlay,isAutoPlay,isTray,isAutoShowDesktopLyric,isLog;
@@ -89,6 +90,7 @@ private:
     QList<int> random_seq;
     int randomplay_progress;
     QStringList themes;
+    int subLRC;//0表示中文翻译 1表示日文罗马音
 
     QStringList songlist;//歌单文件名列表
     QStringList songlist_detail;//当前歌单中音频文件的完整绝对路径
@@ -171,6 +173,7 @@ private slots:
             int seq_songlist=-3,
             int seq_currentSongInSonglist=-1);
     void on_pushButton_mv_clicked();
+    void on_pushButton_switch_sublyric_clicked();
 };
 
 #endif // MAINWINDOW_H

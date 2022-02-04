@@ -573,6 +573,11 @@ background-color: rgba(228, 0, 127, 0);</string>
        <height>730</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="styleSheet">
       <string notr="true">#widget_player{
 	background-color:white;
@@ -694,7 +699,7 @@ background-color:rgba(0,0,0,0);</string>
        <string>暂无歌词</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_lyric_translate">
+     <widget class="QPushButton" name="pushButton_sublyric">
       <property name="geometry">
        <rect>
         <x>890</x>
@@ -1077,12 +1082,49 @@ color:black;</string>
        </property>
       </widget>
      </widget>
+     <widget class="QPushButton" name="pushButton_switch_sublyric">
+      <property name="geometry">
+       <rect>
+        <x>1275</x>
+        <y>510</y>
+        <width>30</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>音</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="fakepushButton_switch_sublyric">
+      <property name="geometry">
+       <rect>
+        <x>1275</x>
+        <y>510</y>
+        <width>30</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>音</string>
+      </property>
+     </widget>
+     <zorder>fakepushButton_switch_sublyric</zorder>
      <zorder>fakelabel_time</zorder>
      <zorder>widget_cover_shadow</zorder>
      <zorder>pushButton_lyric_html</zorder>
      <zorder>pushButton_lyric</zorder>
      <zorder>label_singers</zorder>
-     <zorder>pushButton_lyric_translate</zorder>
+     <zorder>pushButton_sublyric</zorder>
      <zorder>label_info_title</zorder>
      <zorder>label_info_artist</zorder>
      <zorder>label_info_album</zorder>
@@ -1099,6 +1141,7 @@ color:black;</string>
      <zorder>fakewidget_cover</zorder>
      <zorder>pushButton_mv</zorder>
      <zorder>scrollArea_examples</zorder>
+     <zorder>pushButton_switch_sublyric</zorder>
     </widget>
     <widget class="QWidget" name="widget_songlist" native="true">
      <property name="geometry">

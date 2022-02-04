@@ -26,7 +26,7 @@
     background-color:rgba(255,255,255,2);
 }</string>
    </property>
-   <widget class="QLabel" name="label_lyric_translate">
+   <widget class="QLabel" name="label_sublyric">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -128,7 +128,7 @@ color: rgb(127, 127, 127);</string>
    </widget>
    <zorder>pushButton_lyric_html</zorder>
    <zorder>pushButton_lyric</zorder>
-   <zorder>label_lyric_translate</zorder>
+   <zorder>label_sublyric</zorder>
    <zorder>label_layer</zorder>
    <zorder>pushButton_lock</zorder>
   </widget>
