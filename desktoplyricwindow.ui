@@ -43,7 +43,7 @@
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: rgb(127, 127, 127);</string>
+     <string notr="true">color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
      <string>暂无翻译</string>
@@ -91,7 +91,7 @@ background-color:rgba(0,0,0,0);</string>
     <property name="styleSheet">
      <string notr="true">border-color:rgba(0,0,0,0);
 background-color:rgba(0,0,0,0);
-color: rgb(127, 127, 127);</string>
+color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
      <string>暂无歌词</string>
@@ -126,6 +126,62 @@ color: rgb(127, 127, 127);</string>
      <string/>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_lyricbg">
+    <property name="geometry">
+     <rect>
+      <x>1</x>
+      <y>6</y>
+      <width>500</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-color:rgba(0,0,0,0);
+background-color:rgba(0,0,0,0);
+color: rgb(0, 0, 0);</string>
+    </property>
+    <property name="text">
+     <string>暂无歌词</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_sublyricbg">
+    <property name="geometry">
+     <rect>
+      <x>1</x>
+      <y>46</y>
+      <width>500</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
+    </property>
+    <property name="text">
+     <string>暂无翻译</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="textInteractionFlags">
+     <set>Qt::NoTextInteraction</set>
+    </property>
+   </widget>
+   <zorder>label_sublyricbg</zorder>
+   <zorder>pushButton_lyricbg</zorder>
    <zorder>pushButton_lyric_html</zorder>
    <zorder>pushButton_lyric</zorder>
    <zorder>label_sublyric</zorder>

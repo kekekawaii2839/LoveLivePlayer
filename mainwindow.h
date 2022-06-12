@@ -8,7 +8,6 @@
 #include "laudioplayer.h"
 #include "lvideowidget.h"
 #include "animatedscrollbar.h"
-//#include "lscrollarea.h"
 #include "songinfo.h"
 
 #include <QMainWindow>
@@ -82,7 +81,6 @@ private:
     HWND hwnd;
     int valid_lyric;//储存有效lyric的数量
     int current_lyric_index;//LRC数组当前显示的元素的下标
-    //int time_change_mode;//0表示正常播放 1表示拖动进度条导致的positionChanged
     QList<QGroupBox*> groupboxes;
     QIcon* empty_icon;
     bool isRandomPlay,isAutoPlay,isTray,isAutoShowDesktopLyric,isLog;
@@ -103,7 +101,8 @@ private:
     QList<QLabel*> current_songlist_labels2;
     QList<QLabel*> current_songlist_labels3;
     QList<QWidget*> songlist_detail_containers;
-    QListPushButton* play_singlesong_songlist;//鼠标悬浮时在当前歌单中显示的播放小按钮
+    QListPushButton* play_singlesong_songlist;//鼠标悬浮时在当前歌单中显示的"播放"小按钮
+    QListPushButton* add_singlesong_songlist;//鼠标悬浮时在当前歌单中显示的"添加到"小按钮
 
     QStringList name_list;//播放列表
     QStringList all_list;//储存全部音乐的文件名的列表
@@ -174,6 +173,7 @@ private slots:
             int seq_currentSongInSonglist=-1);
     void on_pushButton_mv_clicked();
     void on_pushButton_switch_sublyric_clicked();
+    void on_pushButton_createsonglist_clicked();
 };
 
 #endif // MAINWINDOW_H

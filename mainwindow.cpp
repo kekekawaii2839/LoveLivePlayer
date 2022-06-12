@@ -108,6 +108,10 @@ MainWindow::MainWindow(QWidget *parent) :
         //qDebug()<<themes.last();
     }
 
+    play_singlesong_songlist=new QListPushButton(this);
+    add_singlesong_songlist=new QListPushButton(this);
+    play_singlesong_songlist->close();
+    add_singlesong_songlist->close();
     //ui->widget_playlist->hide();
     on_pushButton_hideplayer_clicked();
     on_pushButton_settings_return_clicked();
@@ -211,7 +215,7 @@ void MainWindow::time_change(int time){
                             }
 
                             QString dda=lyric[i].text;
-                            dda.replace("color:#000000","color:#7f7f7f");
+                            dda.replace("color:#000000","color:#ffffff");
                             dda.replace("font-size:14pt;","font-size:13pt;");
                             //qDebug()<<dda; e.g.<span style=" font-size:14pt; font-weight:600; color:#55aaff;">aaaaa</span><span style=" font-size:14pt; font-weight:600; color:#ffaaff;">aaaaaaa</span>
                             QTextDocument htmll;
@@ -225,32 +229,13 @@ void MainWindow::time_change(int time){
                             dd.ui->pushButton_lyric_html->setIcon(iconn);
                             dd.ui->pushButton_lyric_html->setIconSize(pixmapp.rect().size());
                             dd.ui->pushButton_lyric->setText("");
-                            if(subLRC==0){
-                                if(!lyric_translate[i].text.contains("\n")){
-                                    dd.ui->label_sublyric->setText(lyric_translate[i].text);
-                                }
-                                else{
-                                    QStringList tem=lyric_translate[i].text.split("\n");
-                                    QString aaa;
-                                    for(int m=0;m<tem.count();++m){
-                                        aaa.append(tem.at(m)+" ");
-                                    }
-                                    dd.ui->label_sublyric->setText(adjust_text_overlength(aaa,dd.ui->label_sublyric,1));
-                                }
+
+                            QString ddb=lyric[i].text;
+                            QRegularExpression re("<[^>]{0,}>");
+                            while(re.match(ddb).hasMatch()){
+                                ddb.replace(re,"");
                             }
-                            else if(subLRC==1){
-                                if(!lyric_romaji[i].text.contains("\n")){
-                                    dd.ui->label_sublyric->setText(lyric_romaji[i].text);
-                                }
-                                else{
-                                    QStringList tem=lyric_romaji[i].text.split("\n");
-                                    QString aaa;
-                                    for(int m=0;m<tem.count();++m){
-                                        aaa.append(tem.at(m)+" ");
-                                    }
-                                    dd.ui->label_sublyric->setText(adjust_text_overlength(aaa,dd.ui->label_sublyric,1));
-                                }
-                            }
+                            dd.ui->pushButton_lyricbg->setText(ddb);
                         }
                     }
                     else{
@@ -266,6 +251,7 @@ void MainWindow::time_change(int time){
                         dd.ui->pushButton_lyric_html->setIcon(*empty_icon);
                         if(!lyric[i].text.contains("\n")){
                             dd.ui->pushButton_lyric->setText(lyric[i].text);
+                            dd.ui->pushButton_lyricbg->setText(dd.ui->pushButton_lyric->text());
                         }
                         else{
                             QStringList tem=lyric[i].text.split("\n");
@@ -274,41 +260,17 @@ void MainWindow::time_change(int time){
                                 aaa.append(tem.at(m)+" ");
                             }
                             dd.ui->pushButton_lyric->setText(adjust_text_overlength(aaa,dd.ui->pushButton_lyric,1));
-                        }
-                        if(subLRC==0){
-                            if(!lyric_translate[i].text.contains("\n")){
-                                dd.ui->label_sublyric->setText(lyric_translate[i].text);
-                            }
-                            else{
-                                QStringList tem=lyric_translate[i].text.split("\n");
-                                QString aaa;
-                                for(int m=0;m<tem.count();++m){
-                                    aaa.append(tem.at(m)+" ");
-                                }
-                                dd.ui->label_sublyric->setText(adjust_text_overlength(aaa,dd.ui->label_sublyric,1));
-                            }
-                        }
-                        else if(subLRC==1){
-                            if(!lyric_romaji[i].text.contains("\n")){
-                                dd.ui->label_sublyric->setText(lyric_romaji[i].text);
-                            }
-                            else{
-                                QStringList tem=lyric_romaji[i].text.split("\n");
-                                QString aaa;
-                                for(int m=0;m<tem.count();++m){
-                                    aaa.append(tem.at(m)+" ");
-                                }
-                                dd.ui->label_sublyric->setText(adjust_text_overlength(aaa,dd.ui->label_sublyric,1));
-                            }
+                            dd.ui->pushButton_lyricbg->setText(dd.ui->pushButton_lyric->text());
                         }
 
+                        //设置歌词颜色
                         if(lyric[i].color_num==0){
                             ui->pushButton_lyric->setStyleSheet("color:black;s\nborder-color:rgba(255,255,255,0);\nbackground-color:rgba(255,255,255,0);");
-                            dd.ui->pushButton_lyric->setStyleSheet("color:#7f7f7f;s\nborder-color:rgba(255,255,255,0);\nbackground-color:rgba(255,255,255,0);");
+                            dd.ui->pushButton_lyric->setStyleSheet("color:#ffffff;s\nborder-color:rgba(255,255,255,0);\nbackground-color:rgba(255,255,255,0);");
                         }
                         else if(lyric[i].color_num==conf.num){
                             ui->pushButton_lyric->setStyleSheet("color:black;s\nborder-color:rgba(255,255,255,0);\nbackground-color:rgba(255,255,255,0);");
-                            dd.ui->pushButton_lyric->setStyleSheet("color:#7f7f7f;s\nborder-color:rgba(255,255,255,0);\nbackground-color:rgba(255,255,255,0);");
+                            dd.ui->pushButton_lyric->setStyleSheet("color:#ffffff;s\nborder-color:rgba(255,255,255,0);\nbackground-color:rgba(255,255,255,0);");
                         }
                         else if(lyric[i].color_num==1){
                             for(int u=0;u<conf.num;++u){
@@ -337,6 +299,38 @@ void MainWindow::time_change(int time){
                             temp=temp.mid(0,temp.length()-1);
                             ui->pushButton_lyric->setStyleSheet(style_prefix+temp+style_suffix);
                             dd.ui->pushButton_lyric->setStyleSheet(style_prefix+temp+style_suffix);
+                        }
+                    }
+
+                    //设置subLRC显示
+                    if(subLRC==0){
+                        if(!lyric_translate[i].text.contains("\n")){
+                            dd.ui->label_sublyric->setText(lyric_translate[i].text);
+                            dd.ui->label_sublyricbg->setText(dd.ui->label_sublyric->text());
+                        }
+                        else{
+                            QStringList tem=lyric_translate[i].text.split("\n");
+                            QString aaa;
+                            for(int m=0;m<tem.count();++m){
+                                aaa.append(tem.at(m)+" ");
+                            }
+                            dd.ui->label_sublyric->setText(adjust_text_overlength(aaa,dd.ui->label_sublyric,1));
+                            dd.ui->label_sublyricbg->setText(dd.ui->label_sublyric->text());
+                        }
+                    }
+                    else if(subLRC==1){
+                        if(!lyric_romaji[i].text.contains("\n")){
+                            dd.ui->label_sublyric->setText(lyric_romaji[i].text);
+                            dd.ui->label_sublyricbg->setText(dd.ui->label_sublyric->text());
+                        }
+                        else{
+                            QStringList tem=lyric_romaji[i].text.split("\n");
+                            QString aaa;
+                            for(int m=0;m<tem.count();++m){
+                                aaa.append(tem.at(m)+" ");
+                            }
+                            dd.ui->label_sublyric->setText(adjust_text_overlength(aaa,dd.ui->label_sublyric,1));
+                            dd.ui->label_sublyricbg->setText(dd.ui->label_sublyric->text());
                         }
                     }
 
@@ -454,6 +448,7 @@ bool MainWindow::read_lyric(QString path,int mode){
                     ++lyric_seq;
                 }
             }
+            qDebug()<<"read_lyric01";
             return true;
         }
         else{
@@ -462,6 +457,7 @@ bool MainWindow::read_lyric(QString path,int mode){
                 lyric[i].text="暂无歌词";
                 lyric[i].color_num=0;
             }
+            qDebug()<<"read_lyric00";
             return false;
         }
     }
@@ -507,6 +503,7 @@ bool MainWindow::read_lyric(QString path,int mode){
                     ++lyric_seq;
                 }
             }
+            qDebug()<<"read_lyric11";
             return true;
         }
         else{
@@ -515,6 +512,7 @@ bool MainWindow::read_lyric(QString path,int mode){
                 lyric_translate[i].text="暂无翻译";
                 lyric_translate[i].color_num=0;
             }
+            qDebug()<<"read_lyric10";
             return false;
         }
     }
@@ -525,7 +523,6 @@ bool MainWindow::read_lyric(QString path,int mode){
             QStringList list=all.split("\n");
             QRegularExpression re("\\[(\\d+)?:(\\d+)?(\\.\\d+)?(\\S+)?\\]");
             int lyric_seq=0;
-            qDebug()<<"list.count()="<<list.count();
             for(int i=0;i<list.count();++i){
                 QString text;
                 qint64 lrc_time;
@@ -544,6 +541,7 @@ bool MainWindow::read_lyric(QString path,int mode){
                     ++lyric_seq;
                 }
             }
+            qDebug()<<"read_lyric21";
             return true;
         }
         else{
@@ -552,6 +550,7 @@ bool MainWindow::read_lyric(QString path,int mode){
                 lyric[i].text="暂无歌词";
                 lyric[i].color_num=0;
             }
+            qDebug()<<"read_lyric20";
             return false;
         }
     }
@@ -570,6 +569,8 @@ bool MainWindow::read_lyric(QString path,int mode){
                     lyric_romaji[i].color[k]=false;
                 }
             }
+            qDebug()<<"read_lyric31";
+            return true;
         }
         else{
             for(int i=0;i<200;++i){
@@ -577,10 +578,10 @@ bool MainWindow::read_lyric(QString path,int mode){
                 lyric_romaji[i].text="暂无罗马音";
                 lyric_romaji[i].color_num=0;
             }
+            qDebug()<<"read_lyric30";
             return false;
         }
     }
-    qDebug()<<"read_lyric";
 }
 
 void MainWindow::on_pushButton_lyric_clicked()
@@ -621,7 +622,6 @@ void MainWindow::on_horizontalSlider_sliderPressed()
 void MainWindow::on_horizontalSlider_sliderReleased()
 {
     current_lyric_index=0;
-    //time_change_mode=0;
     player->LSetPosition(ui->horizontalSlider->value());
     ui->fakehorizontalSlider->setValue(ui->horizontalSlider->value());
     player->LPlay();
@@ -779,7 +779,6 @@ void MainWindow::load_single_song(QString name){
 
 void MainWindow::QSliderProClicked(){
     current_lyric_index=0;
-    //time_change_mode=1;
     int pos=ui->horizontalSlider->value();
     disconnect(player,SIGNAL(positionChanged(int)),this,SLOT(time_change(int)));
     player->LSetPosition(pos);
@@ -932,7 +931,6 @@ void MainWindow::player_state_change(QMediaPlayer::State state){
 }
 
 QString MainWindow::adjust_text_overlength(QString text,QWidget* obj,int mode){//自动换行 但不修改含html标签的字符串
-    qDebug()<<"before adjust="<<text;
     if(mode==0){//自动换行模式
         if(!text.contains("<")){
             QString result=text.toUtf8();
@@ -979,7 +977,6 @@ QString MainWindow::adjust_text_overlength(QString text,QWidget* obj,int mode){/
                 else final+=result+"\n";
             }
             QString res=final.left(final.length()-1);
-            qDebug()<<"adjust="<<res;
             return res;
         }
         else{
@@ -999,7 +996,6 @@ QString MainWindow::adjust_text_overlength(QString text,QWidget* obj,int mode){/
                 int ooowidth=obj->fontMetrics().width("...");
                 if(tempwidth+ooowidth>buttonwidth){
                     QString res=temp.left(temp.length()-1)+"...";
-                    qDebug()<<"adjust="<<res;
                     return res;
                 }
             }
@@ -1944,17 +1940,28 @@ void MainWindow::current_songlist_buttons_clicked(int seq){
 }
 
 void MainWindow::current_songlist_buttons_hoverEnter(int seq){
+    if(play_singlesong_songlist!=NULL) play_singlesong_songlist->deleteLater();
     play_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
     play_singlesong_songlist->setGeometry(QRect(335,15,20,20));
     play_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/play_small.png);");
     play_singlesong_songlist->seq=seq;
     connect(play_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(current_songlist_buttons_clicked(int)));
     play_singlesong_songlist->show();
+
+    if(add_singlesong_songlist!=NULL) add_singlesong_songlist->deleteLater();
+    add_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
+    add_singlesong_songlist->setGeometry(QRect(375,15,20,20));
+    add_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/add_small.png);");
+    add_singlesong_songlist->seq=seq;
+    add_singlesong_songlist->show();
 }
 
 void MainWindow::current_songlist_buttons_hoverLeave(int seq){
     play_singlesong_songlist->close();
-    play_singlesong_songlist->deleteLater();
+    //play_singlesong_songlist->deleteLater();
+
+    add_singlesong_songlist->close();
+    //add_singlesong_songlist->deleteLater();
 }
 
 void MainWindow::on_pushButton_playall_clicked()
@@ -2229,6 +2236,11 @@ void MainWindow::addPushbuttonsInSonglist(QStringList content){
 }
 
 void MainWindow::clearItemsInCurrentSonglist(){
+    //play_singlesong_songlist->deleteLater();
+    //add_singlesong_songlist->deleteLater();
+    play_singlesong_songlist->setParent(this);
+    add_singlesong_songlist->setParent(this);
+
     ui->listWidget_songlist_detail->clear();
     for(int i=0;i<current_songlist_buttons.count();++i){
         songlist_detail_containers.at(i)->close();
@@ -2327,6 +2339,7 @@ void MainWindow::on_pushButton_switch_sublyric_clicked()
 
         ui->pushButton_sublyric->setText(adjust_text_overlength(lyric_romaji[current_lyric_index].text,ui->pushButton_sublyric,0));
         dd.ui->label_sublyric->setText(adjust_text_overlength(lyric_romaji[current_lyric_index].text,dd.ui->label_sublyric,1));
+        dd.ui->label_sublyricbg->setText(dd.ui->label_sublyricbg->text());
     }
     else if(subLRC==1){
         subLRC=0;
@@ -2335,5 +2348,11 @@ void MainWindow::on_pushButton_switch_sublyric_clicked()
 
         ui->pushButton_sublyric->setText(adjust_text_overlength(lyric_translate[current_lyric_index].text,ui->pushButton_sublyric,0));
         dd.ui->label_sublyric->setText(adjust_text_overlength(lyric_translate[current_lyric_index].text,dd.ui->label_sublyric,1));
+        dd.ui->label_sublyricbg->setText(dd.ui->label_sublyricbg->text());
     }
+}
+
+void MainWindow::on_pushButton_createsonglist_clicked()
+{
+    //
 }

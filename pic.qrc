@@ -21,5 +21,6 @@
         <file>like.png</file>
         <file>note.png</file>
         <file>play_small.png</file>
+        <file>add_small.png</file>
     </qresource>
 </RCC>

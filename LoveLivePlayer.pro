@@ -37,7 +37,8 @@ SOURCES += \
     laudioplayer.cpp \
     lvideowidget.cpp \
     animatedscrollbar.cpp \
-    songinfo.cpp
+    songinfo.cpp \
+    qmaskwidget.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -54,13 +55,15 @@ HEADERS += \
     laudioplayer.h \
     lvideowidget.h \
     animatedscrollbar.h \
-    songinfo.h
+    songinfo.h \
+    qmaskwidget.h
 
 FORMS += \
         mainwindow.ui \
     desktoplyricwindow.ui \
     quickselect.ui \
-    lvideowidget.ui
+    lvideowidget.ui \
+    qmaskwidget.ui
 
 RESOURCES += \
     pic.qrc \
