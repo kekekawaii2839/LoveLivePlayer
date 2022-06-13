@@ -4,6 +4,7 @@
 #include "qsliderpro.h"
 #include "qlistpushbutton.h"
 #include "qclickwidget.h"
+#include "qmaskwidget.h"
 #include "globalvariable.h"
 #include "laudioplayer.h"
 #include "lvideowidget.h"
@@ -103,6 +104,7 @@ private:
     QList<QWidget*> songlist_detail_containers;
     QListPushButton* play_singlesong_songlist;//鼠标悬浮时在当前歌单中显示的"播放"小按钮
     QListPushButton* add_singlesong_songlist;//鼠标悬浮时在当前歌单中显示的"添加到"小按钮
+    QListPushButton* del_singlesong_songlist;//鼠标悬浮时在当前歌单中显示的"删除"小按钮
 
     QStringList name_list;//播放列表
     QStringList all_list;//储存全部音乐的文件名的列表
@@ -114,6 +116,10 @@ private:
 
     int whatInMainPage=0;//0代表歌单界面 1代表设置界面
     QGraphicsOpacityEffect* effect_for_title_bg;
+
+    QMaskWidget* maskw;
+
+    QString QMenuStyleSheet="QMenu{color:#000000;background-color:#ffffff;border:1px solid #7f7f7f;} QMenu::item{color:#000000;background-color:#ffffff;width:150px;height:40px;padding-left:15px;border-bottom:1px solid #eeeeee;}QMenu::item:selected{color:#000000;background-color:#dddddd;}QMenu::separator{height:1px;background-color:rgba(255,255,255,1);margin-left:5px;margin-right:5px;}QMenu::indicator:unchecked{border:1px solid rgb(180,180,180);}";
 
 private slots:
     void time_change(int);
@@ -174,6 +180,12 @@ private slots:
     void on_pushButton_mv_clicked();
     void on_pushButton_switch_sublyric_clicked();
     void on_pushButton_createsonglist_clicked();
+    void rename_songlist();
+    void songlists_rightclicked(int);
+    void clone_songlist();
+    void del_songlist();
+    void addSongToSonglist(int);
+    void delSongInSonglist(int);
 };
 
 #endif // MAINWINDOW_H

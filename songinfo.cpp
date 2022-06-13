@@ -14,7 +14,7 @@ SongInfo::SongInfo(QString addr,HWND a)//addr是音频文件的完整绝对路�
         CoverAddr.replace(".mp3",".png").replace("/songs/","/infos/");
         QString _t=addr;
         QFileInfo jj(_t.replace(".mp3",".info").replace("/songs/","/infos/"));
-        qDebug()<<jj.absoluteFilePath();
+        //qDebug()<<jj.absoluteFilePath();
         if(jj.isFile()){//info文件存在则读取
             QFile info(_t);
             if(info.open(QIODevice::ReadOnly|QIODevice::Text)){
@@ -32,7 +32,7 @@ SongInfo::SongInfo(QString addr,HWND a)//addr是音频文件的完整绝对路�
                 MvAddr=content.at(4);
 
                 QFileInfo pic(getRealCoverAddr());
-                qDebug()<<"RealCoverAddr:"<<getRealCoverAddr()<<"\nyes?"<<pic.isFile();
+                //qDebug()<<"RealCoverAddr:"<<getRealCoverAddr()<<"\nyes?"<<pic.isFile();
                 get_meta(!pic.isFile());
             }
             else{

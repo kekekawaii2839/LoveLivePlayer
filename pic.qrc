@@ -22,5 +22,6 @@
         <file>note.png</file>
         <file>play_small.png</file>
         <file>add_small.png</file>
+        <file>del_small.png</file>
     </qresource>
 </RCC>

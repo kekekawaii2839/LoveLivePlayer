@@ -19,13 +19,14 @@ LAudioPlayer::LAudioPlayer(QObject *parent)
 }
 
 void LAudioPlayer::LPlay(){
+    //qDebug()<<"LPlay()0";
     //this->play();
     zplayer->Play();
     if(timer->isActive()==false) timer->start();
     L_State=QMediaPlayer::PlayingState;
     emit stateChanged(L_State);
 
-    //qDebug()<<"LPlay()!";
+    //qDebug()<<"LPlay()1!";
 }
 
 void LAudioPlayer::LPause(){

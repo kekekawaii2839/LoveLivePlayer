@@ -17,6 +17,7 @@ public:
     //QString ori_stylesheet;
     //void setStyleSheet(const QString &styleSheet,int mode);
     void setStyleSheet(const QString &styleSheet);//重载 防止QtCreator自动生成ui_mainwindow.h时报错
+    void leftClick();
 protected:
     void mousePressEvent(QMouseEvent *e);
     bool eventFilter(QObject *watched, QEvent *event);

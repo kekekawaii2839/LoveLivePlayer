@@ -44,3 +44,8 @@ bool QListPushButton::eventFilter(QObject *watched, QEvent *event){
 void QListPushButton::setStyleSheet(const QString &styleSheet){
     QPushButton::setStyleSheet("QListPushButton:hover{background-color:rgb(245,245,245);border:0px;border-radius:5px;}\nQListPushButton{"+styleSheet+"}");
 }
+
+void QListPushButton::leftClick(){
+    isRightClicked=false;
+    emit clicked(seq);
+}
