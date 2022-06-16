@@ -21,7 +21,6 @@ private:
 
 protected:
     void paintEvent(QPaintEvent* e);
-
 };
 
 #endif // QMASKWIDGET_H

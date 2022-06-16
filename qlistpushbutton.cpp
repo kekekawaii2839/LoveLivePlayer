@@ -8,6 +8,7 @@ QListPushButton::QListPushButton(QWidget* parent)
     //this->ori_stylesheet="";
     seq=-1;
     isRightClicked=false;
+    isEnableHover=true;
 }
 
 void QListPushButton::mousePressEvent(QMouseEvent *e){
@@ -19,10 +20,10 @@ void QListPushButton::mousePressEvent(QMouseEvent *e){
 bool QListPushButton::eventFilter(QObject *watched, QEvent *event){
     if(watched==this){
         if(event->type()==QEvent::HoverEnter){
-            emit hoverEnter(seq);
+            if(isEnableHover) emit hoverEnter(seq);
         }
         else if(event->type()==QEvent::HoverLeave){
-            emit hoverLeave(seq);
+            if(isEnableHover) emit hoverLeave(seq);
         }
         else if(event->type()==QEvent::MouseButtonDblClick){
             emit dblclicked(seq);
@@ -42,10 +43,35 @@ bool QListPushButton::eventFilter(QObject *watched, QEvent *event){
 }*/
 
 void QListPushButton::setStyleSheet(const QString &styleSheet){
-    QPushButton::setStyleSheet("QListPushButton:hover{background-color:rgb(245,245,245);border:0px;border-radius:5px;}\nQListPushButton{"+styleSheet+"}");
+    if(isEnableHover) QPushButton::setStyleSheet("QListPushButton:hover{background-color:rgb(245,245,245);border:0px;border-radius:5px;}QListPushButton{"+styleSheet+"}");
+    else QPushButton::setStyleSheet("QListPushButton{"+styleSheet+"}");
 }
 
 void QListPushButton::leftClick(){
     isRightClicked=false;
     emit clicked(seq);
 }
+
+void QListPushButton::setHover(bool on){
+    if(on){
+        isEnableHover=true;
+        QString s=styleSheet();
+        s.replace("QListPushButton:hover{background-color:rgb(245,245,245);border:0px;border-radius:5px;}","");
+        setStyleSheet(s);
+    }
+    else{
+        isEnableHover=false;
+        QString s=styleSheet();
+        s.replace("QListPushButton:hover{background-color:rgb(245,245,245);border:0px;border-radius:5px;}QListPushButton{","QListPushButton{");
+        qDebug()<<"s:"<<s;
+        setStyleSheet(s);
+    }
+}
+
+/*void QListPushButton::paintEvent(QPaintEvent *e){//解决继承后qss失效的问题
+    QPushButton::paintEvent(e);
+    QStyleOption opt;
+    opt.init(this);
+    QPainter p(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+}*/

@@ -98,6 +98,7 @@ private:
     int current_songlist_detail_seq;//当前选中的歌单中正在播放的歌曲的序号 -1表示无正在播放
     QList<QListPushButton*> songlist_buttons;
     QList<QListPushButton*> current_songlist_buttons;
+    QList<QListPushButton*> hearts;//目前显示的歌单每首歌曲的红心按钮 用于添加到"我喜欢"
     QList<QLabel*> current_songlist_labels;
     QList<QLabel*> current_songlist_labels2;
     QList<QLabel*> current_songlist_labels3;
@@ -170,7 +171,7 @@ private slots:
     void player_error(QMediaPlayer::Error);
     void on_checkBox_log_clicked(bool checked);
     void addPushbuttonsInPlaylist();
-    void addPushbuttonsInSonglist(QStringList);
+    void addPushbuttonsInSonglist(QStringList,bool);
     void clearItemsInCurrentSonglist();
     void get_all_list();
     void changeThemeColor(
@@ -186,6 +187,8 @@ private slots:
     void del_songlist();
     void addSongToSonglist(int);
     void delSongInSonglist(int);
+    bool isInMylike(QString);
+    void addSongToMyLike(int);
 };
 
 #endif // MAINWINDOW_H

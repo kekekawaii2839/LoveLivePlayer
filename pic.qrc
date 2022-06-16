@@ -18,10 +18,13 @@
         <file>unlocked.png</file>
         <file>icon.ico</file>
         <file>playlist.png</file>
-        <file>like.png</file>
         <file>note.png</file>
         <file>play_small.png</file>
         <file>add_small.png</file>
         <file>del_small.png</file>
+        <file>like.png</file>
+        <file>mylike.png</file>
+        <file>dislike.png</file>
+        <file>dislike_grey.png</file>
     </qresource>
 </RCC>
