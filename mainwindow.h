@@ -92,7 +92,7 @@ private:
     int subLRC;//0表示中文翻译 1表示日文罗马音
 
     QStringList songlist;//歌单文件名列表
-    QStringList songlist_detail;//当前歌单中音频文件的完整绝对路径
+    QStringList songlist_detail;//现在选中的歌单中音频文件的完整绝对路径
     int current_songlist_seq;//现在选中的歌单在songlist中序号 -2代表全部音乐 -1代表我喜欢
     int playing_songlist_seq;//正在播放的歌单序号
     int current_songlist_detail_seq;//当前选中的歌单中正在播放的歌曲的序号 -1表示无正在播放
@@ -104,6 +104,7 @@ private:
     QList<QLabel*> current_songlist_labels3;
     QList<QWidget*> songlist_detail_containers;
     QListPushButton* play_singlesong_songlist;//鼠标悬浮时在当前歌单中显示的"播放"小按钮
+    QListPushButton* playnext_singlesong_songlist;//鼠标悬浮时在当前歌单中显示的"下一首播放"小按钮
     QListPushButton* add_singlesong_songlist;//鼠标悬浮时在当前歌单中显示的"添加到"小按钮
     QListPushButton* del_singlesong_songlist;//鼠标悬浮时在当前歌单中显示的"删除"小按钮
 
@@ -164,7 +165,7 @@ private slots:
     void current_songlist_buttons_clicked(int);
     void current_songlist_buttons_hoverEnter(int);
     void current_songlist_buttons_hoverLeave(int);
-    void on_pushButton_playall_clicked();
+    //void on_pushButton_playall_clicked();
     void on_pushButton_allmusic_clicked();
     void on_pushButton_mylike_clicked();
     void write_log(QString);
@@ -189,6 +190,8 @@ private slots:
     void delSongInSonglist(int);
     bool isInMylike(QString);
     void addSongToMyLike(int);
+    void addNextSong(int);
+    void swapPlaylist(int index,int ori_index);
 };
 
 #endif // MAINWINDOW_H

@@ -35,7 +35,7 @@ private:
 private slots:
     void get_meta(bool);
     void SaveHDCToFile(libZPlay::TID3InfoExW,HWND);
-    void writeInfo();
+    //void writeInfo();
     QString getCoverAddr();
 };
 

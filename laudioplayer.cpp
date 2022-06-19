@@ -145,3 +145,9 @@ void LAudioPlayer::LSetPosition(int pos){
 
     //qDebug()<<"LSetPosition()!"<<"  pos="<<pos<<"  currentTime.ms="<<currentTime.ms<<"  setTime.ms="<<setTime.ms;
 }
+
+int LAudioPlayer::LPos(){
+    libZPlay::TStreamTime currentTime;
+    zplayer->GetPosition(&currentTime);
+    return currentTime.ms;
+}

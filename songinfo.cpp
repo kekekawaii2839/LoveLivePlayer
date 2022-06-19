@@ -12,7 +12,7 @@ SongInfo::SongInfo(QString addr,HWND a)//addr是音频文件的完整绝对路�
         AudioAddr=addr;
         CoverAddr=addr;
         CoverAddr.replace(".mp3",".png").replace("/songs/","/infos/");
-        QString _t=addr;
+        /*QString _t=addr;
         QFileInfo jj(_t.replace(".mp3",".info").replace("/songs/","/infos/"));
         //qDebug()<<jj.absoluteFilePath();
         if(jj.isFile()){//info文件存在则读取
@@ -54,7 +54,13 @@ SongInfo::SongInfo(QString addr,HWND a)//addr是音频文件的完整绝对路�
             if(mv.isFile()) MvAddr=tt;
             else MvAddr="none";
             writeInfo();
-        }
+        }*/
+        QFileInfo pic(getRealCoverAddr());
+        get_meta(!pic.isFile());
+        QString tt=addr;
+        QFileInfo mv(tt.replace(".mp3",".mp4").replace("/songs/","/mv/"));
+        if(mv.isFile()) MvAddr=tt;
+        else MvAddr="none";
     }
     else{
         AudioAddr="error";
@@ -75,9 +81,6 @@ void SongInfo::get_meta(bool isNeedAlbumCover){
     AudioAddr.toWCharArray(wstr);
     if(zplayer->OpenFileW(wstr,libZPlay::sfAutodetect)){
         if(zplayer->LoadID3ExW(&id3_info,1)){
-            if(isNeedAlbumCover){
-                SaveHDCToFile(id3_info,hwnd);
-            }
             title=QString::fromWCharArray(id3_info.Title);
             artist=QString::fromWCharArray(id3_info.Artist);
             album=QString::fromWCharArray(id3_info.Album);
@@ -88,6 +91,9 @@ void SongInfo::get_meta(bool isNeedAlbumCover){
     }
     else{
         qDebug()<<"zplayer can't open this file!";
+    }
+    if(isNeedAlbumCover){
+        SaveHDCToFile(id3_info,hwnd);//这个函数不能用在读取标题等text数据前 否则将导致以上数据出现随机乱码
     }
     if(!isNeedAlbumCover){
         zplayer->Close();
@@ -116,14 +122,15 @@ void SongInfo::SaveHDCToFile(libZPlay::TID3InfoExW id3_info,HWND hwnd){
     DeleteDC(hdc);
 }
 
-void SongInfo::writeInfo(){
-    QFile jj(AudioAddr.replace(".mp3",".info").replace("/songs/","/infos/"));
+/*void SongInfo::writeInfo(){//舍弃.info文件 改为全部由get_meta函数获取元数据
+    QString temp=AudioAddr;
+    QFile jj(temp.replace(".mp3",".info").replace("/songs/","/infos/"));
     if(jj.open(QIODevice::WriteOnly|QIODevice::Text)){
         QString temp=title+"\n"+artist+"\n"+album+"\n"+CoverAddr+"\n"+MvAddr+"\n";
         jj.write(temp.toLocal8Bit());
     }
     jj.close();
-}
+}*/
 
 QString SongInfo::getRealCoverAddr(){
     QString c=getCoverAddr();

@@ -26,5 +26,6 @@
         <file>mylike.png</file>
         <file>dislike.png</file>
         <file>dislike_grey.png</file>
+        <file>playnext.png</file>
     </qresource>
 </RCC>

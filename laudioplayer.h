@@ -40,6 +40,7 @@ public Q_SLOTS:
     void LUpdate();
     State LState();
     QMediaContent LCurrentMedia();
+    int LPos();
 
     //void SaveHDCToFile(libZPlay::TID3InfoExW, HWND);
 private slots:
