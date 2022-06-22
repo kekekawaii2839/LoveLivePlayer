@@ -6,6 +6,7 @@
 #include <QMediaPlaylist>
 #include <QDebug>
 #include <QTimer>
+#include <QFileInfo>
 
 #include <windows.h>
 #include <QtWinExtras/QtWin>
@@ -32,8 +33,8 @@ public Q_SLOTS:
     void LPause();
     void LStop();
 
-    void LSetMedia(const QMediaContent &media);
-    void LSetPlaylist(QMediaPlaylist *temp_playlist);
+    bool LSetMedia(const QMediaContent &media);
+    bool LSetPlaylist(QMediaPlaylist *temp_playlist);
     void LSetVolume(int);
     void LSetPosition(int);
 
@@ -44,7 +45,7 @@ public Q_SLOTS:
 
     //void SaveHDCToFile(libZPlay::TID3InfoExW, HWND);
 private slots:
-    void setPlayerIndex(int);
+    bool setPlayerIndex(int);
 signals:
     //AlbumPicReady();
     positionChanged(int);

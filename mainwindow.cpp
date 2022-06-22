@@ -33,6 +33,13 @@ MainWindow::MainWindow(QWidget *parent) :
     t->setSingleShot(true);
     t->start(10);
 
+    hoverTimer=new QTimer(this);
+    connect(hoverTimer,&QTimer::timeout,[=](){
+        isEnableHover=true;
+        hoverTimer->start(1);
+    });
+    hoverTimer->start(1);
+
     QTextCodec* codec=QTextCodec::codecForName("System");
     QTextCodec::setCodecForLocale(codec);
     //fuckkkkkk!!!!!!
@@ -1493,7 +1500,10 @@ void MainWindow::read_userdata(){
         QStringList tt=c.split("\n");
         playing_songlist_seq=tt.at(0).toInt();
         for(int i=1;i<tt.count();++i){
-            if(tt.at(i)!="") name_list.append(tt.at(i));
+            if(tt.at(i)!=""){
+                QFile test(QApplication::applicationDirPath()+tt.at(i));
+                name_list.append(tt.at(i));
+            }
         }
     }
 
@@ -1978,46 +1988,54 @@ void MainWindow::current_songlist_buttons_clicked(int seq){
 }
 
 void MainWindow::current_songlist_buttons_hoverEnter(int seq){
-    if(play_singlesong_songlist!=NULL) play_singlesong_songlist->deleteLater();
-    play_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
-    play_singlesong_songlist->setGeometry(QRect(335,15,20,20));
-    play_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/play_small.png);");
-    play_singlesong_songlist->seq=seq;
-    connect(play_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(current_songlist_buttons_clicked(int)));
-    play_singlesong_songlist->show();
+    if(isEnableHover){
+        if(play_singlesong_songlist!=NULL) play_singlesong_songlist->deleteLater();
+        play_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
+        play_singlesong_songlist->setGeometry(QRect(335,15,20,20));
+        play_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/play_small.png);");
+        play_singlesong_songlist->seq=seq;
+        connect(play_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(current_songlist_buttons_clicked(int)));
+        play_singlesong_songlist->show();
 
-    if(playnext_singlesong_songlist!=NULL) playnext_singlesong_songlist->deleteLater();
-    playnext_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
-    playnext_singlesong_songlist->setGeometry(QRect(375,15,20,20));
-    playnext_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/playnext.png);");
-    playnext_singlesong_songlist->seq=seq;
-    connect(playnext_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(addNextSong(int)));
-    playnext_singlesong_songlist->show();
+        if(playnext_singlesong_songlist!=NULL) playnext_singlesong_songlist->deleteLater();
+        playnext_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
+        playnext_singlesong_songlist->setGeometry(QRect(375,15,20,20));
+        playnext_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/playnext.png);");
+        playnext_singlesong_songlist->seq=seq;
+        connect(playnext_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(addNextSong(int)));
+        playnext_singlesong_songlist->show();
 
-    if(add_singlesong_songlist!=NULL) add_singlesong_songlist->deleteLater();
-    add_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
-    add_singlesong_songlist->setGeometry(QRect(415,15,20,20));
-    add_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/add_small.png);");
-    add_singlesong_songlist->seq=seq;
-    connect(add_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(addSongToSonglist(int)));
-    add_singlesong_songlist->show();
+        if(add_singlesong_songlist!=NULL) add_singlesong_songlist->deleteLater();
+        add_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
+        add_singlesong_songlist->setGeometry(QRect(415,15,20,20));
+        add_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/add_small.png);");
+        add_singlesong_songlist->seq=seq;
+        connect(add_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(addSongToSonglist(int)));
+        add_singlesong_songlist->show();
 
-    if(del_singlesong_songlist!=NULL) del_singlesong_songlist->deleteLater();
-    del_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
-    del_singlesong_songlist->setGeometry(QRect(455,15,20,20));
-    del_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/del_small.png);");
-    del_singlesong_songlist->seq=seq;
-    connect(del_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(delSongInSonglist(int)));
-    del_singlesong_songlist->show();
+        if(del_singlesong_songlist!=NULL) del_singlesong_songlist->deleteLater();
+        del_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
+        del_singlesong_songlist->setGeometry(QRect(455,15,20,20));
+        del_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/del_small.png);");
+        del_singlesong_songlist->seq=seq;
+        connect(del_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(delSongInSonglist(int)));
+        del_singlesong_songlist->show();
+
+        isEnableHover=false;
+    }
 }
 
 void MainWindow::current_songlist_buttons_hoverLeave(int seq){
-    play_singlesong_songlist->close();
-    //play_singlesong_songlist->deleteLater();
-    playnext_singlesong_songlist->close();
-    add_singlesong_songlist->close();
-    //add_singlesong_songlist->deleteLater();
-    del_singlesong_songlist->close();
+    if(isEnableHover){
+        play_singlesong_songlist->close();
+        //play_singlesong_songlist->deleteLater();
+        playnext_singlesong_songlist->close();
+        add_singlesong_songlist->close();
+        //add_singlesong_songlist->deleteLater();
+        del_singlesong_songlist->close();
+
+        isEnableHover=false;
+    }
 }
 
 /*void MainWindow::on_pushButton_playall_clicked()
@@ -2250,7 +2268,7 @@ void MainWindow::addPushbuttonsInSonglist(QStringList content,bool isMyLike){
         songlist_detail_containers.append(container);
 
         QListPushButton* pb_temp=new QListPushButton(container);
-        pb_temp->setGeometry(15,0,ui->listWidget_songlist_detail->width()-35,50);
+        pb_temp->setGeometry(15,2,ui->listWidget_songlist_detail->width()-35,46);
         pb_temp->setDefault(false);
         pb_temp->setStyleSheet("border-color:rgba(0,0,0,0);background-color:rgba(0,0,0,0);text-align:left;padding-left:20px;padding-right:20px;");
         pb_temp->setAttribute(Qt::WA_Hover,true);

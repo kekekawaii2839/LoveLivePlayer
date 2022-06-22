@@ -65,8 +65,8 @@ private:
     Ui::MainWindow *ui;
     QSystemTrayIcon* mSysTrayIcon;
     DesktopLyricWindow dd;
-    QTimer* t;
-    bool isInitiated;
+    QTimer* t,*hoverTimer;
+    bool isInitiated,isEnableHover;
 
     LAudioPlayer* player;
     int duration;

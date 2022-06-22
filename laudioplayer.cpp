@@ -49,10 +49,12 @@ void LAudioPlayer::LStop(){
     //qDebug()<<"LStop()!";
 }
 
-void LAudioPlayer::LSetMedia(const QMediaContent &media){
+bool LAudioPlayer::LSetMedia(const QMediaContent &media){
     //this->setMedia(media,stream);
     zplayer->Close();
     QString fileUrl=media.canonicalUrl().toString();
+    QFileInfo audioinfo(fileUrl);
+    if(!audioinfo.isFile()) return false;
     wchar_t* wstr=new wchar_t[1024];
     for(int i=0;i<1024;++i){
         wstr[i]=0;
@@ -60,14 +62,16 @@ void LAudioPlayer::LSetMedia(const QMediaContent &media){
     fileUrl.toWCharArray(wstr);
     zplayer->OpenFileW(wstr,libZPlay::sfAutodetect);
     this->LPlay();
+    return true;
 
     //qDebug()<<"LSetMedia()!";
 }
 
-void LAudioPlayer::LSetPlaylist(QMediaPlaylist *temp_playlist){
+bool LAudioPlayer::LSetPlaylist(QMediaPlaylist *temp_playlist){
     playlist=temp_playlist;
-    this->LSetMedia(playlist->currentMedia());
+    if(!this->LSetMedia(playlist->currentMedia())) return false;
     this->LPlay();
+    return true;
 
     //qDebug()<<"LSetPlaylist()!";
 }
@@ -120,9 +124,9 @@ void LAudioPlayer::LSetVolume(int v){
     zplayer->SetMasterVolume(v,v);
 }
 
-void LAudioPlayer::setPlayerIndex(int index){
+bool LAudioPlayer::setPlayerIndex(int index){
     //qDebug()<<"setPlayerIndex()!";
-    this->LSetMedia(playlist->media(index));
+    return this->LSetMedia(playlist->media(index));
 }
 
 void LAudioPlayer::LSetPosition(int pos){
