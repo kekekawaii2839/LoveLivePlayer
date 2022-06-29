@@ -22,8 +22,10 @@ void ScrollLabel::timerEvent(QTimerEvent *event){
     Q_UNUSED(event)
     if(text().isEmpty()) return;
     if(fontMetrics().width(text())<width()){//无需滚动的时候则是普通的Label
+        m_strText=text();
         m_strDrawText=text();
         m_nCurrentIndex=0;
+        update(rect());
         return;
     }
 

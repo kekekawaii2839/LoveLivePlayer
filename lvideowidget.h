@@ -24,6 +24,8 @@ protected:
 private slots:
     void on_pushButton_close_clicked();
 
+    void on_pushButton_play_clicked();
+
 private:
 
 signals:

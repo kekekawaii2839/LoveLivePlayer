@@ -35,3 +35,9 @@ void LVideoWidget::on_pushButton_close_clicked(){
 void LVideoWidget::setPos(int pos){
     //ui->playWidget->thread->setValue();
 }
+
+void LVideoWidget::on_pushButton_play_clicked()
+{
+    if(ui->playWidget->status()==1) ui->playWidget->pause();
+    else if(ui->playWidget->status()==0) ui->playWidget->next();
+}

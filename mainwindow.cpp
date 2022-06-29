@@ -982,17 +982,15 @@ QString MainWindow::adjust_text_overlength(QString text,QWidget* obj,int mode){/
                 if(textwidth>=buttonwidth){
                     QStringList temp=text.split(" ");
                     if(temp.count()>1){//有空格
-                        int sum=0;
-                        for(int i=0;i<temp.count();++i){
-                            sum+=temp.at(i).length();
-                        }
+                        int sum=text.length()-temp.count()+1;
                         int l=0,pos=0;
                         for(int i=0;i<temp.count()-1;++i){
                             l+=temp.at(i).length();
-                            if(l<=sum/2&&(l+temp.at(i+1).length())>sum/2){
+                            if(l*2<=sum&&(l+temp.at(i+1).length())*2>sum){
                                 pos=i;
                                 break;
                             }
+                            else if(i==0&&l*2>sum) break;
                         }
                         result.replace(l+pos,1,"\n");
                     }
@@ -2100,8 +2098,11 @@ void MainWindow::on_pushButton_allmusic_clicked()
     QStringList content;
     for(int i=0;i<all_list.count();++i){
         if(all_list.at(i).contains("\r")) all_list[i].replace("\r","");
-        SongInfo* te=infos.value(QApplication::applicationDirPath()+"/songs/"+all_list.at(i));
-        content.append(te->LAudioAddr());
+        if(infos.contains(QApplication::applicationDirPath()+"/songs/"+all_list.at(i))){
+            SongInfo* te=infos.value(QApplication::applicationDirPath()+"/songs/"+all_list.at(i));
+            content.append(te->LAudioAddr());
+        }
+        else qDebug()<<QApplication::applicationDirPath()+"/songs/"+all_list.at(i)<<"isn't exist!";
     }
     songlist_detail=content;
     addPushbuttonsInSonglist(content,false);
@@ -2134,8 +2135,11 @@ void MainWindow::on_pushButton_mylike_clicked()
             QStringList content;
             for(int i=0;i<list.count();++i){
                 if(list.at(i).contains("\r")) list[i].replace("\r","");
-                SongInfo* te=infos.value(QApplication::applicationDirPath()+"/songs/"+list.at(i));
-                content.append(te->LAudioAddr());
+                if(infos.contains(QApplication::applicationDirPath()+"/songs/"+list.at(i))){
+                    SongInfo* te=infos.value(QApplication::applicationDirPath()+"/songs/"+list.at(i));
+                    content.append(te->LAudioAddr());
+                }
+                else qDebug()<<list.at(i)<<"isn't exist!";
             }
             songlist_detail=content;
             addPushbuttonsInSonglist(content,true);

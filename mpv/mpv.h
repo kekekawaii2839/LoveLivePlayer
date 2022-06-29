@@ -62,6 +62,7 @@ public:
 
 private:
     MpvThread *thread;
+    int Status=-1;//-1表示未初始化 0表示paused 1表示playing
 
 public slots:    
     //设置视频流地址
@@ -79,6 +80,7 @@ public slots:
     void restart();
     //清空
     void clear();
+    int status();
 
 };
 

@@ -170,17 +170,20 @@ void MpvWidget::open()
     //qDebug() << TIMEMS << "open video" << objectName();
     clear();
 
+    Status=1;
     thread->play();
     thread->start();
 }
 
 void MpvWidget::pause()
 {
+    Status=0;
     thread->pause();
 }
 
 void MpvWidget::next()
 {
+    Status=1;
     thread->next();
 }
 
@@ -206,4 +209,9 @@ void MpvWidget::restart()
 void MpvWidget::clear()
 {
     update();
+}
+
+int MpvWidget::status()
+{
+    return Status;
 }
