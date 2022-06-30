@@ -86,7 +86,7 @@ include ($$PWD/mpv/mpv.pri)
 
 CONFIG += resources_big #解决qrc文件中资源文件过大导致无法编译的错误
 
-VERSION = 1.22.5.3#版本信息 major.minor.patch.build
+VERSION = 1.23.0.1#版本信息 major.minor.patch.build
 
 QMAKE_TARGET_COMPANY = "HopUp Tech"#公司名称
 

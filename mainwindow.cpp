@@ -16,14 +16,21 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     isInitiated=false;
-    this->setAttribute(Qt::WA_TranslucentBackground,true);
+    mousePressed=false;
+    maximized=false;
+    isResizing=false;
+    setAttribute(Qt::WA_TranslucentBackground,true);
+    setAttribute(Qt::WA_Hover,true);
     ui->setupUi(this);
     hwnd=(HWND)this->window()->winId();
     setWindowFlags(Qt::FramelessWindowHint);//删除主窗口标题
+    ui->centralWidget->setMouseTracking(true);
+    ui->widget_shadow->setMouseTracking(true);
+    ui->widget_title->setMouseTracking(true);
     setMouseTracking(true);
-    installEventFilter(this);//安装事件过滤器
+    //installEventFilter(this);//安装事件过滤器
 
-    t=new QTimer(this);
+    /*t=new QTimer(this);
     connect(t,&QTimer::timeout,this,[=](){
         QPainterPath path;
         path.addRoundedRect(ui->centralWidget->rect(),11,11);//解决playlist等进出动画超出圆角的问题
@@ -31,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->centralWidget->setMask(mask);
     });
     t->setSingleShot(true);
-    t->start(10);
+    t->start(10);*/
 
     hoverTimer=new QTimer(this);
     connect(hoverTimer,&QTimer::timeout,[=](){
@@ -163,7 +170,6 @@ MainWindow::MainWindow(QWidget *parent) :
             pb_temp->setDefault(false);
             pb_temp->setStyleSheet("border-color:rgba(255,255,255,0);\nbackground-color:rgba(255,255,255,0);\ntext-align:left;padding-left:20px;padding-right:20px;");
             pb_temp->setFont(font1);
-            pb_temp->setAttribute(Qt::WA_Hover,true);
             pb_temp->setText(adjust_text_overlength(songlist.at(i).left(songlist.at(i).count()-6),pb_temp,1));
             pb_temp->seq=i;
             songlist_buttons.append(pb_temp);
@@ -1598,7 +1604,7 @@ void MainWindow::Show_player_next(){
     ui->widget_songlist->setGeometry(QRect(0,ui->widget_title->height(),0,390));
 }
 
-bool MainWindow::eventFilter(QObject* object, QEvent* event){
+/*bool MainWindow::eventFilter(QObject* object, QEvent* event){
     if(event->type()==QEvent::MouseButtonPress){
         if(object!=ui->widget_playlist
                 &&object!=ui->pushButton_hideplaylist
@@ -1607,7 +1613,7 @@ bool MainWindow::eventFilter(QObject* object, QEvent* event){
         }
     }
     return false;
-}
+}*/
 
 void MainWindow::on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason reason){
     switch(reason){
@@ -2227,7 +2233,6 @@ void MainWindow::addPushbuttonsInPlaylist(){
         pb_temp2->setVisible(true);
         pb_temp->setStyleSheet("border-color:rgba(255,255,255,0);\nbackground-color:rgba(255,255,255,0);\ntext-align:left;");
         pb_temp->setFont(font1);
-        pb_temp->setAttribute(Qt::WA_Hover,true);
         pb_temp2->setStyleSheet("color:#a3a3a3;\nborder-color:rgba(255,255,255,0);\nbackground-color:rgba(255,255,255,0);\ntext-align:left;");
         pb_temp2->setFont(font2);
         pb_temp2->setAttribute(Qt::WA_TransparentForMouseEvents,true);
@@ -2275,7 +2280,6 @@ void MainWindow::addPushbuttonsInSonglist(QStringList content,bool isMyLike){
         pb_temp->setGeometry(15,2,ui->listWidget_songlist_detail->width()-35,46);
         pb_temp->setDefault(false);
         pb_temp->setStyleSheet("border-color:rgba(0,0,0,0);background-color:rgba(0,0,0,0);text-align:left;padding-left:20px;padding-right:20px;");
-        pb_temp->setAttribute(Qt::WA_Hover,true);
         pb_temp->seq=i;
         current_songlist_buttons.append(pb_temp);
         connect(pb_temp,SIGNAL(dblclicked(int)),this,SLOT(current_songlist_buttons_clicked(int)));
@@ -2556,7 +2560,6 @@ void MainWindow::on_pushButton_createsonglist_clicked()
                     QFont font1;
                     font1.setPointSize(12);
                     pb_temp->setFont(font1);
-                    pb_temp->setAttribute(Qt::WA_Hover,true);
                     pb_temp->setText(adjust_text_overlength(songlist.at(i).left(songlist.at(i).count()-6),pb_temp,1));
                     pb_temp->seq=i;
                     songlist_buttons.append(pb_temp);
@@ -2710,7 +2713,6 @@ void MainWindow::clone_songlist(){
         QFont font1;
         font1.setPointSize(12);
         pb_temp->setFont(font1);
-        pb_temp->setAttribute(Qt::WA_Hover,true);
         pb_temp->setText(adjust_text_overlength(songlist_buttons.at(rightclicked_songlist_seq)->text()+"_copy",pb_temp,1));
         pb_temp->seq=rightclicked_songlist_seq+1;
         connect(pb_temp,SIGNAL(clicked(int)),this,SLOT(songlist_buttons_clicked(int)));
@@ -3170,4 +3172,47 @@ void MainWindow::swapPlaylist(int index, int ori_index){
         if(index<ori_index) changeThemeColor(play_progress,-3,-1);
         else if(index>ori_index) changeThemeColor(play_progress-1,-3,-1);
     }
+}
+
+void MainWindow::mousePressEvent(QMouseEvent *e){
+    if(e->button()==Qt::LeftButton){
+        mousePressed=true;
+        if(cursor().shape()==Qt::SizeFDiagCursor){
+            isResizing=true;
+            ori_pos=cursor().pos();
+        }
+    }
+}
+
+void MainWindow::mouseReleaseEvent(QMouseEvent *e){
+    mousePressed=false;
+    isResizing=false;
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent *e){
+    //qDebug()<<"fuck";
+    if(!mousePressed){
+        //qDebug()<<e->pos().x()<<e->pos().y();
+        if(!maximized&&abs(e->pos().x()-this->width())<16&&abs(e->pos().y()-this->height())<16){
+            setCursor(Qt::SizeFDiagCursor);
+        }
+        else{
+            unsetCursor();
+            isResizing=false;
+        }
+    }
+    else{
+        if(isResizing){
+            resize(width()+cursor().pos().x()-ori_pos.x(),height()+cursor().pos().y()-ori_pos.y());
+            ori_pos=cursor().pos();
+        }
+    }
+}
+
+void MainWindow::resizeEvent(QResizeEvent *e){
+    ui->centralWidget->resize(width(),height());
+    ui->widget_playlist->move(width()+1,1);
+    ui->widget_title->setGeometry(1,1,width()-2,150);
+    ui->horizontalLayout_main->setGeometry(QRect(0,0,width(),150));
+    ui->widget_shadow->setGeometry(1,1,width()-2,height()-2);
 }

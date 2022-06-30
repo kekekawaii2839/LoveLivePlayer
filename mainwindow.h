@@ -66,7 +66,7 @@ private:
     QSystemTrayIcon* mSysTrayIcon;
     DesktopLyricWindow dd;
     QTimer* t,*hoverTimer;
-    bool isInitiated,isEnableHover;
+    bool isInitiated,isEnableHover,mousePressed,maximized,isResizing;
 
     LAudioPlayer* player;
     int duration;
@@ -151,7 +151,7 @@ private slots:
     void on_pushButton_settings_return_clicked();
     void Show_player();
     void Show_player_next();
-    bool eventFilter(QObject* object, QEvent* event);
+    //bool eventFilter(QObject* object, QEvent* event);
     void on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason);
     void on_action_exit_triggered();
     void on_checkBox_isAutoPlay_clicked(bool checked);
@@ -192,6 +192,11 @@ private slots:
     void addSongToMyLike(int);
     void addNextSong(int);
     void swapPlaylist(int index,int ori_index);
+
+    void mousePressEvent(QMouseEvent* e);
+    void mouseReleaseEvent(QMouseEvent* e);
+    void mouseMoveEvent(QMouseEvent* e);
+    void resizeEvent(QResizeEvent* e);
 };
 
 #endif // MAINWINDOW_H

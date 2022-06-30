@@ -110,7 +110,7 @@ void SongInfo::SaveHDCToFile(libZPlay::TID3InfoExW id3_info,HWND hwnd){
 
     pic=id3_info.Picture;
     picFormat=QString::fromWCharArray(pic.MIMEType);
-    qDebug()<<AudioAddr<<pic.CanDrawPicture;
+    //qDebug()<<AudioAddr<<pic.CanDrawPicture;
     //if(pic.CanDrawPicture==0) qDebug()<<QString::fromWCharArray(zplayer->GetErrorW());
     zplayer->DrawBitmapToHDC(memDc,0,0,id3_info.Picture.Width,id3_info.Picture.Height,id3_info.Picture.hBitmap);
     zplayer->Close();
