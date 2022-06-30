@@ -31,6 +31,7 @@ private:
     QString MvAddr;
     HWND hwnd;
     libZPlay::ZPlay* zplayer;
+    QString picFormat;
 
 private slots:
     void get_meta(bool);

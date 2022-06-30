@@ -109,13 +109,17 @@ void SongInfo::SaveHDCToFile(libZPlay::TID3InfoExW id3_info,HWND hwnd){
     SelectObject(memDc,hBmp);
 
     pic=id3_info.Picture;
+    picFormat=QString::fromWCharArray(pic.MIMEType);
+    qDebug()<<AudioAddr<<pic.CanDrawPicture;
+    //if(pic.CanDrawPicture==0) qDebug()<<QString::fromWCharArray(zplayer->GetErrorW());
     zplayer->DrawBitmapToHDC(memDc,0,0,id3_info.Picture.Width,id3_info.Picture.Height,id3_info.Picture.hBitmap);
     zplayer->Close();
     zplayer->Release();
 
-    QPixmap pixmap=QtWin::fromHBITMAP(hBmp,QtWin::HBitmapNoAlpha);
+    QPixmap pixmap=QtWin::fromHBITMAP(hBmp,QtWin::HBitmapPremultipliedAlpha);
     QImage img=pixmap.toImage();
-    img.save(getRealCoverAddr(),"PNG",100);
+    if(picFormat=="image/png"&&pic.CanDrawPicture==1) img.save(getRealCoverAddr(),"PNG",100);
+    else if(picFormat=="image/jpeg"&&pic.CanDrawPicture==1) img.save(getRealCoverAddr(),"JPG",100);
     SelectObject(memDc,(HBITMAP)NULL);
     DeleteDC(memDc);
     DeleteObject(hBmp);
@@ -134,12 +138,14 @@ void SongInfo::SaveHDCToFile(libZPlay::TID3InfoExW id3_info,HWND hwnd){
 
 QString SongInfo::getRealCoverAddr(){
     QString c=getCoverAddr();
-    c.replace(".png","");
+    c=c.left(c.length()-4);
     c.replace(QApplication::applicationDirPath()+"/infos/","");
     QByteArray cc=c.toLocal8Bit();
     cc=cc.toBase64();
     if(cc.contains("/")) cc.replace("/","");//避免base64加密结果出现"/"导致文件路径出错
-    QString ccc=QApplication::applicationDirPath()+"/infos/"+cc+".png";
+    QString ccc;
+    if(picFormat=="image/png") ccc=QApplication::applicationDirPath()+"/infos/"+cc+".png";
+    else if(picFormat=="image/jpeg") ccc=QApplication::applicationDirPath()+"/infos/"+cc+".jpg";
     return ccc;
 }
 
