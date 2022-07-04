@@ -116,7 +116,7 @@ private:
     bool isPlaylistShowing=false;
     QList<QWidget*> playlist_containers;
 
-    int whatInMainPage=0;//0代表歌单界面 1代表设置界面
+    int whatInMainPage=0;//0代表歌单界面 1代表设置界面 2代表播放器界面
     QGraphicsOpacityEffect* effect_for_title_bg;
 
     QMaskWidget* maskw;
@@ -197,6 +197,7 @@ private slots:
     void mouseReleaseEvent(QMouseEvent* e);
     void mouseMoveEvent(QMouseEvent* e);
     void resizeEvent(QResizeEvent* e);
+    void closeEvent(QCloseEvent* e);
 };
 
 #endif // MAINWINDOW_H
