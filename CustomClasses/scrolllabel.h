@@ -7,6 +7,7 @@
 class ScrollLabel:public QLabel
 {
     Q_OBJECT
+
 public:
     ScrollLabel(QWidget* parent=nullptr);
     void setInterVal(int nInterVal){

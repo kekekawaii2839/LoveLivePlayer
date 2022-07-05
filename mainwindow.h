@@ -1,15 +1,17 @@
 ﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "qsliderpro.h"
-#include "qlistpushbutton.h"
-#include "qclickwidget.h"
-#include "qmaskwidget.h"
+#include "CustomClasses\qsliderpro.h"
+#include "CustomClasses\qlistpushbutton.h"
+#include "CustomClasses\qclickwidget.h"
+#include "CustomClasses\qmaskwidget.h"
 #include "globalvariable.h"
-#include "laudioplayer.h"
-#include "lvideowidget.h"
-#include "animatedscrollbar.h"
+#include "CustomClasses\laudioplayer.h"
+#include "CustomClasses\lvideowidget.h"
+#include "CustomClasses\animatedscrollbar.h"
 #include "songinfo.h"
+#include "CustomClasses/qsmarttextwidget.h"
+#include "CustomClasses/qtitlewidget.h"
 
 #include <QMainWindow>
 #include <QUrl>
@@ -38,6 +40,7 @@
 #include <QMap>
 #include <QString>
 #include <QPainterPath>
+#include <QDesktopWidget>
 
 namespace Ui {
 class MainWindow;
@@ -66,7 +69,9 @@ private:
     QSystemTrayIcon* mSysTrayIcon;
     DesktopLyricWindow dd;
     QTimer* t,*hoverTimer;
-    bool isInitiated,isEnableHover,mousePressed,maximized,isResizing;
+    bool isInitiated,isEnableHover,mousePressed,isMaximized,isResizing;
+    QPoint posBeforeMax;
+    QSize sizeBeforeMax;
 
     LAudioPlayer* player;
     int duration;
@@ -192,6 +197,8 @@ private slots:
     void addSongToMyLike(int);
     void addNextSong(int);
     void swapPlaylist(int index,int ori_index);
+    void showMaximized();
+    void showMinimized();
 
     void mousePressEvent(QMouseEvent* e);
     void mouseReleaseEvent(QMouseEvent* e);

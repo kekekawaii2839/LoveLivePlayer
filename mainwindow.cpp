@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     isInitiated=false;
     mousePressed=false;
-    maximized=false;
+    isMaximized=false;
     isResizing=false;
     setAttribute(Qt::WA_TranslucentBackground,true);
     setAttribute(Qt::WA_Hover,true);
@@ -146,6 +146,10 @@ MainWindow::MainWindow(QWidget *parent) :
     on_pushButton_hideplayer_clicked();
     on_pushButton_settings_return_clicked();
     connect(ui->widget_cover,SIGNAL(clicked()),this,SLOT(Show_player()));
+    connect(ui->widget_title,&QTitleWidget::dblclicked,[=](){
+        if(isMaximized) showMinimized();
+        else showMaximized();
+    });
 
     QString path_songlist=QApplication::applicationDirPath()+"/songlists/";
     QDirIterator iter_songlist(path_songlist,QStringList()<<"*.llist",
@@ -1969,7 +1973,7 @@ void MainWindow::current_songlist_buttons_hoverEnter(int seq){
     if(isEnableHover){
         if(play_singlesong_songlist!=NULL) play_singlesong_songlist->deleteLater();
         play_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
-        play_singlesong_songlist->setGeometry(QRect(335,15,20,20));
+        play_singlesong_songlist->setGeometry(ui->listWidget_songlist_detail->width()*0.284,15,20,20);
         play_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/play_small.png);");
         play_singlesong_songlist->seq=seq;
         connect(play_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(current_songlist_buttons_clicked(int)));
@@ -1977,7 +1981,7 @@ void MainWindow::current_songlist_buttons_hoverEnter(int seq){
 
         if(playnext_singlesong_songlist!=NULL) playnext_singlesong_songlist->deleteLater();
         playnext_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
-        playnext_singlesong_songlist->setGeometry(QRect(375,15,20,20));
+        playnext_singlesong_songlist->setGeometry(play_singlesong_songlist->x()+40,15,20,20);
         playnext_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/playnext.png);");
         playnext_singlesong_songlist->seq=seq;
         connect(playnext_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(addNextSong(int)));
@@ -1985,7 +1989,7 @@ void MainWindow::current_songlist_buttons_hoverEnter(int seq){
 
         if(add_singlesong_songlist!=NULL) add_singlesong_songlist->deleteLater();
         add_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
-        add_singlesong_songlist->setGeometry(QRect(415,15,20,20));
+        add_singlesong_songlist->setGeometry(play_singlesong_songlist->x()+80,15,20,20);
         add_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/add_small.png);");
         add_singlesong_songlist->seq=seq;
         connect(add_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(addSongToSonglist(int)));
@@ -1993,7 +1997,7 @@ void MainWindow::current_songlist_buttons_hoverEnter(int seq){
 
         if(del_singlesong_songlist!=NULL) del_singlesong_songlist->deleteLater();
         del_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
-        del_singlesong_songlist->setGeometry(QRect(455,15,20,20));
+        del_singlesong_songlist->setGeometry(play_singlesong_songlist->x()+120,15,20,20);
         del_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/del_small.png);");
         del_singlesong_songlist->seq=seq;
         connect(del_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(delSongInSonglist(int)));
@@ -2280,27 +2284,27 @@ void MainWindow::addPushbuttonsInSonglist(QStringList content,bool isMyLike){
         hearts.append(heart);
         connect(heart,SIGNAL(clicked(int)),this,SLOT(addSongToMyLike(int)));
 
-        QLabel* label_song=new QLabel(container);
-        label_song->setGeometry(80,0,250,50);
+        QSmartTextLabel* label_song=new QSmartTextLabel(container);
+        label_song->setGeometry(80,0,ui->listWidget_songlist_detail->width()*0.212,50);
         label_song->setFont(font1);
         label_song->setStyleSheet("color:black;\nbackground-color:rgba(0,0,0,0);\ntext-align:left;");
-        label_song->setText(adjust_text_overlength(info->Ltitle(),label_song,1));
+        label_song->setText(info->Ltitle(),1);
         label_song->setAttribute(Qt::WA_TransparentForMouseEvents,true);
         current_songlist_labels.append(label_song);
 
-        QLabel* label_song2=new QLabel(container);
+        QSmartTextLabel* label_song2=new QSmartTextLabel(container);
         label_song2->setGeometry(140+pb_temp->width()/3,0,pb_temp->width()/5,50);
         label_song2->setFont(font1);
         label_song2->setStyleSheet("color:black;\nbackground-color:rgba(0,0,0,0);\ntext-align:left;");
-        label_song2->setText(adjust_text_overlength(info->Lartist(),label_song2,1));
+        label_song2->setText(info->Lartist(),1);
         label_song2->setAttribute(Qt::WA_TransparentForMouseEvents,true);
         current_songlist_labels2.append(label_song2);
 
-        QLabel* label_song3=new QLabel(container);
-        label_song3->setGeometry(QRect(label_song2->x()+label_song2->width()+110,0,pb_temp->width()/4,50));
+        QSmartTextLabel* label_song3=new QSmartTextLabel(container);
+        label_song3->setGeometry(label_song2->x()+label_song2->width()+110,0,pb_temp->width()/4,50);
         label_song3->setFont(font1);
         label_song3->setStyleSheet("color:black;\nbackground-color:rgba(0,0,0,0);\ntext-align:left;");
-        label_song3->setText(adjust_text_overlength(info->Lalbum(),label_song3,1));
+        label_song3->setText(info->Lalbum(),1);
         label_song3->setAttribute(Qt::WA_TransparentForMouseEvents,true);
         current_songlist_labels3.append(label_song3);
 
@@ -3148,6 +3152,35 @@ void MainWindow::swapPlaylist(int index, int ori_index){
     }
 }
 
+void MainWindow::showMaximized(){
+    posBeforeMax=pos();
+    sizeBeforeMax=size();
+
+    resize(QApplication::desktop()->availableGeometry().width(),QApplication::desktop()->availableGeometry().height());
+    move(0,0);
+    QMouseEvent* empty;
+    isResizing=true;
+    mouseReleaseEvent(empty);
+    isResizing=false;
+
+    ui->centralWidget->clearMask();
+    ui->centralWidget->setStyleSheet("#centralWidget{background-color:white;border:1px solid #686868;}");
+    ui->widget_title->setStyleSheet("background-color:"+conf.theme_color+";");
+
+    isMaximized=true;
+}
+
+void MainWindow::showMinimized(){
+    resize(sizeBeforeMax);
+    move(posBeforeMax);
+    QMouseEvent* empty;
+    isResizing=true;
+    mouseReleaseEvent(empty);
+    isResizing=false;
+
+    isMaximized=false;
+}
+
 void MainWindow::mousePressEvent(QMouseEvent *e){
     if(e->button()==Qt::LeftButton){
         mousePressed=true;
@@ -3179,13 +3212,17 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *e){
                                                         current_songlist_buttons.at(i)->y(),
                                                         ui->listWidget_songlist_detail->width()-35,
                                                         current_songlist_buttons.at(i)->height());
+            current_songlist_labels.at(i)->setGeometry(current_songlist_labels.at(i)->x(),
+                                                       current_songlist_labels.at(i)->y(),
+                                                       ui->listWidget_songlist_detail->width()*0.212,
+                                                       current_songlist_labels.at(i)->height());
             current_songlist_labels2.at(i)->setGeometry((current_songlist_buttons.at(i)->width()+30)*0.464,
                                                         current_songlist_labels2.at(i)->y(),
-                                                        current_songlist_labels2.at(i)->width(),
+                                                        current_songlist_buttons.at(i)->width()/5,
                                                         current_songlist_labels2.at(i)->height());
             current_songlist_labels3.at(i)->setGeometry((current_songlist_buttons.at(i)->width()+30)*0.729,
                                                         current_songlist_labels3.at(i)->y(),
-                                                        current_songlist_labels3.at(i)->width(),
+                                                        current_songlist_buttons.at(i)->width()/4,
                                                         current_songlist_labels3.at(i)->height());
         }
 
@@ -3271,7 +3308,7 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *e){
 void MainWindow::mouseMoveEvent(QMouseEvent *e){
     if(!mousePressed){
         //qDebug()<<e->pos().x()<<e->pos().y();
-        if(!maximized&&abs(e->pos().x()-this->width())<16&&abs(e->pos().y()-this->height())<16){
+        if(!isMaximized&&abs(e->pos().x()-this->width())<16&&abs(e->pos().y()-this->height())<16){
             setCursor(Qt::SizeFDiagCursor);
         }
         else{

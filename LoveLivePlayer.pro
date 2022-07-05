@@ -26,44 +26,46 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     lrc.cpp \
-    qsliderpro.cpp \
-    qlistpushbutton.cpp \
-    qtitlewidget.cpp \
+    CustomClasses\qsliderpro.cpp \
+    CustomClasses\qlistpushbutton.cpp \
+    CustomClasses\qtitlewidget.cpp \
     config.cpp \
-    scrolllabel.cpp \
+    CustomClasses\scrolllabel.cpp \
     desktoplyricwindow.cpp \
     quickselect.cpp \
-    qclickwidget.cpp \
-    laudioplayer.cpp \
-    lvideowidget.cpp \
-    animatedscrollbar.cpp \
+    CustomClasses\qclickwidget.cpp \
+    CustomClasses\laudioplayer.cpp \
+    CustomClasses\lvideowidget.cpp \
+    CustomClasses\animatedscrollbar.cpp \
     songinfo.cpp \
-    qmaskwidget.cpp
+    CustomClasses\qmaskwidget.cpp \
+    CustomClasses\qsmarttextwidget.cpp
 
 HEADERS += \
         mainwindow.h \
     lrc.h \
-    qsliderpro.h \
-    qlistpushbutton.h \
-    qtitlewidget.h \
+    CustomClasses\qsliderpro.h \
+    CustomClasses\qlistpushbutton.h \
+    CustomClasses\qtitlewidget.h \
     config.h \
-    scrolllabel.h \
+    CustomClasses\scrolllabel.h \
     desktoplyricwindow.h \
     globalvariable.h \
     quickselect.h \
-    qclickwidget.h \
-    laudioplayer.h \
-    lvideowidget.h \
-    animatedscrollbar.h \
+    CustomClasses\qclickwidget.h \
+    CustomClasses\laudioplayer.h \
+    CustomClasses\lvideowidget.h \
+    CustomClasses\animatedscrollbar.h \
     songinfo.h \
-    qmaskwidget.h
+    CustomClasses\qmaskwidget.h \
+    CustomClasses\qsmarttextwidget.h
 
 FORMS += \
         mainwindow.ui \
     desktoplyricwindow.ui \
     quickselect.ui \
-    lvideowidget.ui \
-    qmaskwidget.ui
+    CustomClasses\lvideowidget.ui \
+    CustomClasses\qmaskwidget.ui
 
 RESOURCES += \
     pic.qrc \
@@ -86,7 +88,7 @@ include ($$PWD/mpv/mpv.pri)
 
 CONFIG += resources_big #解决qrc文件中资源文件过大导致无法编译的错误
 
-VERSION = 1.23.0.1#版本信息 major.minor.patch.build
+VERSION = 1.23.1.9#版本信息 major.minor.patch.build
 
 QMAKE_TARGET_COMPANY = "HopUp Tech"#公司名称
 

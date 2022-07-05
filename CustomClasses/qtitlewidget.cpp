@@ -36,6 +36,11 @@ void QTitleWidget::mouseReleaseEvent(QMouseEvent *e){
     press_pos=QPoint(0,0);
 }
 
+void QTitleWidget::mouseDoubleClickEvent(QMouseEvent *e){
+    QWidget::mouseDoubleClickEvent(e);
+    emit dblclicked();
+}
+
 void QTitleWidget::paintEvent(QPaintEvent *e){//解决继承后qss失效的问题
     QWidget::paintEvent(e);
     QStyleOption opt;

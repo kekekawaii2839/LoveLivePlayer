@@ -6,7 +6,7 @@
 #include "config.h"
 #include "desktoplyricwindow.h"
 #include "quickselect.h"
-#include "laudioplayer.h"
+#include "CustomClasses\laudioplayer.h"
 
 extern LAudioPlayer* player;
 //extern QMediaPlaylist* playlist;
