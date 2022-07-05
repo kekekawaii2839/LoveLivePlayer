@@ -35,7 +35,7 @@
    <string/>
   </property>
   <property name="windowIcon">
-   <iconset resource="pic.qrc">
+   <iconset>
     <normaloff>:/new/prefix1/icon.ico</normaloff>:/new/prefix1/icon.ico</iconset>
   </property>
   <property name="iconSize">
@@ -132,7 +132,7 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">border-image: url(:/new/prefix1/loop.png);</string>
+      <string notr="true">border-image: url(:/new/prefix1/rec/loop.png);</string>
      </property>
      <property name="text">
       <string/>
@@ -151,7 +151,7 @@
       <cursorShape>PointingHandCursor</cursorShape>
      </property>
      <property name="styleSheet">
-      <string notr="true">border-image: url(:/new/prefix1/player-skip-backward.png);</string>
+      <string notr="true">border-image: url(:/new/prefix1/rec/player-skip-backward.png);</string>
      </property>
      <property name="text">
       <string/>
@@ -198,7 +198,7 @@
       <cursorShape>PointingHandCursor</cursorShape>
      </property>
      <property name="styleSheet">
-      <string notr="true">border-image: url(:/new/prefix1/player-skip-forward.png);</string>
+      <string notr="true">border-image: url(:/new/prefix1/rec/player-skip-forward.png);</string>
      </property>
      <property name="text">
       <string/>
@@ -250,7 +250,7 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">border-image: url(:/new/prefix1/playlist.png);</string>
+      <string notr="true">border-image: url(:/new/prefix1/rec/playlist.png);</string>
      </property>
      <property name="text">
       <string/>
@@ -939,7 +939,7 @@ color:black;</string>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">border-image: url(:/new/prefix1/player-skip-backward.png);</string>
+       <string notr="true">border-image: url(:/new/prefix1/rec/player-skip-backward.png);</string>
       </property>
       <property name="text">
        <string/>
@@ -955,7 +955,7 @@ color:black;</string>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">border-image: url(:/new/prefix1/player-skip-forward.png);</string>
+       <string notr="true">border-image: url(:/new/prefix1/rec/player-skip-forward.png);</string>
       </property>
       <property name="text">
        <string/>
@@ -971,7 +971,7 @@ color:black;</string>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">border-image: url(:/new/prefix1/playlist.png);</string>
+       <string notr="true">border-image: url(:/new/prefix1/rec/playlist.png);</string>
       </property>
       <property name="text">
        <string/>
@@ -987,7 +987,7 @@ color:black;</string>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">border-image: url(:/new/prefix1/loop.png);</string>
+       <string notr="true">border-image: url(:/new/prefix1/rec/loop.png);</string>
       </property>
       <property name="text">
        <string/>
@@ -1261,7 +1261,7 @@ color:black;</string>
           </rect>
          </property>
          <property name="styleSheet">
-          <string notr="true">border-image: url(:/new/prefix1/mylike.png);
+          <string notr="true">border-image: url(:/new/prefix1/rec/mylike.png);
 background-color: rgba(0,0,0,0);</string>
          </property>
          <property name="text">
@@ -1278,7 +1278,7 @@ background-color: rgba(0,0,0,0);</string>
           </rect>
          </property>
          <property name="styleSheet">
-          <string notr="true">border-image: url(:/new/prefix1/note.png);
+          <string notr="true">border-image: url(:/new/prefix1/rec/note.png);
 background-color: rgba(0,0,0,0);</string>
          </property>
          <property name="text">
@@ -1592,7 +1592,7 @@ background-color: rgba(0,0,0,0);</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">border-image: url(:/new/prefix1/playlist.png);</string>
+      <string notr="true">border-image: url(:/new/prefix1/rec/playlist.png);</string>
      </property>
      <property name="text">
       <string/>
@@ -1670,6 +1670,12 @@ background-color: rgba(0,0,0,0);</string>
       <enum>QAbstractItemView::ScrollPerPixel</enum>
      </property>
     </widget>
+    <zorder>label_playlist</zorder>
+    <zorder>pushButton_hideplaylist</zorder>
+    <zorder>label</zorder>
+    <zorder>line_3</zorder>
+    <zorder>listWidget_playlist</zorder>
+    <zorder>line_2</zorder>
    </widget>
    <widget class="QTitleWidget" name="widget_title" native="true">
     <property name="geometry">
@@ -1758,7 +1764,7 @@ background-color: rgba(0,0,0,0);</string>
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/new/prefix1/settings.png);
+      <string notr="true">background-image: url(:/new/prefix1/rec/settings.png);
 background-repeat:no-repeat;
 background-position:center;
 background-color: rgba(228, 0, 127, 0);</string>
@@ -1877,7 +1883,7 @@ color:white;</string>
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/new/prefix1/refresh.png);
+      <string notr="true">background-image: url(:/new/prefix1/rec/refresh.png);
 background-repeat:no-repeat;
 background-position:center;
 background-color: rgba(228, 0, 127, 0);</string>
@@ -1893,7 +1899,7 @@ background-color: rgba(228, 0, 127, 0);</string>
   </widget>
   <action name="action_exit">
    <property name="icon">
-    <iconset resource="pic.qrc">
+    <iconset>
      <normaloff>:/new/prefix1/exit.png</normaloff>:/new/prefix1/exit.png</iconset>
    </property>
    <property name="text">
@@ -1911,33 +1917,31 @@ background-color: rgba(228, 0, 127, 0);</string>
   <customwidget>
    <class>QSliderPro</class>
    <extends>QSlider</extends>
-   <header location="global">qsliderpro.h</header>
+   <header location="global">CustomClasses/qsliderpro.h</header>
   </customwidget>
   <customwidget>
    <class>QTitleWidget</class>
    <extends>QWidget</extends>
-   <header location="global">qtitlewidget.h</header>
+   <header location="global">CustomClasses/qtitlewidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>ScrollLabel</class>
    <extends>QLabel</extends>
-   <header>scrolllabel.h</header>
+   <header>CustomClasses/scrolllabel.h</header>
   </customwidget>
   <customwidget>
    <class>QClickWidget</class>
    <extends>QWidget</extends>
-   <header location="global">qclickwidget.h</header>
+   <header location="global">CustomClasses/qclickwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>QListPushButton</class>
    <extends>QPushButton</extends>
-   <header>qlistpushbutton.h</header>
+   <header>CustomClasses/qlistpushbutton.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="pic.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

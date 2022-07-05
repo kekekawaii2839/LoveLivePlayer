@@ -110,7 +110,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(player,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(change_song(QMediaPlayer::MediaStatus)));
     //connect(player,SIGNAL(error(QMediaPlayer::Error)),this,SLOT(player_error(QMediaPlayer::Error)));
 
-    QIcon icon = QIcon(":/new/prefix1/icon.png");
+    QIcon icon = QIcon(":/new/prefix1/rec/icon.png");
     mSysTrayIcon->setIcon(icon);
     mSysTrayIcon->setToolTip(title+" - "+artist);
     QMenu* menu=new QMenu();
@@ -973,12 +973,12 @@ void MainWindow::on_pushButton_next_clicked()
 
 void MainWindow::player_state_change(QMediaPlayer::State state){
     if(state==QMediaPlayer::PausedState){
-        ui->pushButton_play->setStyleSheet("QToolTip{font:9pt\"微软雅黑\";}\n#pushButton_play{border-image: url(:/new/prefix1/player-play-circle.png);}");
-        ui->fakepushButton_play->setStyleSheet("border-image: url(:/new/prefix1/player-play-circle.png);");
+        ui->pushButton_play->setStyleSheet("QToolTip{font:9pt\"微软雅黑\";}\n#pushButton_play{border-image: url(:/new/prefix1/rec/player-play-circle.png);}");
+        ui->fakepushButton_play->setStyleSheet("border-image: url(:/new/prefix1/rec/player-play-circle.png);");
     }
     else if(state==QMediaPlayer::PlayingState){
-        ui->pushButton_play->setStyleSheet("QToolTip{font:9pt\"微软雅黑\";}\n#pushButton_play{border-image: url(:/new/prefix1/player-pause-circle.png);}");
-        ui->fakepushButton_play->setStyleSheet("border-image: url(:/new/prefix1/player-pause-circle.png);");
+        ui->pushButton_play->setStyleSheet("QToolTip{font:9pt\"微软雅黑\";}\n#pushButton_play{border-image: url(:/new/prefix1/rec/player-pause-circle.png);}");
+        ui->fakepushButton_play->setStyleSheet("border-image: url(:/new/prefix1/rec/player-pause-circle.png);");
     }
 }
 
@@ -1164,13 +1164,13 @@ void MainWindow::on_pushButton_close_clicked()
 void MainWindow::on_pushButton_playmode_clicked()
 {
     if(player->playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==false){//从列表循环到单曲循环
-        ui->pushButton_playmode->setStyleSheet("border-image: url(:/new/prefix1/currentitemloop.png);");
-        ui->fakepushButton_playmode->setStyleSheet("border-image: url(:/new/prefix1/currentitemloop.png);");
+        ui->pushButton_playmode->setStyleSheet("border-image: url(:/new/prefix1/rec/currentitemloop.png);");
+        ui->fakepushButton_playmode->setStyleSheet("border-image: url(:/new/prefix1/rec/currentitemloop.png);");
         player->playlist->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
     }
     else if(player->playlist->playbackMode()==QMediaPlaylist::CurrentItemInLoop){//从单曲循环到随机播放
-        ui->pushButton_playmode->setStyleSheet("border-image: url(:/new/prefix1/randomplay.png);");
-        ui->fakepushButton_playmode->setStyleSheet("border-image: url(:/new/prefix1/randomplay.png);");
+        ui->pushButton_playmode->setStyleSheet("border-image: url(:/new/prefix1/rec/randomplay.png);");
+        ui->fakepushButton_playmode->setStyleSheet("border-image: url(:/new/prefix1/rec/randomplay.png);");
         player->playlist->setPlaybackMode(QMediaPlaylist::Loop);
         isRandomPlay=true;
 
@@ -1193,8 +1193,8 @@ void MainWindow::on_pushButton_playmode_clicked()
         }
     }
     else if(player->playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==true){//从随机播放到列表循环
-        ui->pushButton_playmode->setStyleSheet("border-image: url(:/new/prefix1/loop.png);");
-        ui->fakepushButton_playmode->setStyleSheet("border-image: url(:/new/prefix1/loop.png);");
+        ui->pushButton_playmode->setStyleSheet("border-image: url(:/new/prefix1/rec/loop.png);");
+        ui->fakepushButton_playmode->setStyleSheet("border-image: url(:/new/prefix1/rec/loop.png);");
         isRandomPlay=false;
     }
 }
@@ -1231,7 +1231,7 @@ void MainWindow::get_config(QString id){
     con.close();
     //qDebug()<<"conf.theme_color:"<<conf.theme_color<<"\nconf.title:"<<conf.title<<"\nconf.num:"<<conf.num<<"\nconf.icon_addr:"<<conf.icon_addr;
 
-    ui->widget_title->setStyleSheet("background-color:"+conf.theme_color+";\nborder-top-left-radius:12px;\nborder-top-right-radius:12px;");
+    ui->widget_title->setStyleSheet("background-color:"+conf.theme_color+";border-top-left-radius:12px;border-top-right-radius:12px;");
     ui->horizontalSlider->setStyleSheet("QSlider::groove:horizontal{\nborder: 1px solid #d9d9d9;\nborder-radius:1.5px;\nheight: 3px;\nbackground-color:#d9d9d9;\nmargin: 2px 0;\n}\n\nQSlider::handle:horizontal {\nbackground-color:"+conf.theme_color+";\nwidth: 10px;\nmargin: -4px 0;\nborder-radius: 5px;\n}\n\nQSlider::sub-page:horizontal{\nbackground-color:"+conf.theme_color+";\nmargin:2px 0;\nborder-radius:1.5px;\n}");
     ui->fakehorizontalSlider->setStyleSheet(ui->horizontalSlider->styleSheet());
     ui->Slider_volume->setStyleSheet("QSlider::groove:vertical{\nborder: 1px solid #d9d9d9;\nwidth: 3px;\nbackground-color:#d9d9d9;\nmargin: 0 2px;\n}\n\nQSlider::handle:vertical {\nbackground-color:"+conf.theme_color+";\nheight:10px;\nmargin: 0 -4px;\nborder-radius: 5px;\n}\n\nQSlider::add-page:vertical {\nbackground-color:"+conf.theme_color+";\nmargin:0 2px;\n}");
@@ -1408,10 +1408,10 @@ void MainWindow::read_userdata(){
         ui->radioButton_settings_tray_0->setChecked(true);
     }
     if(dd.is_locked==true){
-        dd.ui->pushButton_lock->setStyleSheet("border-image: url(:/new/prefix1/locked.png);");
+        dd.ui->pushButton_lock->setStyleSheet("border-image: url(:/new/prefix1/rec/locked.png);");
     }
     else{
-        dd.ui->pushButton_lock->setStyleSheet("border-image: url(:/new/prefix1/unlocked.png);");
+        dd.ui->pushButton_lock->setStyleSheet("border-image: url(:/new/prefix1/rec/unlocked.png);");
     }
     if(isQuickSelect==true){
         ui->checkBox_quickselect->setCheckState(Qt::Checked);
@@ -1549,7 +1549,7 @@ void MainWindow::Show_player(){
     ui->label_info_title->move(ui->fakewidget_cover->x()-(ui->label_info_title->width()-ui->fakewidget_cover->width())/2,(ui->widget_shadow->height()-ui->widget_title->height())*0.6644);//不可用ui->widget_player->height()代替ui->widget_shadow->height()-ui->widget_title->height() 因为此时widget_player的伸缩动画尚未开始
     ui->label_info_artist->move(ui->label_info_title->x(),ui->label_info_title->y()+40);
     ui->label_info_album->move(ui->label_info_title->x(),ui->label_info_artist->y()+40);
-    ui->label_volume->move(ui->widget_player->width()*0.946,(ui->widget_shadow->height()-ui->widget_title->height())*0.71);
+    ui->label_volume->move(ui->widget_player->width()*0.946,ui->widget_shadow->height()-ui->widget_title->height()-210);
     ui->Slider_volume->move(ui->label_volume->x()+5,ui->label_volume->y()+30);
 
     ui->scrollArea_examples->move(ui->widget_player->width()*0.348,ui->widget_shadow->height()*0.19);
@@ -1974,7 +1974,7 @@ void MainWindow::current_songlist_buttons_hoverEnter(int seq){
         if(play_singlesong_songlist!=NULL) play_singlesong_songlist->deleteLater();
         play_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
         play_singlesong_songlist->setGeometry(ui->listWidget_songlist_detail->width()*0.284,15,20,20);
-        play_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/play_small.png);");
+        play_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/rec/play_small.png);");
         play_singlesong_songlist->seq=seq;
         connect(play_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(current_songlist_buttons_clicked(int)));
         play_singlesong_songlist->show();
@@ -1982,7 +1982,7 @@ void MainWindow::current_songlist_buttons_hoverEnter(int seq){
         if(playnext_singlesong_songlist!=NULL) playnext_singlesong_songlist->deleteLater();
         playnext_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
         playnext_singlesong_songlist->setGeometry(play_singlesong_songlist->x()+40,15,20,20);
-        playnext_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/playnext.png);");
+        playnext_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/rec/playnext.png);");
         playnext_singlesong_songlist->seq=seq;
         connect(playnext_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(addNextSong(int)));
         playnext_singlesong_songlist->show();
@@ -1990,7 +1990,7 @@ void MainWindow::current_songlist_buttons_hoverEnter(int seq){
         if(add_singlesong_songlist!=NULL) add_singlesong_songlist->deleteLater();
         add_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
         add_singlesong_songlist->setGeometry(play_singlesong_songlist->x()+80,15,20,20);
-        add_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/add_small.png);");
+        add_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/rec/add_small.png);");
         add_singlesong_songlist->seq=seq;
         connect(add_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(addSongToSonglist(int)));
         add_singlesong_songlist->show();
@@ -1998,7 +1998,7 @@ void MainWindow::current_songlist_buttons_hoverEnter(int seq){
         if(del_singlesong_songlist!=NULL) del_singlesong_songlist->deleteLater();
         del_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
         del_singlesong_songlist->setGeometry(play_singlesong_songlist->x()+120,15,20,20);
-        del_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/del_small.png);");
+        del_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/rec/del_small.png);");
         del_singlesong_songlist->seq=seq;
         connect(del_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(delSongInSonglist(int)));
         del_singlesong_songlist->show();
@@ -2271,13 +2271,13 @@ void MainWindow::addPushbuttonsInSonglist(QStringList content,bool isMyLike){
 
         QListPushButton* heart=new QListPushButton(container);
         heart->setGeometry(28,13,24,24);
-        if(isMyLike) heart->setStyleSheet("border-image:url(:/new/prefix1/like.png);");
+        if(isMyLike) heart->setStyleSheet("border-image:url(:/new/prefix1/rec/like.png);");
         else{
             if(isInMylike(info->LAudioAddr().right(info->LAudioAddr().length()-QApplication::applicationDirPath().length()-7))){
-                heart->setStyleSheet("border-image:url(:/new/prefix1/like.png);");
+                heart->setStyleSheet("border-image:url(:/new/prefix1/rec/like.png);");
             }
             else{
-                heart->setStyleSheet("border-image:url(:/new/prefix1/dislike_grey.png);");
+                heart->setStyleSheet("border-image:url(:/new/prefix1/rec/dislike_grey.png);");
             }
         }
         heart->seq=i;
@@ -3028,7 +3028,7 @@ void MainWindow::addSongToMyLike(int songseq){
         else qDebug()<<"can't open like list";
         llike.close();
 
-        hearts.at(songseq)->setStyleSheet("border-image:url(:/new/prefix1/like.png);");
+        hearts.at(songseq)->setStyleSheet("border-image:url(:/new/prefix1/rec/like.png);");
     }
     else if(hearts.at(songseq)->styleSheet().contains("like.png")){
         QString temp;
@@ -3050,7 +3050,7 @@ void MainWindow::addSongToMyLike(int songseq){
         else qDebug()<<"can't open like list";
         llike.close();
 
-        hearts.at(songseq)->setStyleSheet("border-image:url(:/new/prefix1/dislike_grey.png);");
+        hearts.at(songseq)->setStyleSheet("border-image:url(:/new/prefix1/rec/dislike_grey.png);");
 
         if(current_songlist_seq==-1){//当前界面是"我喜欢"时 要将相应控件删除
             play_singlesong_songlist->setParent(this);
@@ -3178,6 +3178,19 @@ void MainWindow::showMinimized(){
     mouseReleaseEvent(empty);
     isResizing=false;
 
+    t=new QTimer(this);
+    connect(t,&QTimer::timeout,this,[=](){
+        QPainterPath path;
+        path.addRoundedRect(ui->centralWidget->rect(),11,11);//解决playlist等进出动画超出圆角的问题
+        QRegion mask(path.toFillPolygon().toPolygon());
+        ui->centralWidget->setMask(mask);
+    });
+    t->setSingleShot(true);
+    t->start(10);
+
+    ui->centralWidget->setStyleSheet("#centralWidget{background-color:white;border:1px solid #686868;border-radius:11px;}");
+    ui->widget_title->setStyleSheet("background-color:"+conf.theme_color+";border-top-left-radius:12px;border-top-right-radius:12px;");
+
     isMaximized=false;
 }
 
@@ -3252,7 +3265,6 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *e){
         ui->pushButton_lyric_html->move(ui->pushButton_lyric->pos());
         ui->pushButton_sublyric->move(ui->label_singers->x()-20,(ui->widget_shadow->height()-ui->widget_title->height())*0.45);
         if(!ui->widget_cover->is_small){
-            qDebug()<<"hihi";
             ui->horizontalSlider->setGeometry(ui->fakehorizontalSlider->x(),ui->fakehorizontalSlider->y()+150,ui->fakehorizontalSlider->width(),22);
             ui->label_time->move(ui->widget_shadow->width()-300,ui->widget_shadow->height()-69);
             ui->pushButton_play->move(ui->fakepushButton_play->x(),ui->fakepushButton_play->y()+150);
@@ -3276,6 +3288,12 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *e){
             ui->pushButton_DesktopLyric->move(ui->pushButton_play->x()+95,ui->widget_shadow->height()-54);
             ui->pushButton_playlist->setGeometry(ui->pushButton_play->x()+135,ui->widget_shadow->height()-49,20,20);
         }
+
+        //widget_playlist范围内控件大小调整
+        ui->listWidget_playlist->setFixedHeight(ui->widget_shadow->height()-170);
+        ui->line_2->move(50,ui->listWidget_playlist->y()+ui->listWidget_playlist->height());
+        ui->pushButton_hideplaylist->move(120,ui->widget_shadow->height()-56);
+        ui->label->move(155,ui->widget_shadow->height()-56);
 
         if(whatInMainPage==0){
             ui->widget_songlist->raise();

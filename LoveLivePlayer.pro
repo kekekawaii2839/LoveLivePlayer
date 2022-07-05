@@ -98,6 +98,6 @@ QMAKE_TARGET_DESCRIPTION = "by 33ba6_2839 in HopUp Tech"#文件说明
 
 QMAKE_TARGET_COPYRIGHT = ""#版权信息
 
-RC_ICONS = icon.ico
+RC_ICONS = rec/icon.ico
 
 RC_LANG = 0x0004#语言:中文(简体)
