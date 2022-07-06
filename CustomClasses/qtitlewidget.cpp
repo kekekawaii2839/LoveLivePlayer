@@ -11,6 +11,7 @@ QTitleWidget::QTitleWidget(QWidget* parent)
     this->setParent(parent);
     press_pos=QPoint(0,0);
     ori_pos=QPoint(0,0);
+    ok=true;
 }
 
 void QTitleWidget::mousePressEvent(QMouseEvent *e){
@@ -26,7 +27,7 @@ void QTitleWidget::mouseMoveEvent(QMouseEvent *e){
         QWidget::mouseMoveEvent(e);
 
         QWidget* w=window();
-        w->move(e->globalPos().x()-press_pos.x()+ori_pos.x(),e->globalPos().y()-press_pos.y()+ori_pos.y());
+        if(ok) w->move(e->globalPos().x()-press_pos.x()+ori_pos.x(),e->globalPos().y()-press_pos.y()+ori_pos.y());
     }
 }
 

@@ -293,7 +293,7 @@
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">border-image: url(:/new/prefix1/return.png);
+       <string notr="true">border-image: url(:/new/prefix1/rec/return.png);
 background-color: rgba(228, 0, 127, 0);</string>
       </property>
       <property name="text">
@@ -306,7 +306,7 @@ background-color: rgba(228, 0, 127, 0);</string>
         <x>200</x>
         <y>150</y>
         <width>1080</width>
-        <height>335</height>
+        <height>400</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -320,254 +320,308 @@ background-color: rgba(228, 0, 127, 0);</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1057</width>
-         <height>400</height>
+         <width>1078</width>
+         <height>398</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>400</height>
+         <height>380</height>
         </size>
        </property>
-       <widget class="QGroupBox" name="groupBox_settings_autoplay">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>1060</width>
-          <height>80</height>
-         </rect>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>0</number>
         </property>
-        <property name="styleSheet">
-         <string notr="true">#groupBox_settings_autoplay{
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QGroupBox" name="groupBox_settings_autoplay">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>80</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>80</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">#groupBox_settings_autoplay{
     border-top:1px solid rgb(220,220,220);
     border-bottom:1px solid rgb(220,220,220);
 }</string>
-        </property>
-        <property name="title">
-         <string/>
-        </property>
-        <widget class="QCheckBox" name="checkBox_isAutoPlay">
-         <property name="geometry">
-          <rect>
-           <x>160</x>
-           <y>30</y>
-           <width>121</width>
-           <height>20</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>11</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>自动播放</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_settings_autoplay">
-         <property name="geometry">
-          <rect>
-           <x>30</x>
-           <y>30</y>
-           <width>72</width>
-           <height>20</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>11</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#7e7e7e;&quot;&gt;启动&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-       </widget>
-       <widget class="QGroupBox" name="groupBox_settings_tray">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>79</y>
-          <width>1060</width>
-          <height>141</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">#groupBox_settings_tray{
+          </property>
+          <property name="title">
+           <string/>
+          </property>
+          <widget class="QCheckBox" name="checkBox_isAutoPlay">
+           <property name="geometry">
+            <rect>
+             <x>160</x>
+             <y>30</y>
+             <width>121</width>
+             <height>20</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>自动播放</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="label_settings_autoplay">
+           <property name="geometry">
+            <rect>
+             <x>30</x>
+             <y>30</y>
+             <width>72</width>
+             <height>20</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#7e7e7e;&quot;&gt;启动&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_settings_tray">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>140</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>140</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">#groupBox_settings_tray{
     border-top:1px solid rgb(220,220,220);
     border-bottom:1px solid rgb(220,220,220);
 }</string>
-        </property>
-        <property name="title">
-         <string/>
-        </property>
-        <widget class="QRadioButton" name="radioButton_settings_tray_1">
-         <property name="geometry">
-          <rect>
-           <x>160</x>
-           <y>30</y>
-           <width>141</width>
-           <height>19</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>11</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>最小化到托盘</string>
-         </property>
-        </widget>
-        <widget class="QRadioButton" name="radioButton_settings_tray_0">
-         <property name="geometry">
-          <rect>
-           <x>160</x>
-           <y>90</y>
-           <width>141</width>
-           <height>19</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>11</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>直接退出程序</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label__settings_tray">
-         <property name="geometry">
-          <rect>
-           <x>30</x>
-           <y>30</y>
-           <width>80</width>
-           <height>20</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>11</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#7e7e7e;&quot;&gt;关闭程序&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-       </widget>
-       <widget class="QGroupBox" name="groupBox_settings_quickselect">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>219</y>
-          <width>1060</width>
-          <height>80</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">#groupBox_settings_quickselect{
+          </property>
+          <property name="title">
+           <string/>
+          </property>
+          <widget class="QRadioButton" name="radioButton_settings_tray_1">
+           <property name="geometry">
+            <rect>
+             <x>160</x>
+             <y>30</y>
+             <width>141</width>
+             <height>19</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>最小化到托盘</string>
+           </property>
+          </widget>
+          <widget class="QRadioButton" name="radioButton_settings_tray_0">
+           <property name="geometry">
+            <rect>
+             <x>160</x>
+             <y>90</y>
+             <width>141</width>
+             <height>19</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>直接退出程序</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="label__settings_tray">
+           <property name="geometry">
+            <rect>
+             <x>30</x>
+             <y>30</y>
+             <width>80</width>
+             <height>20</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#7e7e7e;&quot;&gt;关闭程序&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_settings_quickselect">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>80</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>80</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">#groupBox_settings_quickselect{
     border-top:1px solid rgb(220,220,220);
     border-bottom:1px solid rgb(220,220,220);
 }</string>
-        </property>
-        <property name="title">
-         <string/>
-        </property>
-        <widget class="QCheckBox" name="checkBox_quickselect">
-         <property name="geometry">
-          <rect>
-           <x>160</x>
-           <y>30</y>
-           <width>121</width>
-           <height>20</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>11</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>开启</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_settings_quickselect">
-         <property name="geometry">
-          <rect>
-           <x>30</x>
-           <y>30</y>
-           <width>72</width>
-           <height>20</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>11</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#7e7e7e;&quot;&gt;快速切歌&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-       </widget>
-       <widget class="QGroupBox" name="groupBox_settings_log">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>298</y>
-          <width>1060</width>
-          <height>80</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">#groupBox_settings_log{
+          </property>
+          <property name="title">
+           <string/>
+          </property>
+          <widget class="QCheckBox" name="checkBox_quickselect">
+           <property name="geometry">
+            <rect>
+             <x>160</x>
+             <y>30</y>
+             <width>121</width>
+             <height>20</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>开启</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="label_settings_quickselect">
+           <property name="geometry">
+            <rect>
+             <x>30</x>
+             <y>30</y>
+             <width>72</width>
+             <height>20</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#7e7e7e;&quot;&gt;快速切歌&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_settings_log">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>80</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>80</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">#groupBox_settings_log{
     border-top:1px solid rgb(220,220,220);
     border-bottom:1px solid rgb(220,220,220);
 }</string>
-        </property>
-        <property name="title">
-         <string/>
-        </property>
-        <widget class="QCheckBox" name="checkBox_log">
-         <property name="geometry">
-          <rect>
-           <x>160</x>
-           <y>30</y>
-           <width>121</width>
-           <height>20</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>11</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>开启</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_settings_log">
-         <property name="geometry">
-          <rect>
-           <x>30</x>
-           <y>30</y>
-           <width>72</width>
-           <height>20</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>11</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#7e7e7e;&quot;&gt;日志文件&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-       </widget>
+          </property>
+          <property name="title">
+           <string/>
+          </property>
+          <widget class="QCheckBox" name="checkBox_log">
+           <property name="geometry">
+            <rect>
+             <x>160</x>
+             <y>30</y>
+             <width>121</width>
+             <height>20</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>开启</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="label_settings_log">
+           <property name="geometry">
+            <rect>
+             <x>30</x>
+             <y>30</y>
+             <width>72</width>
+             <height>20</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#7e7e7e;&quot;&gt;日志文件&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </widget>
      </widget>
      <zorder>scrollArea_settings</zorder>

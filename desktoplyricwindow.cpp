@@ -27,15 +27,15 @@ bool DesktopLyricWindow::eventFilter(QObject *watched, QEvent *event){
         if(event->type()==QEvent::HoverEnter){
             ui->pushButton_lock->setVisible(true);
             if(is_locked==true){
-                ui->centralwidget->setStyleSheet("#centralwidget{\nborder:0px solid rgba(0,0,0,50);\nbackground-color:rgba(255,255,255,2);\n}");
+                ui->centralwidget->setStyleSheet("#centralwidget{border:0px solid rgba(0,0,0,50);background-color:rgba(255,255,255,2);}");
             }
             else{
-                ui->centralwidget->setStyleSheet("#centralwidget{\nborder:0px solid rgba(0,0,0,50);\nbackground-color:rgba(100,100,100,100);\n}");
+                ui->centralwidget->setStyleSheet("#centralwidget{border:0px solid rgba(0,0,0,50);background-color:rgba(100,100,100,100);}");
             }
         }
         else if(event->type()==QEvent::HoverLeave){
             ui->pushButton_lock->setVisible(false);
-            ui->centralwidget->setStyleSheet("#centralwidget{\nborder:0px solid rgba(0,0,0,50);\nbackground-color:rgba(255,255,255,2);\n}");
+            ui->centralwidget->setStyleSheet("#centralwidget{border:0px solid rgba(0,0,0,50);background-color:rgba(255,255,255,2);}");
         }
         else if(event->type()==QEvent::MouseButtonPress){
             QMouseEvent *e = static_cast<QMouseEvent *>(event);
@@ -83,12 +83,12 @@ void DesktopLyricWindow::on_pushButton_lock_clicked()
 {
     if(is_locked==true){
         is_locked=false;
-        ui->pushButton_lock->setStyleSheet("border-image: url(:/new/prefix1/unlocked.png);");
-        ui->centralwidget->setStyleSheet("#centralwidget{\nborder:0px solid rgba(0,0,0,50);\nbackground-color:rgba(100,100,100,100);\n}");
+        ui->pushButton_lock->setStyleSheet("border-image: url(:/new/prefix1/rec/unlocked.png);");
+        ui->centralwidget->setStyleSheet("#centralwidget{border:0px solid rgba(0,0,0,50);background-color:rgba(100,100,100,100);}");
     }
     else{
         is_locked=true;
-        ui->pushButton_lock->setStyleSheet("border-image: url(:/new/prefix1/locked.png);");
-        ui->centralwidget->setStyleSheet("#centralwidget{\nborder:0px solid rgba(0,0,0,50);\nbackground-color:rgba(255,255,255,2);\n}");
+        ui->pushButton_lock->setStyleSheet("border-image: url(:/new/prefix1/rec/locked.png);");
+        ui->centralwidget->setStyleSheet("#centralwidget{border:0px solid rgba(0,0,0,50);background-color:rgba(255,255,255,2);}");
     }
 }

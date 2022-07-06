@@ -179,7 +179,7 @@ private slots:
     void addPushbuttonsInPlaylist();
     void addPushbuttonsInSonglist(QStringList,bool);
     void clearItemsInCurrentSonglist();
-    void get_all_list();
+    bool get_all_list();
     void changeThemeColor(
             int seq_playlist=-1,
             int seq_songlist=-3,
@@ -205,6 +205,7 @@ private slots:
     void mouseMoveEvent(QMouseEvent* e);
     void resizeEvent(QResizeEvent* e);
     void closeEvent(QCloseEvent* e);
+    void changeEvent(QEvent* e);
 };
 
 #endif // MAINWINDOW_H

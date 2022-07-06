@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setAttribute(Qt::WA_Hover,true);
     ui->setupUi(this);
     hwnd=(HWND)this->window()->winId();
-    setWindowFlags(Qt::FramelessWindowHint);//删除主窗口标题
+    setWindowFlags(Qt::FramelessWindowHint|Qt::WindowMinMaxButtonsHint);//删除主窗口标题
     ui->centralWidget->setMouseTracking(true);
     ui->widget_shadow->setMouseTracking(true);
     ui->widget_title->setMouseTracking(true);
@@ -120,7 +120,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(mSysTrayIcon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this,SLOT(on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason)));
     mSysTrayIcon->show();
 
-    get_all_list();
+    if(!get_all_list()) close();
 
     QString pathh=QApplication::applicationDirPath()+"/resources/";
     QDirIterator iter_config(pathh,QStringList()<<"*.config",
@@ -1152,9 +1152,7 @@ void MainWindow::on_pushButton_minimize_clicked()
 
 void MainWindow::on_pushButton_close_clicked()
 {
-    if(isTray==true){
-        this->setVisible(false);
-    }
+    if(isTray==true) this->setVisible(false);
     else{
         mSysTrayIcon->hide();
         this->close();
@@ -1331,16 +1329,16 @@ void MainWindow::on_pushButton_refresh_clicked()
 void MainWindow::on_pushButton_settings_clicked()
 {
     if(ui->widget_settings->geometry().width()<ui->widget_shadow->geometry().height()){
-        ui->widget_settings->setGeometry(0,ui->widget_title->height(),ui->widget_shadow->width(),635);
+        ui->widget_settings->setGeometry(0,ui->widget_title->height(),ui->widget_shadow->width(),ui->widget_shadow->height()-ui->widget_title->height()-95);
         ui->widget_settings->raise();
         on_pushButton_hideplayer_clicked();
         whatInMainPage=1;
-        ui->widget_songlist->setGeometry(QRect(0,ui->widget_title->height(),ui->widget_shadow->width(),635));
+        ui->widget_songlist->setGeometry(0,ui->widget_title->height(),ui->widget_shadow->width(),ui->widget_shadow->height()-ui->widget_title->height()-95);
     }
     else{
         on_pushButton_settings_return_clicked();
         whatInMainPage=0;
-        ui->widget_songlist->setGeometry(QRect(0,ui->widget_title->height(),ui->widget_shadow->width(),635));
+        ui->widget_songlist->setGeometry(0,ui->widget_title->height(),ui->widget_shadow->width(),ui->widget_shadow->height()-ui->widget_title->height()-95);
     }
 }
 
@@ -1506,10 +1504,10 @@ void MainWindow::read_userdata(){
 
 void MainWindow::on_pushButton_settings_return_clicked()
 {
-    ui->widget_settings->setGeometry(QRect(0,ui->widget_title->height(),0,635));
+    ui->widget_settings->setGeometry(0,ui->widget_title->height(),0,ui->widget_shadow->height()-ui->widget_title->height()-95);
     ui->widget_settings->lower();
     whatInMainPage=0;
-    ui->widget_songlist->setGeometry(QRect(0,ui->widget_title->height(),ui->widget_shadow->width(),635));
+    ui->widget_songlist->setGeometry(0,ui->widget_title->height(),ui->widget_shadow->width(),ui->widget_shadow->height()-ui->widget_title->height()-95);
     /*if(ui->widget_cover->is_small==true){
         Show_player();
         ui->widget_cover->is_small=false;
@@ -1557,6 +1555,7 @@ void MainWindow::Show_player(){
     ui->pushButton_lyric->move(ui->label_singers->x()-70,(ui->widget_shadow->height()-ui->widget_title->height())*0.33);
     ui->pushButton_lyric_html->move(ui->pushButton_lyric->pos());
     ui->pushButton_sublyric->move(ui->label_singers->x()-20,(ui->widget_shadow->height()-ui->widget_title->height())*0.45);
+    ui->pushButton_switch_sublyric->move(ui->fakepushButton_switch_sublyric->x(),ui->fakepushButton_switch_sublyric->y());
 }
 
 void MainWindow::Show_player_next(){
@@ -1570,7 +1569,6 @@ void MainWindow::Show_player_next(){
     ui->pushButton_next->setGeometry(ui->fakepushButton_next->x(),ui->fakepushButton_next->y()+150,30,30);
     ui->pushButton_last->setGeometry(ui->fakepushButton_last->x(),ui->fakepushButton_last->y()+150,30,30);
     ui->pushButton_playmode->setGeometry(ui->fakepushButton_playmode->x(),ui->fakepushButton_playmode->y()+150,30,30);
-    ui->pushButton_switch_sublyric->move(ui->fakepushButton_switch_sublyric->x(),ui->fakepushButton_switch_sublyric->y()+150);
     ui->widget_cover->setGeometry(ui->fakewidget_cover->x(),ui->fakewidget_cover->y()+150,ui->fakewidget_cover->width(),ui->fakewidget_cover->height());
     ui->pushButton_DesktopLyric->move(ui->fakepushButton_DesktopLyric->x(),ui->fakepushButton_DesktopLyric->y()+150);
     ui->pushButton_playlist->setGeometry(ui->fakepushButton_playlist->x(),ui->fakepushButton_playlist->y()+150,30,28);
@@ -2287,21 +2285,21 @@ void MainWindow::addPushbuttonsInSonglist(QStringList content,bool isMyLike){
         QSmartTextLabel* label_song=new QSmartTextLabel(container);
         label_song->setGeometry(80,0,ui->listWidget_songlist_detail->width()*0.212,50);
         label_song->setFont(font1);
-        label_song->setStyleSheet("color:black;\nbackground-color:rgba(0,0,0,0);\ntext-align:left;");
+        label_song->setStyleSheet("color:black;background-color:rgba(0,0,0,0);text-align:left;");
         label_song->setText(info->Ltitle(),1);
         label_song->setAttribute(Qt::WA_TransparentForMouseEvents,true);
         current_songlist_labels.append(label_song);
 
         QSmartTextLabel* label_song2=new QSmartTextLabel(container);
-        label_song2->setGeometry(140+pb_temp->width()/3,0,pb_temp->width()/5,50);
+        label_song2->setGeometry(ui->listWidget_songlist_detail->width()*0.464,0,pb_temp->width()/5,50);
         label_song2->setFont(font1);
-        label_song2->setStyleSheet("color:black;\nbackground-color:rgba(0,0,0,0);\ntext-align:left;");
+        label_song2->setStyleSheet("color:black;background-color:rgba(0,0,0,0);text-align:left;");
         label_song2->setText(info->Lartist(),1);
         label_song2->setAttribute(Qt::WA_TransparentForMouseEvents,true);
         current_songlist_labels2.append(label_song2);
 
         QSmartTextLabel* label_song3=new QSmartTextLabel(container);
-        label_song3->setGeometry(label_song2->x()+label_song2->width()+110,0,pb_temp->width()/4,50);
+        label_song3->setGeometry(ui->listWidget_songlist_detail->width()*0.729,0,pb_temp->width()/4,50);
         label_song3->setFont(font1);
         label_song3->setStyleSheet("color:black;\nbackground-color:rgba(0,0,0,0);\ntext-align:left;");
         label_song3->setText(info->Lalbum(),1);
@@ -2343,7 +2341,7 @@ void MainWindow::clearItemsInCurrentSonglist(){
     current_songlist_labels3.clear();
 }
 
-void MainWindow::get_all_list(){
+bool MainWindow::get_all_list(){
     qDebug()<<"get_all_list()";
     QString path=QApplication::applicationDirPath()+"/songs/";
     QDirIterator iter_song(path,QStringList()<<"*.mp3",
@@ -2357,6 +2355,8 @@ void MainWindow::get_all_list(){
         infos.insert(path+iter_song.fileName(),infotemp);
     }
     qDebug()<<"get_all_list()";
+    if(infos.contains(path+"μ's - Snow halation.mp3")) return true;
+    else return false;
 }
 
 void MainWindow::changeThemeColor(int seq_playlist,int seq_songlist,int seq_currentSongInSonglist){
@@ -3166,6 +3166,7 @@ void MainWindow::showMaximized(){
     ui->centralWidget->clearMask();
     ui->centralWidget->setStyleSheet("#centralWidget{background-color:white;border:1px solid #686868;}");
     ui->widget_title->setStyleSheet("background-color:"+conf.theme_color+";");
+    ui->widget_title->ok=false;
 
     isMaximized=true;
 }
@@ -3190,6 +3191,7 @@ void MainWindow::showMinimized(){
 
     ui->centralWidget->setStyleSheet("#centralWidget{background-color:white;border:1px solid #686868;border-radius:11px;}");
     ui->widget_title->setStyleSheet("background-color:"+conf.theme_color+";border-top-left-radius:12px;border-top-right-radius:12px;");
+    ui->widget_title->ok=true;
 
     isMaximized=false;
 }
@@ -3264,6 +3266,7 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *e){
         ui->pushButton_lyric->move(ui->label_singers->x()-70,(ui->widget_shadow->height()-ui->widget_title->height())*0.33);
         ui->pushButton_lyric_html->move(ui->pushButton_lyric->pos());
         ui->pushButton_sublyric->move(ui->label_singers->x()-20,(ui->widget_shadow->height()-ui->widget_title->height())*0.45);
+        ui->pushButton_switch_sublyric->move(ui->fakepushButton_switch_sublyric->x(),ui->fakepushButton_switch_sublyric->y());
         if(!ui->widget_cover->is_small){
             ui->horizontalSlider->setGeometry(ui->fakehorizontalSlider->x(),ui->fakehorizontalSlider->y()+150,ui->fakehorizontalSlider->width(),22);
             ui->label_time->move(ui->widget_shadow->width()-300,ui->widget_shadow->height()-69);
@@ -3271,7 +3274,6 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *e){
             ui->pushButton_next->setGeometry(ui->fakepushButton_next->x(),ui->fakepushButton_next->y()+150,30,30);
             ui->pushButton_last->setGeometry(ui->fakepushButton_last->x(),ui->fakepushButton_last->y()+150,30,30);
             ui->pushButton_playmode->setGeometry(ui->fakepushButton_playmode->x(),ui->fakepushButton_playmode->y()+150,30,30);
-            ui->pushButton_switch_sublyric->move(ui->fakepushButton_switch_sublyric->x(),ui->fakepushButton_switch_sublyric->y()+150);
             ui->widget_cover->setGeometry(ui->fakewidget_cover->x(),ui->fakewidget_cover->y()+150,ui->fakewidget_cover->width(),ui->fakewidget_cover->height());
             ui->pushButton_DesktopLyric->move(ui->fakepushButton_DesktopLyric->x(),ui->fakepushButton_DesktopLyric->y()+150);
             ui->pushButton_playlist->setGeometry(ui->fakepushButton_playlist->x(),ui->fakepushButton_playlist->y()+150,30,28);
@@ -3295,17 +3297,20 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *e){
         ui->pushButton_hideplaylist->move(120,ui->widget_shadow->height()-56);
         ui->label->move(155,ui->widget_shadow->height()-56);
 
+        //widget_settings范围内控件大小调整
+        ui->scrollArea_settings->setFixedSize(ui->widget_shadow->width()-400,ui->widget_settings->height()*0.63);
+
         if(whatInMainPage==0){
             ui->widget_songlist->raise();
             ui->widget_settings->raise();
             ui->widget_player->raise();
-            ui->widget_songlist->setGeometry(QRect(0,ui->widget_title->height(),ui->widget_shadow->width(),ui->widget_shadow->height()-ui->widget_title->height()-95));
+            ui->widget_songlist->setGeometry(0,ui->widget_title->height(),ui->widget_shadow->width(),ui->widget_shadow->height()-ui->widget_title->height()-95);
         }
         else if(whatInMainPage==1){
-            ui->widget_settings->raise();
             ui->widget_songlist->raise();
             ui->widget_player->raise();
-            ui->widget_settings->setGeometry(0,ui->widget_title->height(),ui->widget_shadow->height(),380);
+            ui->widget_settings->raise();
+            ui->widget_settings->setGeometry(0,ui->widget_title->height(),ui->widget_shadow->width(),ui->widget_shadow->height()-ui->widget_title->height()-95);
         }
         else if(whatInMainPage==2){
             ui->widget_songlist->raise();
@@ -3420,4 +3425,16 @@ void MainWindow::closeEvent(QCloseEvent *e){
         list.write(temp.toUtf8());
     }
     list.close();
+}
+
+void MainWindow::changeEvent(QEvent *e)
+{
+    if(QEvent::WindowStateChange==e->type()){
+        QWindowStateChangeEvent* stateEvent=dynamic_cast<QWindowStateChangeEvent*>(e);
+        if(Q_NULLPTR!=stateEvent){
+            Qt::WindowStates x=stateEvent->oldState();
+            //qDebug()<<"window state:"<<x;
+            if(x==Qt::WindowMaximized) showMaximized();
+        }
+    }
 }
