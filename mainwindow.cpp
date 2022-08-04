@@ -10,6 +10,7 @@ int toBeAddedSongSeqInCurrentSonglist=-1;//用于判断现在选中的歌单中�
 int toBeDeletedSongSeqInCurrentSonglist=-1;//用于判断现在选中的歌单中将要被删除的歌曲的序号
 bool isNeedClearBuffer=false;//判断是否需要点击"下一首播放"之后断点续播
 int bufferPos=-1;//储存断点续播的进度(ms为单位)
+QList<int> seqTemp;//用于储存歌单中歌曲排序前原始顺序
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -85,10 +86,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->listWidget_playlist->setVerticalScrollBar(bar_playlist);
     ui->listWidget_playlist->setStyleSheet("border:none;");
     ui->listWidget_playlist->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    AnimatedScrollBar* bar_songlist=new AnimatedScrollBar(ui->listWidget_songlist_detail);
-    ui->listWidget_songlist_detail->setVerticalScrollBar(bar_songlist);
-    ui->listWidget_songlist_detail->setStyleSheet("border:none;");
-    ui->listWidget_songlist_detail->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    AnimatedScrollBar* bar_songlist=new AnimatedScrollBar(ui->scrollArea_songlist_detail);
+    ui->scrollArea_songlist_detail->setVerticalScrollBar(bar_songlist);
+    ui->scrollArea_songlist_detail->setStyleSheet("border:none;");
+    ui->scrollArea_songlist_detail->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     player=new LAudioPlayer();
     player->playlist->setPlaybackMode(QMediaPlaylist::Loop);
@@ -147,7 +148,7 @@ MainWindow::MainWindow(QWidget *parent) :
     on_pushButton_settings_return_clicked();
     connect(ui->widget_cover,SIGNAL(clicked()),this,SLOT(Show_player()));
     connect(ui->widget_title,&QTitleWidget::dblclicked,[=](){
-        if(isMaximized) showMinimized();
+        if(isMaximized) unMaximize();
         else showMaximized();
     });
 
@@ -1184,6 +1185,7 @@ void MainWindow::on_pushButton_playmode_clicked()
             random_seq[i]=t;
         }
         for(int i=0;i<name_list.count();++i){
+            //qDebug()<<"random_seq.at("+QString::number(i)+")="+QString::number(random_seq.at(i));
             if(random_seq.at(i)==play_progress){
                 randomplay_progress=i;
                 break;
@@ -1452,8 +1454,8 @@ void MainWindow::read_userdata(){
         playing_songlist_seq=tt.at(0).toInt();
         for(int i=1;i<tt.count();++i){
             if(tt.at(i)!=""){
-                QFile test(QApplication::applicationDirPath()+tt.at(i));
-                name_list.append(tt.at(i));
+                QFileInfo test(QApplication::applicationDirPath()+"/songs/"+tt.at(i));
+                if(test.isFile()) name_list.append(tt.at(i));
             }
         }
     }
@@ -1941,27 +1943,38 @@ void MainWindow::current_songlist_buttons_clicked(int seq){
     name_list.clear();
     player->playlist->clear();
 
-    if(current_songlist_seq==-2){
-        for(int i=0;i<all_list.count();++i){
-            QString temp=all_list.at(i);
-            name_list.append(temp.replace(QApplication::applicationDirPath()+"/songs/",""));
-        }
-    }
-    else{
-        for(int i=0;i<songlist_detail.count();++i){
-            QString temp=songlist_detail.at(i);
-            name_list.append(temp.replace(QApplication::applicationDirPath()+"/songs/",""));
-        }
+    for(int i=0;i<songlist_detail.count();++i){
+        QString temp=songlist_detail.at(i);
+        name_list.append(temp.replace(QApplication::applicationDirPath()+"/songs/",""));
     }
 
     addPushbuttonsInPlaylist();
-    play_progress=seq;
-    player->playlist->setCurrentIndex(seq);
-    player->LPause();
-    load_single_song(name_list.at(seq));
-    playing_songlist_seq=current_songlist_seq;
-    current_songlist_detail_seq=seq;
-    changeThemeColor(seq,current_songlist_seq,current_songlist_detail_seq);
+
+    if(player->playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==false){
+        play_progress=seq;
+        player->playlist->setCurrentIndex(seq);
+        player->LPause();
+        load_single_song(name_list.at(seq));
+        playing_songlist_seq=current_songlist_seq;
+        current_songlist_detail_seq=seq;
+        changeThemeColor(seq,current_songlist_seq,current_songlist_detail_seq);
+    }
+    else if(player->playlist->playbackMode()==QMediaPlaylist::Loop&&isRandomPlay==true){
+        play_progress=seq;
+        player->playlist->setCurrentIndex(seq);
+        player->LPause();
+        load_single_song(name_list.at(seq));
+        playing_songlist_seq=current_songlist_seq;
+        current_songlist_detail_seq=seq;
+        changeThemeColor(seq,current_songlist_seq,current_songlist_detail_seq);
+        for(int i=0;i<name_list.count();++i){
+            if(random_seq.at(i)==seq){
+                randomplay_progress=i;
+                break;
+            }
+        }
+    }
+
     player->LPlay();
 
     qDebug()<<"current_songlist_buttons_clicked";
@@ -1971,7 +1984,7 @@ void MainWindow::current_songlist_buttons_hoverEnter(int seq){
     if(isEnableHover){
         if(play_singlesong_songlist!=NULL) play_singlesong_songlist->deleteLater();
         play_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
-        play_singlesong_songlist->setGeometry(ui->listWidget_songlist_detail->width()*0.284,15,20,20);
+        play_singlesong_songlist->setGeometry(ui->scrollArea_songlist_detail->width()*0.284,15,20,20);
         play_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/rec/play_small.png);");
         play_singlesong_songlist->seq=seq;
         connect(play_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(current_songlist_buttons_clicked(int)));
@@ -2242,18 +2255,21 @@ void MainWindow::addPushbuttonsInSonglist(QStringList content,bool isMyLike){
         }
     }
     //songlist_detail->setContent(content);
+    sortBySongname=-1;
+    seqTemp.clear();
+    for(int i=0;i<content.count();++i) seqTemp.append(i);
 
     QFont font1;
     font1.setPointSize(11);
     for(int i=0;i<content.count();++i){
         SongInfo* info=infos.value(content.at(i));
 
-        QWidget* container=new QWidget();
-        container->setBaseSize(QSize(ui->listWidget_songlist_detail->width(),50));
-        songlist_detail_containers.append(container);
+        /*QWidget* container=new QWidget();
+        container->setBaseSize(QSize(ui->scrollArea_songlist_detail->width(),50));
+        songlist_detail_containers.append(container);*/
 
-        QListPushButton* pb_temp=new QListPushButton(container);
-        pb_temp->setGeometry(15,2,ui->listWidget_songlist_detail->width()-35,46);
+        QListPushButton* pb_temp=new QListPushButton(ui->scrollAreaWidgetContents_songlist_detail);
+        pb_temp->setGeometry(15,i*50+2,ui->scrollArea_songlist_detail->width()-35,46);
         pb_temp->setDefault(false);
         pb_temp->setStyleSheet("border-color:rgba(0,0,0,0);background-color:rgba(0,0,0,0);text-align:left;padding-left:20px;padding-right:20px;");
         pb_temp->seq=i;
@@ -2262,13 +2278,13 @@ void MainWindow::addPushbuttonsInSonglist(QStringList content,bool isMyLike){
         connect(pb_temp,SIGNAL(hoverEnter(int)),this,SLOT(current_songlist_buttons_hoverEnter(int)));
         connect(pb_temp,SIGNAL(hoverLeave(int)),this,SLOT(current_songlist_buttons_hoverLeave(int)));
 
-        QListWidgetItem* item=new QListWidgetItem(ui->listWidget_songlist_detail);
-        item->setSizeHint(QSize(ui->listWidget_songlist_detail->width(),50));
-        ui->listWidget_songlist_detail->setItemWidget(item,container);
-        ui->listWidget_songlist_detail->addItem(item);
+        /*QListWidgetItem* item=new QListWidgetItem(ui->scrollArea_songlist_detail);
+        item->setSizeHint(QSize(ui->scrollArea_songlist_detail->width(),50));
+        ui->scrollArea_songlist_detail->setItemWidget(item,container);
+        ui->scrollArea_songlist_detail->addItem(item);*/
 
-        QListPushButton* heart=new QListPushButton(container);
-        heart->setGeometry(28,13,24,24);
+        QListPushButton* heart=new QListPushButton(pb_temp);
+        heart->setGeometry(12,11,24,24);
         if(isMyLike) heart->setStyleSheet("border-image:url(:/new/prefix1/rec/like.png);");
         else{
             if(isInMylike(info->LAudioAddr().right(info->LAudioAddr().length()-QApplication::applicationDirPath().length()-7))){
@@ -2282,24 +2298,24 @@ void MainWindow::addPushbuttonsInSonglist(QStringList content,bool isMyLike){
         hearts.append(heart);
         connect(heart,SIGNAL(clicked(int)),this,SLOT(addSongToMyLike(int)));
 
-        QSmartTextLabel* label_song=new QSmartTextLabel(container);
-        label_song->setGeometry(80,0,ui->listWidget_songlist_detail->width()*0.212,50);
+        QSmartTextLabel* label_song=new QSmartTextLabel(pb_temp);
+        label_song->setGeometry(65,0,ui->scrollArea_songlist_detail->width()*0.212,50);
         label_song->setFont(font1);
         label_song->setStyleSheet("color:black;background-color:rgba(0,0,0,0);text-align:left;");
         label_song->setText(info->Ltitle(),1);
         label_song->setAttribute(Qt::WA_TransparentForMouseEvents,true);
         current_songlist_labels.append(label_song);
 
-        QSmartTextLabel* label_song2=new QSmartTextLabel(container);
-        label_song2->setGeometry(ui->listWidget_songlist_detail->width()*0.464,0,pb_temp->width()/5,50);
+        QSmartTextLabel* label_song2=new QSmartTextLabel(pb_temp);
+        label_song2->setGeometry(pb_temp->width()*0.464,0,ui->scrollArea_songlist_detail->width()*0.265-20,50);
         label_song2->setFont(font1);
         label_song2->setStyleSheet("color:black;background-color:rgba(0,0,0,0);text-align:left;");
         label_song2->setText(info->Lartist(),1);
         label_song2->setAttribute(Qt::WA_TransparentForMouseEvents,true);
         current_songlist_labels2.append(label_song2);
 
-        QSmartTextLabel* label_song3=new QSmartTextLabel(container);
-        label_song3->setGeometry(ui->listWidget_songlist_detail->width()*0.729,0,pb_temp->width()/4,50);
+        QSmartTextLabel* label_song3=new QSmartTextLabel(pb_temp);
+        label_song3->setGeometry(pb_temp->width()*0.729+10,0,ui->scrollArea_songlist_detail->width()*0.271-20,50);
         label_song3->setFont(font1);
         label_song3->setStyleSheet("color:black;\nbackground-color:rgba(0,0,0,0);\ntext-align:left;");
         label_song3->setText(info->Lalbum(),1);
@@ -2307,11 +2323,13 @@ void MainWindow::addPushbuttonsInSonglist(QStringList content,bool isMyLike){
         current_songlist_labels3.append(label_song3);
 
         pb_temp->lower();
+        pb_temp->show();
         heart->show();
         label_song->show();
         label_song2->show();
         label_song3->show();
     }
+    ui->scrollAreaWidgetContents_songlist_detail->setMinimumHeight(content.count()*50);
 
     qDebug()<<"addPushbuttonsInSonglist";
 }
@@ -2324,16 +2342,16 @@ void MainWindow::clearItemsInCurrentSonglist(){
     add_singlesong_songlist->setParent(this);
     del_singlesong_songlist->setParent(this);
 
-    ui->listWidget_songlist_detail->clear();
+    //ui->scrollArea_songlist_detail->clear();
     for(int i=0;i<current_songlist_buttons.count();++i){
-        songlist_detail_containers.at(i)->close();
+        //songlist_detail_containers.at(i)->close();
         current_songlist_buttons.at(i)->close();
         hearts.at(i)->close();
         current_songlist_labels.at(i)->close();
         current_songlist_labels2.at(i)->close();
         current_songlist_labels3.at(i)->close();
     }
-    songlist_detail_containers.clear();
+    //songlist_detail_containers.clear();
     current_songlist_buttons.clear();
     hearts.clear();
     current_songlist_labels.clear();
@@ -2389,13 +2407,13 @@ void MainWindow::changeThemeColor(int seq_playlist,int seq_songlist,int seq_curr
 
     if(seq_currentSongInSonglist>=0){//歌单中的歌曲列表主题色更换
         for(int i=0;i<current_songlist_labels.count();++i){
-            current_songlist_labels.at(i)->setStyleSheet("color:black;\nbackground-color:rgba(255,255,255,0);\ntext-align:left;");
-            current_songlist_labels2.at(i)->setStyleSheet("color:black;\nbackground-color:rgba(255,255,255,0);\ntext-align:left;");
-            current_songlist_labels3.at(i)->setStyleSheet("color:black;\nbackground-color:rgba(255,255,255,0);\ntext-align:left;");
+            current_songlist_labels.at(i)->setStyleSheet("color:black;background-color:rgba(255,255,255,0);text-align:left;");
+            current_songlist_labels2.at(i)->setStyleSheet("color:black;background-color:rgba(255,255,255,0);text-align:left;");
+            current_songlist_labels3.at(i)->setStyleSheet("color:black;background-color:rgba(255,255,255,0);text-align:left;");
         }
-        current_songlist_labels.at(seq_currentSongInSonglist)->setStyleSheet("color:"+conf.theme_color+";\nbackground-color:rgba(255,255,255,0);\ntext-align:left;");
-        current_songlist_labels2.at(seq_currentSongInSonglist)->setStyleSheet("color:"+conf.theme_color+";\nbackground-color:rgba(255,255,255,0);\ntext-align:left;");
-        current_songlist_labels3.at(seq_currentSongInSonglist)->setStyleSheet("color:"+conf.theme_color+";\nbackground-color:rgba(255,255,255,0);\ntext-align:left;");
+        current_songlist_labels.at(seq_currentSongInSonglist)->setStyleSheet("color:"+conf.theme_color+";background-color:rgba(255,255,255,0);text-align:left;");
+        current_songlist_labels2.at(seq_currentSongInSonglist)->setStyleSheet("color:"+conf.theme_color+";background-color:rgba(255,255,255,0);text-align:left;");
+        current_songlist_labels3.at(seq_currentSongInSonglist)->setStyleSheet("color:"+conf.theme_color+";background-color:rgba(255,255,255,0);text-align:left;");
     }
 }
 
@@ -2443,9 +2461,10 @@ void MainWindow::on_pushButton_switch_sublyric_clicked()
 
 void MainWindow::on_pushButton_createsonglist_clicked()
 {
+    maskw->setGeometry(0,ui->widget_title->height(),width(),height()-ui->widget_title->height());
     maskw->show();
     QWidget* mainbox=new QWidget(maskw);
-    mainbox->setGeometry(490,190,500,250);
+    mainbox->setGeometry((width()-502)/2,(height()-252-ui->widget_title->height())/2,500,250);
     mainbox->setStyleSheet("background-color:#ffffff;\nborder-radius:5px;");
     mainbox->show();
     QPushButton* pb_yes=new QPushButton(mainbox);
@@ -2564,9 +2583,10 @@ void MainWindow::rename_songlist(){
     qDebug()<<"rename_songlist()";
 
     qDebug()<<"find right clicked!";
+    maskw->setGeometry(0,ui->widget_title->height(),width(),height()-ui->widget_title->height());
     maskw->show();
     QWidget* mainbox=new QWidget(maskw);
-    mainbox->setGeometry(490,190,500,250);
+    mainbox->setGeometry((width()-502)/2,(height()-252-ui->widget_title->height())/2,500,250);
     mainbox->setStyleSheet("background-color:#ffffff;\nborder-radius:5px;");
     mainbox->show();
     QPushButton* pb_yes=new QPushButton(mainbox);
@@ -2651,9 +2671,10 @@ void MainWindow::songlists_rightclicked(int ii){
 }
 
 void MainWindow::clone_songlist(){
+    maskw->setGeometry(0,ui->widget_title->height(),width(),height()-ui->widget_title->height());
     maskw->show();
     QWidget* mainbox=new QWidget(maskw);
-    mainbox->setGeometry(490,190,500,250);
+    mainbox->setGeometry((width()-502)/2,(height()-252-ui->widget_title->height())/2,500,250);
     mainbox->setStyleSheet("background-color:#ffffff;\nborder-radius:5px;");
     mainbox->show();
     QPushButton* pb_yes=new QPushButton(mainbox);
@@ -2699,7 +2720,7 @@ void MainWindow::clone_songlist(){
         songlist_buttons.insert(rightclicked_songlist_seq+1,pb_temp);
         pb_temp->show();
         for(int i=rightclicked_songlist_seq+2;i<songlist_buttons.count();++i){
-            songlist_buttons.at(i)->move(songlist_buttons.at(i)->x(),songlist_buttons.at(i)->y()+50);
+            songlist_buttons.at(i)->move(songlist_buttons.at(i)->x(),songlist_buttons.at(i)->y()+50,0);
             songlist_buttons.at(i)->seq++;
         }
 
@@ -2712,9 +2733,10 @@ void MainWindow::clone_songlist(){
 }
 
 void MainWindow::del_songlist(){
+    maskw->setGeometry(0,ui->widget_title->height(),width(),height()-ui->widget_title->height());
     maskw->show();
     QWidget* mainbox=new QWidget(maskw);
-    mainbox->setGeometry(490,190,500,250);
+    mainbox->setGeometry((width()-502)/2,(height()-252-ui->widget_title->height())/2,500,250);
     mainbox->setStyleSheet("background-color:#ffffff;\nborder-radius:5px;");
     mainbox->show();
     QPushButton* pb_yes=new QPushButton(mainbox);
@@ -2747,7 +2769,7 @@ void MainWindow::del_songlist(){
             songlist.removeAt(rightclicked_songlist_seq);
 
             for(int i=rightclicked_songlist_seq+1;i<songlist_buttons.count();++i){
-                songlist_buttons.at(i)->move(songlist_buttons.at(i)->x(),songlist_buttons.at(i)->y()-50);
+                songlist_buttons.at(i)->move(songlist_buttons.at(i)->x(),songlist_buttons.at(i)->y()-50,0);
                 songlist_buttons.at(i)->seq--;
             }
             songlist_buttons.at(rightclicked_songlist_seq)->close();
@@ -2786,16 +2808,17 @@ void MainWindow::del_songlist(){
 
 void MainWindow::addSongToSonglist(int songseq){
     toBeAddedSongSeqInCurrentSonglist=songseq;
+    maskw->setGeometry(0,ui->widget_title->height(),width(),height()-ui->widget_title->height());
     maskw->show();
     QWidget* mainbox=new QWidget(maskw);
     if(songlist.count()<=0){
-        mainbox->setGeometry(490,210,500,210);
+        mainbox->setGeometry((width()-502)/2,(height()-212-ui->widget_title->height())/2,500,210);
         mainbox->setStyleSheet("background-color:#ffffff;\nborder-radius:5px;");
         mainbox->show();
         QPushButton* pb_yes=new QPushButton(mainbox);
         pb_yes->setGeometry(160,145,180,40);
         pb_yes->setText("这就去新建歌单！");
-        pb_yes->setStyleSheet("background-color:"+conf.theme_color+";\nborder-radius:5px;");
+        pb_yes->setStyleSheet("background-color:"+conf.theme_color+";border-radius:5px;");
         pb_yes->setDefault(false);
         pb_yes->show();
         QPushButton* pb_close=new QPushButton(mainbox);
@@ -2833,70 +2856,76 @@ void MainWindow::addSongToSonglist(int songseq){
         la->setAlignment(Qt::AlignCenter);
         la->setText("添加到歌单");
         la->show();
-        if((880-songlist.count()*70-100)/2-150>=30){
-            mainbox->setGeometry(490,(880-songlist.count()*70-120)/2-150,500,songlist.count()*70+120);
-            for(int i=0;i<songlist.count();++i){
-                QListPushButton* pb=new QListPushButton(mainbox);
-                pb->setGeometry(10,100+i*70,480,70);
-                pb->setStyleSheet("border-color:rgba(255,255,255,0);background-color:rgba(255,255,255,0);text-align:left;padding-left:20px;padding-right:20px;");
-                pb->setText(adjust_text_overlength(songlist.at(i).left(songlist.at(i).count()-6),pb,1));
-                pb->seq=i;
-                pb->show();
+        if((height()-2-songlist.count()*70-100)/2-150>=30) mainbox->setGeometry((width()-502)/2,(height()-2-songlist.count()*70-120)/2-150,500,songlist.count()*70+120);
+        else mainbox->setGeometry((width()-502)/2,(height()-672-ui->widget_title->height())/2,500,670);
 
-                connect(pb,&QListPushButton::clicked,[=](int songlist_seq,int song_seq=toBeAddedSongSeqInCurrentSonglist){
-                    QString temp;
-                    if(songlist_seq>=0){
-                        QFile sheep(QApplication::applicationDirPath()+"/songlists/"+songlist.at(songlist_seq));
-                        if(sheep.open(QIODevice::ReadOnly)){
-                            temp=sheep.readAll();
-                        }
-                        else{
-                            qDebug()<<"can't open destination songlist!";
-                            return;
-                        }
-                        sheep.close();
+        QScrollArea* sc=new QScrollArea(mainbox);
+        QWidget* sc_content=new QWidget(sc);
+        sc->setGeometry(10,90,mainbox->width()-20,mainbox->height()-80);
+        sc->setWidget(sc_content);
+        sc_content->setFixedSize(mainbox->width()-20,songlist.count()*70);
+        sc->show();
+        sc_content->show();
 
-                        if(temp.contains(songlist_detail.at(song_seq).right(songlist_detail.at(song_seq).length()-QApplication::applicationDirPath().length()-7))){
-                            //重复添加不可取
-                            QTimer* t=new QTimer();
-                            t->setInterval(1000);
-                            t->start();
-                            QLabel* warn=new QLabel(mainbox);
-                            warn->setText("重复添加歌曲！");
-                            warn->setAlignment(Qt::AlignCenter);
-                            warn->setGeometry(160,(mainbox->height()-40)/2,180,40);
-                            warn->setStyleSheet("background-color:#ee0000;color:#ffffff;border:none;border-radius:20px;");
-                            warn->show();
-                            connect(t,&QTimer::timeout,[=](){
-                                warn->close();
-                                warn->deleteLater();
-                                t->deleteLater();
-                            });
-                            return;
-                        }
+        for(int i=0;i<songlist.count();++i){
+            QListPushButton* pb=new QListPushButton(sc_content);
+            pb->setGeometry(0,i*70,480,70);
+            pb->setStyleSheet("border-color:rgba(255,255,255,0);background-color:rgba(255,255,255,0);text-align:left;padding-left:20px;padding-right:20px;");
+            pb->setText(adjust_text_overlength(songlist.at(i).left(songlist.at(i).count()-6),pb,1));
+            pb->seq=i;
+            pb->show();
 
-                        QFile sheepp(QApplication::applicationDirPath()+"/songlists/"+songlist.at(songlist_seq));
-                        if(sheepp.open(QIODevice::WriteOnly)){
-                            temp=songlist_detail.at(song_seq).right(songlist_detail.at(song_seq).length()-QApplication::applicationDirPath().length()-7)+"\n"+temp;
-                            if(temp.endsWith('\n')) temp=temp.left(temp.length()-1);
-                            sheepp.write(temp.toUtf8());
-                        }
-                        else{
-                            qDebug()<<"can't open destination songlist!";
-                            return;
-                        }
-                        sheepp.close();
+            connect(pb,&QListPushButton::clicked,[=](int songlist_seq,int song_seq=toBeAddedSongSeqInCurrentSonglist){
+                QString temp;
+                if(songlist_seq>=0){
+                    QFile sheep(QApplication::applicationDirPath()+"/songlists/"+songlist.at(songlist_seq));
+                    if(sheep.open(QIODevice::ReadOnly)){
+                        temp=sheep.readAll();
+                    }
+                    else{
+                        qDebug()<<"can't open destination songlist!";
+                        return;
+                    }
+                    sheep.close();
+
+                    if(temp.contains(songlist_detail.at(song_seq).right(songlist_detail.at(song_seq).length()-QApplication::applicationDirPath().length()-7))){
+                        //重复添加不可取
+                        QTimer* t=new QTimer();
+                        t->setInterval(1000);
+                        t->start();
+                        QLabel* warn=new QLabel(mainbox);
+                        warn->setText("重复添加歌曲！");
+                        warn->setAlignment(Qt::AlignCenter);
+                        warn->setGeometry(160,(mainbox->height()-40)/2,180,40);
+                        warn->setStyleSheet("background-color:#ee0000;color:#ffffff;border:none;border-radius:20px;");
+                        warn->show();
+                        connect(t,&QTimer::timeout,[=](){
+                            warn->close();
+                            warn->deleteLater();
+                            t->deleteLater();
+                        });
+                        return;
                     }
 
-                    mainbox->close();
-                    mainbox->deleteLater();
-                    maskw->close();
-                });
-            }
+                    QFile sheepp(QApplication::applicationDirPath()+"/songlists/"+songlist.at(songlist_seq));
+                    if(sheepp.open(QIODevice::WriteOnly)){
+                        temp=songlist_detail.at(song_seq).right(songlist_detail.at(song_seq).length()-QApplication::applicationDirPath().length()-7)+"\n"+temp;
+                        if(temp.endsWith('\n')) temp=temp.left(temp.length()-1);
+                        sheepp.write(temp.toUtf8());
+                    }
+                    else{
+                        qDebug()<<"can't open destination songlist!";
+                        return;
+                    }
+                    sheepp.close();
+                }
+
+                mainbox->close();
+                mainbox->deleteLater();
+                maskw->close();
+            });
         }
-        else{
-            mainbox->setGeometry(490,30,500,670);
-        }
+
 
         connect(pb_close,&QPushButton::clicked,[=](){
             mainbox->close();
@@ -2908,9 +2937,10 @@ void MainWindow::addSongToSonglist(int songseq){
 
 void MainWindow::delSongInSonglist(int songseq){
     toBeDeletedSongSeqInCurrentSonglist=songseq;
+    maskw->setGeometry(0,ui->widget_title->height(),width(),height()-ui->widget_title->height());
     maskw->show();
     QWidget* mainbox=new QWidget(maskw);
-    mainbox->setGeometry(490,190,500,250);
+    mainbox->setGeometry((width()-502)/2,(height()-252-ui->widget_title->height())/2,500,250);
     mainbox->setStyleSheet("background-color:#ffffff;\nborder-radius:5px;");
     mainbox->show();
     QPushButton* pb_close=new QPushButton(mainbox);
@@ -2955,7 +2985,7 @@ void MainWindow::delSongInSonglist(int songseq){
                 temp.replace("\n\n","\n");
                 if(temp.endsWith('\n')) temp=temp.left(temp.length()-1);
                 if(temp.startsWith('\n')) temp=temp.right(temp.length()-1);
-                qDebug()<<"temp:"<<temp;
+                //qDebug()<<"temp:"<<temp;
                 sheepp.write(temp.toUtf8());
             }
             else{
@@ -2968,21 +2998,19 @@ void MainWindow::delSongInSonglist(int songseq){
             playnext_singlesong_songlist->setParent(this);
             add_singlesong_songlist->setParent(this);
             del_singlesong_songlist->setParent(this);
-            songlist_detail_containers.at(toBeDeletedSongSeqInCurrentSonglist)->close();
-            songlist_detail_containers.at(toBeDeletedSongSeqInCurrentSonglist)->deleteLater();
-            songlist_detail_containers.removeAt(toBeDeletedSongSeqInCurrentSonglist);
+            current_songlist_buttons.at(toBeDeletedSongSeqInCurrentSonglist)->close();
+            current_songlist_buttons.at(toBeDeletedSongSeqInCurrentSonglist)->deleteLater();
+            current_songlist_buttons.removeAt(toBeDeletedSongSeqInCurrentSonglist);
             songlist_detail.removeAt(toBeDeletedSongSeqInCurrentSonglist);
             hearts.removeAt(toBeDeletedSongSeqInCurrentSonglist);
             qDebug()<<"hearts.count()="<<hearts.count();
-            current_songlist_buttons.removeAt(toBeDeletedSongSeqInCurrentSonglist);
             current_songlist_labels.removeAt(toBeDeletedSongSeqInCurrentSonglist);
             current_songlist_labels2.removeAt(toBeDeletedSongSeqInCurrentSonglist);
             current_songlist_labels3.removeAt(toBeDeletedSongSeqInCurrentSonglist);
-            ui->listWidget_songlist_detail->takeItem(toBeDeletedSongSeqInCurrentSonglist);
             for(int i=toBeDeletedSongSeqInCurrentSonglist;i<current_songlist_buttons.count();++i){
                 current_songlist_buttons.at(i)->seq=i;
                 hearts.at(i)->seq=i;
-                songlist_detail_containers.at(i)->move(songlist_detail_containers.at(i)->x(),songlist_detail_containers.at(i)->y()-50);
+                current_songlist_buttons.at(i)->move(current_songlist_buttons.at(i)->x(),current_songlist_buttons.at(i)->y()-50,(i-toBeDeletedSongSeqInCurrentSonglist)*50);
             }
 
             mainbox->close();
@@ -3057,20 +3085,20 @@ void MainWindow::addSongToMyLike(int songseq){
             playnext_singlesong_songlist->setParent(this);
             add_singlesong_songlist->setParent(this);
             del_singlesong_songlist->setParent(this);
-            songlist_detail_containers.at(songseq)->close();
-            songlist_detail_containers.at(songseq)->deleteLater();
-            songlist_detail_containers.removeAt(songseq);
+            //songlist_detail_containers.at(songseq)->close();
+            //songlist_detail_containers.at(songseq)->deleteLater();
+            //songlist_detail_containers.removeAt(songseq);
             songlist_detail.removeAt(songseq);
             hearts.removeAt(songseq);
             current_songlist_buttons.removeAt(songseq);
             current_songlist_labels.removeAt(songseq);
             current_songlist_labels2.removeAt(songseq);
             current_songlist_labels3.removeAt(songseq);
-            ui->listWidget_songlist_detail->takeItem(songseq);
+            //ui->scrollArea_songlist_detail->takeItem(songseq);
             for(int i=songseq;i<current_songlist_buttons.count();++i){
                 current_songlist_buttons.at(i)->seq=i;
                 hearts.at(i)->seq=i;
-                songlist_detail_containers.at(i)->move(songlist_detail_containers.at(i)->x(),songlist_detail_containers.at(i)->y()-50);
+                //songlist_detail_containers.at(i)->move(songlist_detail_containers.at(i)->x(),songlist_detail_containers.at(i)->y()-50);
             }
         }
     }
@@ -3171,7 +3199,7 @@ void MainWindow::showMaximized(){
     isMaximized=true;
 }
 
-void MainWindow::showMinimized(){
+void MainWindow::unMaximize(){
     resize(sizeBeforeMax);
     move(posBeforeMax);
     QMouseEvent* empty;
@@ -3194,6 +3222,65 @@ void MainWindow::showMinimized(){
     ui->widget_title->ok=true;
 
     isMaximized=false;
+}
+
+void MainWindow::swapSongsInSonglist(int a, int b){
+    //if(a==b||a<0||b<0) return;
+    songlist_detail.swap(a,b);
+    current_songlist_buttons.at(a)->move(15,b*50+2,0);
+    current_songlist_buttons.at(b)->move(15,a*50+2,0);
+    current_songlist_buttons.at(a)->seq=b;
+    current_songlist_buttons.at(b)->seq=a;
+    current_songlist_buttons.swap(a,b);
+    current_songlist_labels.swap(a,b);
+    current_songlist_labels2.swap(a,b);
+    current_songlist_labels3.swap(a,b);
+
+    seqTemp.swap(a,b);
+
+    if(playing_songlist_seq==current_songlist_seq){
+        if(a==current_songlist_detail_seq) current_songlist_detail_seq=b;
+        else if(b==current_songlist_detail_seq) current_songlist_detail_seq=a;
+    }
+}
+
+void MainWindow::on_pushButton_songlist_songname_clicked()
+{
+    if(sortBySongname==1){
+        int i=0;
+        while(i!=seqTemp.at(i)){
+            swapSongsInSonglist(i,seqTemp.at(i));
+            while(i==seqTemp.at(i)) ++i;
+            if(i>=seqTemp.count()) break;
+        }
+        sortBySongname=-1;
+    }
+    else{
+        std::function<void(QList<QLabel*>*,int,int)> quickSort=[&](QList<QLabel*>* list,int left,int right){
+            if(left>=right) return;
+            QString key=list->at(left)->text();
+            int l=left,r=right;
+            while(l<r){
+                while(list->at(r)->text()>=key&&l<r) --r;
+                while(list->at(l)->text()<=key&&l<r) ++l;
+                if(l<r) swapSongsInSonglist(l,r);
+            }
+            swapSongsInSonglist(left,l);
+
+            if(left<l-1) quickSort(list,left,l-1);
+            if(l+1<right) quickSort(list,l+1,right);
+
+        };
+
+        if(sortBySongname==-1) quickSort(&current_songlist_labels,0,current_songlist_labels.count()-1);
+        else if(sortBySongname==0){
+            for(int i=0;i<(current_songlist_labels.count()-1)/2;++i){
+                swapSongsInSonglist(i,current_songlist_labels.count()-1-i);
+            }
+        }
+        for(int i=0;i<seqTemp.count();++i) qDebug()<<seqTemp.at(i);
+        ++sortBySongname;
+    }
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *e){
@@ -3220,24 +3307,24 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *e){
         ui->label_songlist_artist->move((ui->widget_shadow->width()-300)*0.464+300,120);
         ui->line_4->setFixedWidth(ui->widget_shadow->width()-300);
         ui->line_5->setFixedHeight(ui->widget_songlist->height());
-        ui->listWidget_songlist_detail->setFixedSize(ui->widget_shadow->width()-300,ui->widget_songlist->height());
-        ui->scrollArea_songlists->setFixedHeight(ui->widget_songlist->height());
+        ui->scrollArea_songlists->setFixedSize(300,ui->widget_songlist->height());
+        ui->scrollArea_songlist_detail->setFixedSize(ui->widget_shadow->width()-300,ui->widget_songlist->height()-ui->scrollArea_songlist_detail->y());
         for(int i=0;i<current_songlist_buttons.count();++i){
             current_songlist_buttons.at(i)->setGeometry(current_songlist_buttons.at(i)->x(),
                                                         current_songlist_buttons.at(i)->y(),
-                                                        ui->listWidget_songlist_detail->width()-35,
+                                                        ui->scrollArea_songlist_detail->width()-35,
                                                         current_songlist_buttons.at(i)->height());
             current_songlist_labels.at(i)->setGeometry(current_songlist_labels.at(i)->x(),
                                                        current_songlist_labels.at(i)->y(),
-                                                       ui->listWidget_songlist_detail->width()*0.212,
+                                                       ui->scrollArea_songlist_detail->width()*0.212,
                                                        current_songlist_labels.at(i)->height());
-            current_songlist_labels2.at(i)->setGeometry((current_songlist_buttons.at(i)->width()+30)*0.464,
+            current_songlist_labels2.at(i)->setGeometry(current_songlist_buttons.at(i)->width()*0.464,
                                                         current_songlist_labels2.at(i)->y(),
-                                                        current_songlist_buttons.at(i)->width()/5,
+                                                        ui->scrollArea_songlist_detail->width()*0.265-20,
                                                         current_songlist_labels2.at(i)->height());
-            current_songlist_labels3.at(i)->setGeometry((current_songlist_buttons.at(i)->width()+30)*0.729,
+            current_songlist_labels3.at(i)->setGeometry(current_songlist_buttons.at(i)->width()*0.729+10,
                                                         current_songlist_labels3.at(i)->y(),
-                                                        current_songlist_buttons.at(i)->width()/4,
+                                                        ui->scrollArea_songlist_detail->width()*0.271-20,
                                                         current_songlist_labels3.at(i)->height());
         }
 

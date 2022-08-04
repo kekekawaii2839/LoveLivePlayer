@@ -1461,7 +1461,7 @@ background-color: rgba(0,0,0,0);</string>
      <widget class="QLabel" name="label_songlist_artist">
       <property name="geometry">
        <rect>
-        <x>820</x>
+        <x>847</x>
         <y>120</y>
         <width>40</width>
         <height>20</height>
@@ -1531,24 +1531,6 @@ background-color: rgba(0,0,0,0);</string>
        <string>我喜欢</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_songlist_songname">
-      <property name="geometry">
-       <rect>
-        <x>330</x>
-        <y>120</y>
-        <width>40</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>歌曲</string>
-      </property>
-     </widget>
      <widget class="QLabel" name="label_no_songlist">
       <property name="geometry">
        <rect>
@@ -1570,7 +1552,7 @@ background-color: rgba(0,0,0,0);</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QListWidget" name="listWidget_songlist_detail">
+     <widget class="QScrollArea" name="scrollArea_songlist_detail">
       <property name="geometry">
        <rect>
         <x>301</x>
@@ -1579,14 +1561,51 @@ background-color: rgba(0,0,0,0);</string>
         <height>484</height>
        </rect>
       </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::NoSelection</enum>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
       </property>
-      <property name="verticalScrollMode">
-       <enum>QAbstractItemView::ScrollPerPixel</enum>
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustToContents</enum>
       </property>
-      <property name="horizontalScrollMode">
-       <enum>QAbstractItemView::ScrollPerPixel</enum>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents_songlist_detail">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>1178</width>
+         <height>482</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QPushButton" name="pushButton_songlist_songname">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>120</y>
+        <width>40</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>歌曲</string>
+      </property>
+      <property name="flat">
+       <bool>true</bool>
       </property>
      </widget>
     </widget>

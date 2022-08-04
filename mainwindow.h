@@ -72,6 +72,7 @@ private:
     bool isInitiated,isEnableHover,mousePressed,isMaximized,isResizing;
     QPoint posBeforeMax;
     QSize sizeBeforeMax;
+    int sortBySongname=-1;//表示歌单中歌曲排序方式 -1表示自然顺序 0表示升序 1表示降序
 
     LAudioPlayer* player;
     int duration;
@@ -107,7 +108,7 @@ private:
     QList<QLabel*> current_songlist_labels;
     QList<QLabel*> current_songlist_labels2;
     QList<QLabel*> current_songlist_labels3;
-    QList<QWidget*> songlist_detail_containers;
+    //QList<QWidget*> songlist_detail_containers;
     QListPushButton* play_singlesong_songlist;//鼠标悬浮时在当前歌单中显示的"播放"小按钮
     QListPushButton* playnext_singlesong_songlist;//鼠标悬浮时在当前歌单中显示的"下一首播放"小按钮
     QListPushButton* add_singlesong_songlist;//鼠标悬浮时在当前歌单中显示的"添加到"小按钮
@@ -198,7 +199,9 @@ private slots:
     void addNextSong(int);
     void swapPlaylist(int index,int ori_index);
     void showMaximized();
-    void showMinimized();
+    void unMaximize();
+    void swapSongsInSonglist(int a,int b);
+    void on_pushButton_songlist_songname_clicked();
 
     void mousePressEvent(QMouseEvent* e);
     void mouseReleaseEvent(QMouseEvent* e);

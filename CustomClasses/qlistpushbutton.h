@@ -6,6 +6,8 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QDebug>
+#include <QPropertyAnimation>
+#include <QTimer>
 
 class QListPushButton:public QPushButton
 {
@@ -14,11 +16,13 @@ public:
     QListPushButton(QWidget* parent=nullptr);
     int seq;
     bool isRightClicked;
+    //QWidget* bottomline;
     //QString ori_stylesheet;
     //void setStyleSheet(const QString &styleSheet,int mode);
     void setStyleSheet(const QString &styleSheet);//重载 防止QtCreator自动生成ui_mainwindow.h时报错
     void leftClick();
-    void setHover(bool);
+    //void setHover(bool);
+    void move(int x,int y,int interval);
 protected:
     void mousePressEvent(QMouseEvent *e);
     bool eventFilter(QObject *watched, QEvent *event);
