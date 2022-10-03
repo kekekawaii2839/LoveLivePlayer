@@ -2423,7 +2423,7 @@ void MainWindow::on_pushButton_mv_clicked()
     //t->stop();
 
     mv=new LVideoWidget(this);
-    mv->setGeometry(1,151,1480,730);
+    mv->setGeometry(1,151,width()-2,height()-ui->widget_title->height()-2);
     QString url=QApplication::applicationDirPath()+"/mv/"+name_list.at(play_progress);
     url.replace(".mp3",".mp4");
     qDebug()<<"url="<<url;
@@ -3197,6 +3197,8 @@ void MainWindow::showMaximized(){
     ui->widget_title->setStyleSheet("background-color:"+conf.theme_color+";");
     ui->widget_title->ok=false;
 
+    if(mv) mv->setGeometry(1,151,width()-2,height()-ui->widget_title->height()-2);
+
     isMaximized=true;
 }
 
@@ -3447,6 +3449,8 @@ void MainWindow::resizeEvent(QResizeEvent *e){
     ui->widget_title_bg->move((width()-2-ui->widget_title_bg->width())/2,0);
 
     ui->widget_shadow->setGeometry(1,1,width()-2,height()-2);
+
+    if(mv) mv->setGeometry(1,151,width()-2,height()-ui->widget_title->height()-2);
 
     //重绘mask以免无法显示拓展出的新区域
     QPainterPath path;

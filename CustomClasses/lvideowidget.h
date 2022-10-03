@@ -20,6 +20,7 @@ public:
 
 protected:
     void paintEvent(QPaintEvent* e);
+    void resizeEvent(QResizeEvent* e);
 
 private slots:
     void on_pushButton_close_clicked();

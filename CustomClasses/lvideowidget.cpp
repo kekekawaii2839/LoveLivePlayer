@@ -41,3 +41,9 @@ void LVideoWidget::on_pushButton_play_clicked()
     if(ui->playWidget->status()==1) ui->playWidget->pause();
     else if(ui->playWidget->status()==0) ui->playWidget->next();
 }
+
+void LVideoWidget::resizeEvent(QResizeEvent *e){
+    ui->playWidget->setGeometry(100,50,width()-200,height()-100);
+    ui->pushButton_play->setGeometry((width()-80)/2,height()-40,80,40);
+    ui->pushButton_close->setGeometry(width()-80,20,60,60);
+}
