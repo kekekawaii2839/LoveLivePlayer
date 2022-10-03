@@ -14,6 +14,14 @@
 #include <gdiplus.h>
 #include "libzplay.h"
 
+struct picInfo{
+    QString picFormat;
+    unsigned int CanDrawPicture;
+    unsigned int Width;
+    unsigned int Height;
+    void* hBitmap;//for temporary
+};
+
 class SongInfo
 {
 public:
@@ -31,11 +39,12 @@ private:
     QString MvAddr;
     HWND hwnd;
     libZPlay::ZPlay* zplayer;
-    QString picFormat;
+    //libZPlay::TID3PictureW pic;//这玩意存的是地址啊！！！
+    picInfo pic;
 
 private slots:
-    void get_meta(bool);
-    void SaveHDCToFile(libZPlay::TID3InfoExW,HWND);
+    void get_meta();
+    void SaveHDCToFile(picInfo,HWND);
     //void writeInfo();
     QString getCoverAddr();
 };

@@ -744,6 +744,7 @@ void MainWindow::load_single_song(QString name){
     ui->label_info_title->setText(adjust_text_overlength(infoo->Ltitle(),ui->label_info_title,1));
     ui->label_info_artist->setText(adjust_text_overlength("歌手："+infoo->Lartist(),ui->label_info_artist,1));
     ui->label_info_album->setText(adjust_text_overlength("专辑："+infoo->Lalbum(),ui->label_info_album,1));
+    qDebug()<<"infoo->getRealCoverAddr()="<<infoo->getRealCoverAddr();
     ui->widget_cover->setStyleSheet("border-image:url("+infoo->getRealCoverAddr()+");border-radius:8px;background-color:transparent;");
     ui->fakewidget_cover->setStyleSheet("border-image:url("+infoo->getRealCoverAddr()+");border-radius:8px;background-color:transparent;");
 
@@ -1231,7 +1232,8 @@ void MainWindow::get_config(QString id){
     con.close();
     //qDebug()<<"conf.theme_color:"<<conf.theme_color<<"\nconf.title:"<<conf.title<<"\nconf.num:"<<conf.num<<"\nconf.icon_addr:"<<conf.icon_addr;
 
-    ui->widget_title->setStyleSheet("background-color:"+conf.theme_color+";border-top-left-radius:12px;border-top-right-radius:12px;");
+    if(ui->widget_title->ok) ui->widget_title->setStyleSheet("background-color:"+conf.theme_color+";border-top-left-radius:12px;border-top-right-radius:12px;");
+    else ui->widget_title->setStyleSheet("background-color:"+conf.theme_color+";");
     ui->horizontalSlider->setStyleSheet("QSlider::groove:horizontal{\nborder: 1px solid #d9d9d9;\nborder-radius:1.5px;\nheight: 3px;\nbackground-color:#d9d9d9;\nmargin: 2px 0;\n}\n\nQSlider::handle:horizontal {\nbackground-color:"+conf.theme_color+";\nwidth: 10px;\nmargin: -4px 0;\nborder-radius: 5px;\n}\n\nQSlider::sub-page:horizontal{\nbackground-color:"+conf.theme_color+";\nmargin:2px 0;\nborder-radius:1.5px;\n}");
     ui->fakehorizontalSlider->setStyleSheet(ui->horizontalSlider->styleSheet());
     ui->Slider_volume->setStyleSheet("QSlider::groove:vertical{\nborder: 1px solid #d9d9d9;\nwidth: 3px;\nbackground-color:#d9d9d9;\nmargin: 0 2px;\n}\n\nQSlider::handle:vertical {\nbackground-color:"+conf.theme_color+";\nheight:10px;\nmargin: 0 -4px;\nborder-radius: 5px;\n}\n\nQSlider::add-page:vertical {\nbackground-color:"+conf.theme_color+";\nmargin:0 2px;\n}");
@@ -1250,8 +1252,8 @@ void MainWindow::get_config(QString id){
         ui->widget_title_bg->setStyleSheet("background-color:rgba(255,255,255,0);");
     }
     if(dd.isVisible()){
-        ui->pushButton_DesktopLyric->setStyleSheet("border-color:rgba(255,255,255,0);\nbackground-color:rgba(255,255,255,0);\ncolor:"+conf.theme_color+";");
-        ui->fakepushButton_DesktopLyric->setStyleSheet("border-color:rgba(255,255,255,0);\nbackground-color:rgba(255,255,255,0);\ncolor:"+conf.theme_color+";");
+        ui->pushButton_DesktopLyric->setStyleSheet("border-color:rgba(255,255,255,0);background-color:rgba(255,255,255,0);color:"+conf.theme_color+";");
+        ui->fakepushButton_DesktopLyric->setStyleSheet("border-color:rgba(255,255,255,0);background-color:rgba(255,255,255,0);color:"+conf.theme_color+";");
     }
 
     int count=groupboxes.count();
@@ -2369,11 +2371,10 @@ bool MainWindow::get_all_list(){
         iter_song.next();
         all_list.append(iter_song.fileName());
         SongInfo* infotemp=new SongInfo(path+iter_song.fileName(),hwnd);
-        //qDebug()<<"infotemp->LAudioAddr():"<<infotemp->LAudioAddr();
         infos.insert(path+iter_song.fileName(),infotemp);
     }
     qDebug()<<"get_all_list()";
-    if(infos.contains(path+"μ's - Snow halation.mp3")) return true;
+    if(infos.contains(path+"μ's - Snow halation.mp3")) return true;//无聊的小校验
     else return false;
 }
 

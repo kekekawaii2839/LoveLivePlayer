@@ -1,5 +1,5 @@
-﻿#pragma execution_character_set("utf-8")
-#include "songinfo.h"
+﻿#include "songinfo.h"
+#include <QTime>
 
 SongInfo::SongInfo(QString addr,HWND a)//addr是音频文件的完整绝对路径
 {
@@ -55,8 +55,17 @@ SongInfo::SongInfo(QString addr,HWND a)//addr是音频文件的完整绝对路�
             else MvAddr="none";
             writeInfo();
         }*/
-        QFileInfo pic(getRealCoverAddr());
-        get_meta(!pic.isFile());
+
+        get_meta();//调用完get_meta()以初始化pic之后才能调用getRealCoverAddr(),不然QString::fromWCharArray(pic.MIMEType)将是空字符串,导致getRealCoverAddr()返回空字符串
+        QFileInfo picc(getRealCoverAddr());
+        if(!picc.isFile()){
+            SaveHDCToFile(pic,hwnd);//这个函数不能用在读取标题等text数据前 否则将导致以上数据出现随机乱码
+        }
+        else{
+            zplayer->Close();
+            zplayer->Release();
+        }
+
         QString tt=addr;
         QFileInfo mv(tt.replace(".mp3",".mp4").replace("/songs/","/mv/"));
         if(mv.isFile()) MvAddr=tt;
@@ -68,7 +77,7 @@ SongInfo::SongInfo(QString addr,HWND a)//addr是音频文件的完整绝对路�
     }
 }
 
-void SongInfo::get_meta(bool isNeedAlbumCover){
+void SongInfo::get_meta(){
     title="unknown";
     artist="unknown";
     album="unknown";
@@ -84,6 +93,11 @@ void SongInfo::get_meta(bool isNeedAlbumCover){
             title=QString::fromWCharArray(id3_info.Title);
             artist=QString::fromWCharArray(id3_info.Artist);
             album=QString::fromWCharArray(id3_info.Album);
+            pic.picFormat=QString::fromStdWString(id3_info.Picture.MIMEType);
+            pic.CanDrawPicture=id3_info.Picture.CanDrawPicture;
+            pic.Height=id3_info.Picture.Height;
+            pic.Width=id3_info.Picture.Width;
+            pic.hBitmap=id3_info.Picture.hBitmap;
         }
         else{
             qDebug()<<"not a ID3";
@@ -92,34 +106,25 @@ void SongInfo::get_meta(bool isNeedAlbumCover){
     else{
         qDebug()<<"zplayer can't open this file!";
     }
-    if(isNeedAlbumCover){
-        SaveHDCToFile(id3_info,hwnd);//这个函数不能用在读取标题等text数据前 否则将导致以上数据出现随机乱码
-    }
-    if(!isNeedAlbumCover){
-        zplayer->Close();
-        zplayer->Release();
-    }
 }
 
-void SongInfo::SaveHDCToFile(libZPlay::TID3InfoExW id3_info,HWND hwnd){
-    libZPlay::TID3PictureW pic;
+void SongInfo::SaveHDCToFile(picInfo pic,HWND hwnd){
     HDC hdc=GetDC(hwnd);
     HDC memDc=CreateCompatibleDC(hdc);
-    HBITMAP hBmp=CreateCompatibleBitmap(hdc,id3_info.Picture.Width,id3_info.Picture.Height);
+    HBITMAP hBmp=CreateCompatibleBitmap(hdc,pic.Width,pic.Height);
     SelectObject(memDc,hBmp);
 
-    pic=id3_info.Picture;
-    picFormat=QString::fromWCharArray(pic.MIMEType);
+    //picFormat=QString::fromWCharArray(pic.MIMEType);//在这里才初始化picFormat会出bug的啊喂！
     //qDebug()<<AudioAddr<<pic.CanDrawPicture;
     //if(pic.CanDrawPicture==0) qDebug()<<QString::fromWCharArray(zplayer->GetErrorW());
-    zplayer->DrawBitmapToHDC(memDc,0,0,id3_info.Picture.Width,id3_info.Picture.Height,id3_info.Picture.hBitmap);
+    zplayer->DrawBitmapToHDC(memDc,0,0,pic.Width,pic.Height,pic.hBitmap);
     zplayer->Close();
     zplayer->Release();
 
     QPixmap pixmap=QtWin::fromHBITMAP(hBmp,QtWin::HBitmapPremultipliedAlpha);
     QImage img=pixmap.toImage();
-    if(picFormat=="image/png"&&pic.CanDrawPicture==1) img.save(getRealCoverAddr(),"PNG",100);
-    else if(picFormat=="image/jpeg"&&pic.CanDrawPicture==1) img.save(getRealCoverAddr(),"JPG",100);
+    if(pic.picFormat=="image/png"&&pic.CanDrawPicture==1) img.save(getRealCoverAddr(),"PNG",100);
+    else if(pic.picFormat=="image/jpeg"&&pic.CanDrawPicture==1) img.save(getRealCoverAddr(),"JPG",100);
     SelectObject(memDc,(HBITMAP)NULL);
     DeleteDC(memDc);
     DeleteObject(hBmp);
@@ -144,8 +149,9 @@ QString SongInfo::getRealCoverAddr(){
     cc=cc.toBase64();
     if(cc.contains("/")) cc.replace("/","");//避免base64加密结果出现"/"导致文件路径出错
     QString ccc;
-    if(picFormat=="image/png") ccc=QApplication::applicationDirPath()+"/infos/"+cc+".png";
-    else if(picFormat=="image/jpeg") ccc=QApplication::applicationDirPath()+"/infos/"+cc+".jpg";
+    if(pic.picFormat=="image/png") ccc=QApplication::applicationDirPath()+"/infos/"+cc+".png";
+    else if(pic.picFormat=="image/jpeg") ccc=QApplication::applicationDirPath()+"/infos/"+cc+".jpg";
+    else ccc="error!";
     return ccc;
 }
 
