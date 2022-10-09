@@ -9,12 +9,15 @@ QListPushButton::QListPushButton(QWidget* parent)
     seq=-1;
     isRightClicked=false;
     isEnableHover=true;
+    isEvenGrey=true;
 
     /*bottomline=new QWidget(this);
     bottomline->setGeometry(width()*0.05,height()-5,width()*0.9,2);
     bottomline->setStyleSheet("background-color:#000000;border:1px solid black;");
     bottomline->show();
     qDebug()<<"bottomline:"<<bottomline->isVisible();*/
+
+    QPushButton::setStyleSheet("QListPushButton{background-color:#ffffff;}");
 }
 
 void QListPushButton::mousePressEvent(QMouseEvent *e){
@@ -49,8 +52,16 @@ bool QListPushButton::eventFilter(QObject *watched, QEvent *event){
 }*/
 
 void QListPushButton::setStyleSheet(const QString &styleSheet){
-    if(isEnableHover) QPushButton::setStyleSheet("QListPushButton{border-radius:5px;"+styleSheet+"}QListPushButton:hover{background-color:rgb(245,245,245);}");
-    else QPushButton::setStyleSheet("QListPushButton{"+styleSheet+"}");
+    if(isEnableHover){
+        //if(seq%2==1&&isEvenGrey) QPushButton::setStyleSheet("QListPushButton{background-color:#f5f5f5;border-radius:5px;"+styleSheet+"}QListPushButton:hover{background-color:rgb(245,245,245);}");
+        //else QPushButton::setStyleSheet("QListPushButton{background-color:#ffffff;border-radius:5px;"+styleSheet+"}QListPushButton:hover{background-color:rgb(245,245,245);}");
+        if(seq%2==1&&isEvenGrey) QPushButton::setStyleSheet("QListPushButton{background-color:#f5f5f5;border-radius:5px;"+styleSheet+"}");
+        else QPushButton::setStyleSheet("QListPushButton{background-color:#ffffff;border-radius:5px;"+styleSheet+"}");
+    }
+    else{
+        if(seq%2==1&&isEvenGrey) QPushButton::setStyleSheet("QListPushButton{background-color:#f5f5f5;"+styleSheet+"}");
+        else QPushButton::setStyleSheet("QListPushButton{background-color:#ffffff;"+styleSheet+"}");
+    }
 }
 
 void QListPushButton::leftClick(){
@@ -93,4 +104,30 @@ void QListPushButton::move(int x,int y,int interval){
     connect(t,&QTimer::timeout,[=](){moveani->start();});
     t->setSingleShot(true);
     t->start(interval);
+}
+
+void QListPushButton::setSeq(int s){
+    QString temp=styleSheet();
+    if(s>=0){
+        seq=s;
+        if(seq%2==1){
+            int i=temp.indexOf("{background-color:#ffffff");
+            if(i>=0) temp.replace(i,25,"{background-color:#f5f5f5");
+        }
+        else{
+            int i=temp.indexOf("{background-color:#f5f5f5");
+            if(i>=0) temp.replace(i,25,"{background-color:#ffffff");
+        }
+
+    }
+    else{
+        seq=-1;
+        int i=temp.indexOf("{background-color:#f5f5f5");
+        if(i>=0) temp.replace(i,24,"{background-color:#ffffff");
+    }
+    if(isEvenGrey) QPushButton::setStyleSheet(temp);
+}
+
+int QListPushButton::Seq(){
+    return seq;
 }

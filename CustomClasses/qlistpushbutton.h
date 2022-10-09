@@ -14,8 +14,7 @@ class QListPushButton:public QPushButton
     Q_OBJECT
 public:
     QListPushButton(QWidget* parent=nullptr);
-    int seq;
-    bool isRightClicked;
+    bool isRightClicked,isEvenGrey;
     //QWidget* bottomline;
     //QString ori_stylesheet;
     //void setStyleSheet(const QString &styleSheet,int mode);
@@ -23,12 +22,15 @@ public:
     void leftClick();
     //void setHover(bool);
     void move(int x,int y,int interval);
+    void setSeq(int);
+    int Seq();
 protected:
     void mousePressEvent(QMouseEvent *e);
     bool eventFilter(QObject *watched, QEvent *event);
     //void paintEvent(QPaintEvent* e);
 private:
     bool isEnableHover;
+    int seq;
 signals:
     clicked(int);
     dblclicked(int);

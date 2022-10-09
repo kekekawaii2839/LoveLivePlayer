@@ -176,10 +176,10 @@ MainWindow::MainWindow(QWidget *parent) :
             QListPushButton* pb_temp=new QListPushButton(ui->scrollAreaWidgetContents_songlists);
             pb_temp->setGeometry(QRect(15,i*50+200,260,40));
             pb_temp->setDefault(false);
-            pb_temp->setStyleSheet("border-color:rgba(255,255,255,0);\nbackground-color:rgba(255,255,255,0);\ntext-align:left;padding-left:20px;padding-right:20px;");
+            pb_temp->setStyleSheet("border-color:rgba(255,255,255,0);text-align:left;padding-left:20px;padding-right:20px;");
             pb_temp->setFont(font1);
             pb_temp->setText(adjust_text_overlength(songlist.at(i).left(songlist.at(i).count()-6),pb_temp,1));
-            pb_temp->seq=i;
+            pb_temp->setSeq(i);
             songlist_buttons.append(pb_temp);
         }
         for(int i=0;i<songlist_buttons.length();++i){
@@ -1232,11 +1232,11 @@ void MainWindow::get_config(QString id){
     con.close();
     //qDebug()<<"conf.theme_color:"<<conf.theme_color<<"\nconf.title:"<<conf.title<<"\nconf.num:"<<conf.num<<"\nconf.icon_addr:"<<conf.icon_addr;
 
-    if(ui->widget_title->ok) ui->widget_title->setStyleSheet("background-color:"+conf.theme_color+";border-top-left-radius:12px;border-top-right-radius:12px;");
-    else ui->widget_title->setStyleSheet("background-color:"+conf.theme_color+";");
-    ui->horizontalSlider->setStyleSheet("QSlider::groove:horizontal{\nborder: 1px solid #d9d9d9;\nborder-radius:1.5px;\nheight: 3px;\nbackground-color:#d9d9d9;\nmargin: 2px 0;\n}\n\nQSlider::handle:horizontal {\nbackground-color:"+conf.theme_color+";\nwidth: 10px;\nmargin: -4px 0;\nborder-radius: 5px;\n}\n\nQSlider::sub-page:horizontal{\nbackground-color:"+conf.theme_color+";\nmargin:2px 0;\nborder-radius:1.5px;\n}");
+    //if(ui->widget_title->ok) ui->widget_title->setStyleSheet("background-color:"+conf.theme_color+";border-top-left-radius:12px;border-top-right-radius:12px;");
+    //else ui->widget_title->setStyleSheet("background-color:"+conf.theme_color+";");
+    ui->horizontalSlider->setStyleSheet("QSlider::groove:horizontal{border:1px solid #d9d9d9;border-radius:1.5px;height:3px;background-color:#d9d9d9;margin: 2px 0;\n}\n\nQSlider::handle:horizontal {\nbackground-color:"+conf.theme_color+";\nwidth: 10px;\nmargin: -4px 0;\nborder-radius: 5px;\n}\n\nQSlider::sub-page:horizontal{\nbackground-color:"+conf.theme_color+";\nmargin:2px 0;\nborder-radius:1.5px;\n}");
     ui->fakehorizontalSlider->setStyleSheet(ui->horizontalSlider->styleSheet());
-    ui->Slider_volume->setStyleSheet("QSlider::groove:vertical{\nborder: 1px solid #d9d9d9;\nwidth: 3px;\nbackground-color:#d9d9d9;\nmargin: 0 2px;\n}\n\nQSlider::handle:vertical {\nbackground-color:"+conf.theme_color+";\nheight:10px;\nmargin: 0 -4px;\nborder-radius: 5px;\n}\n\nQSlider::add-page:vertical {\nbackground-color:"+conf.theme_color+";\nmargin:0 2px;\n}");
+    ui->Slider_volume->setStyleSheet("QSlider::groove:vertical{border:1px solid #d9d9d9;width:3px;background-color:#d9d9d9;margin:0 2px;}QSlider::handle:vertical{background-color:"+conf.theme_color+";height:10px;\nmargin: 0 -4px;\nborder-radius: 5px;\n}\n\nQSlider::add-page:vertical {\nbackground-color:"+conf.theme_color+";\nmargin:0 2px;\n}");
     this->setStyleSheet("QScrollBar:vertical{background:#f5f5f5;width:10px;}QScrollBar::handle:vertical{background:"+conf.theme_color+";border-radius:5px;}QScrollBar::add-line:vertical{background:#f5f5f5;height:20px;subcontrol-position:bottom;subcontrol-origin:margin;}QScrollBar::sub-line:vertical{background:#f5f5f5;height:20px;subcontrol-position:top;subcontrol-origin:margin;}QScrollArea{border:0px;}");
     this->setWindowTitle(conf.title);
     if(conf.icon_addr!=QApplication::applicationDirPath()+"/resources/none"){
@@ -1245,12 +1245,12 @@ void MainWindow::get_config(QString id){
     else{
         ui->widget_icon->setStyleSheet("background-color:rgba(255,255,255,0);");
     }
-    if(conf.bg_addr!=QApplication::applicationDirPath()+"/resources/none"){
+    /*if(conf.bg_addr!=QApplication::applicationDirPath()+"/resources/none"){
         ui->widget_title_bg->setStyleSheet("background-color:rgba(0,0,0,0);border-image:url("+conf.bg_addr+");");
     }
     else{
         ui->widget_title_bg->setStyleSheet("background-color:rgba(255,255,255,0);");
-    }
+    }*/
     if(dd.isVisible()){
         ui->pushButton_DesktopLyric->setStyleSheet("border-color:rgba(255,255,255,0);background-color:rgba(255,255,255,0);color:"+conf.theme_color+";");
         ui->fakepushButton_DesktopLyric->setStyleSheet("border-color:rgba(255,255,255,0);background-color:rgba(255,255,255,0);color:"+conf.theme_color+";");
@@ -1988,7 +1988,7 @@ void MainWindow::current_songlist_buttons_hoverEnter(int seq){
         play_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
         play_singlesong_songlist->setGeometry(ui->scrollArea_songlist_detail->width()*0.284,15,20,20);
         play_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/rec/play_small.png);");
-        play_singlesong_songlist->seq=seq;
+        play_singlesong_songlist->setSeq(seq);
         connect(play_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(current_songlist_buttons_clicked(int)));
         play_singlesong_songlist->show();
 
@@ -1996,7 +1996,7 @@ void MainWindow::current_songlist_buttons_hoverEnter(int seq){
         playnext_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
         playnext_singlesong_songlist->setGeometry(play_singlesong_songlist->x()+40,15,20,20);
         playnext_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/rec/playnext.png);");
-        playnext_singlesong_songlist->seq=seq;
+        playnext_singlesong_songlist->setSeq(seq);
         connect(playnext_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(addNextSong(int)));
         playnext_singlesong_songlist->show();
 
@@ -2004,7 +2004,7 @@ void MainWindow::current_songlist_buttons_hoverEnter(int seq){
         add_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
         add_singlesong_songlist->setGeometry(play_singlesong_songlist->x()+80,15,20,20);
         add_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/rec/add_small.png);");
-        add_singlesong_songlist->seq=seq;
+        add_singlesong_songlist->setSeq(seq);
         connect(add_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(addSongToSonglist(int)));
         add_singlesong_songlist->show();
 
@@ -2012,7 +2012,7 @@ void MainWindow::current_songlist_buttons_hoverEnter(int seq){
         del_singlesong_songlist=new QListPushButton(current_songlist_buttons.at(seq));
         del_singlesong_songlist->setGeometry(play_singlesong_songlist->x()+120,15,20,20);
         del_singlesong_songlist->setStyleSheet("border-image:url(:/new/prefix1/rec/del_small.png);");
-        del_singlesong_songlist->seq=seq;
+        del_singlesong_songlist->setSeq(seq);
         connect(del_singlesong_songlist,SIGNAL(clicked(int)),this,SLOT(delSongInSonglist(int)));
         del_singlesong_songlist->show();
 
@@ -2222,15 +2222,15 @@ void MainWindow::addPushbuttonsInPlaylist(){
         pb_temp->setVisible(true);
         pb_temp2->setDefault(false);
         pb_temp2->setVisible(true);
-        pb_temp->setStyleSheet("border-color:rgba(255,255,255,0);\nbackground-color:rgba(255,255,255,0);\ntext-align:left;");
+        pb_temp->setStyleSheet("border-color:rgba(255,255,255,0);text-align:left;");
         pb_temp->setFont(font1);
-        pb_temp2->setStyleSheet("color:#a3a3a3;\nborder-color:rgba(255,255,255,0);\nbackground-color:rgba(255,255,255,0);\ntext-align:left;");
+        pb_temp2->setStyleSheet("color:#a3a3a3;border-color:rgba(255,255,255,0);text-align:left;");
         pb_temp2->setFont(font2);
         pb_temp2->setAttribute(Qt::WA_TransparentForMouseEvents,true);
         pb_temp->setText(adjust_text_overlength(" "+infoo->Ltitle(),pb_temp,1));
         pb_temp2->setText(adjust_text_overlength(" "+infoo->Lartist(),pb_temp2,1));
-        pb_temp->seq=i;
-        pb_temp2->seq=i;
+        pb_temp->setSeq(i);
+        pb_temp2->setSeq(i);
         playlist_buttons.append(pb_temp);
         playlist_singers_buttons.append(pb_temp2);
     }
@@ -2273,8 +2273,8 @@ void MainWindow::addPushbuttonsInSonglist(QStringList content,bool isMyLike){
         QListPushButton* pb_temp=new QListPushButton(ui->scrollAreaWidgetContents_songlist_detail);
         pb_temp->setGeometry(15,i*50+2,ui->scrollArea_songlist_detail->width()-35,46);
         pb_temp->setDefault(false);
-        pb_temp->setStyleSheet("border-color:rgba(0,0,0,0);background-color:rgba(0,0,0,0);text-align:left;padding-left:20px;padding-right:20px;");
-        pb_temp->seq=i;
+        pb_temp->setStyleSheet("border-color:rgba(0,0,0,0);text-align:left;padding-left:20px;padding-right:20px;");
+        pb_temp->setSeq(i);
         current_songlist_buttons.append(pb_temp);
         connect(pb_temp,SIGNAL(dblclicked(int)),this,SLOT(current_songlist_buttons_clicked(int)));
         connect(pb_temp,SIGNAL(hoverEnter(int)),this,SLOT(current_songlist_buttons_hoverEnter(int)));
@@ -2296,7 +2296,8 @@ void MainWindow::addPushbuttonsInSonglist(QStringList content,bool isMyLike){
                 heart->setStyleSheet("border-image:url(:/new/prefix1/rec/dislike_grey.png);");
             }
         }
-        heart->seq=i;
+        //heart->isEvenGrey=false;
+        heart->setSeq(i);
         hearts.append(heart);
         connect(heart,SIGNAL(clicked(int)),this,SLOT(addSongToMyLike(int)));
 
@@ -2319,7 +2320,7 @@ void MainWindow::addPushbuttonsInSonglist(QStringList content,bool isMyLike){
         QSmartTextLabel* label_song3=new QSmartTextLabel(pb_temp);
         label_song3->setGeometry(pb_temp->width()*0.729+10,0,ui->scrollArea_songlist_detail->width()*0.271-20,50);
         label_song3->setFont(font1);
-        label_song3->setStyleSheet("color:black;\nbackground-color:rgba(0,0,0,0);\ntext-align:left;");
+        label_song3->setStyleSheet("color:black;background-color:rgba(0,0,0,0);text-align:left;");
         label_song3->setText(info->Lalbum(),1);
         label_song3->setAttribute(Qt::WA_TransparentForMouseEvents,true);
         current_songlist_labels3.append(label_song3);
@@ -2554,12 +2555,12 @@ void MainWindow::on_pushButton_createsonglist_clicked()
                     QListPushButton* pb_temp=new QListPushButton(ui->scrollAreaWidgetContents_songlists);
                     pb_temp->setGeometry(QRect(15,i*50+200,260,40));
                     pb_temp->setDefault(false);
-                    pb_temp->setStyleSheet("border-color:rgba(255,255,255,0);\nbackground-color:rgba(255,255,255,0);\ntext-align:left;padding-left:20px;padding-right:20px;");
+                    pb_temp->setStyleSheet("border-color:rgba(255,255,255,0);text-align:left;padding-left:20px;padding-right:20px;");
                     QFont font1;
                     font1.setPointSize(12);
                     pb_temp->setFont(font1);
                     pb_temp->setText(adjust_text_overlength(songlist.at(i).left(songlist.at(i).count()-6),pb_temp,1));
-                    pb_temp->seq=i;
+                    pb_temp->setSeq(i);
                     songlist_buttons.append(pb_temp);
                 }
                 for(int i=0;i<songlist_buttons.length();++i){
@@ -2709,12 +2710,12 @@ void MainWindow::clone_songlist(){
         QListPushButton* pb_temp=new QListPushButton(ui->scrollAreaWidgetContents_songlists);
         pb_temp->setGeometry(QRect(15,rightclicked_songlist_seq*50+250,260,40));
         pb_temp->setDefault(false);
-        pb_temp->setStyleSheet("border-color:rgba(255,255,255,0);\nbackground-color:rgba(255,255,255,0);\ntext-align:left;padding-left:20px;padding-right:20px;");
+        pb_temp->setStyleSheet("border-color:rgba(255,255,255,0);text-align:left;padding-left:20px;padding-right:20px;");
         QFont font1;
         font1.setPointSize(12);
         pb_temp->setFont(font1);
         pb_temp->setText(adjust_text_overlength(songlist_buttons.at(rightclicked_songlist_seq)->text()+"_copy",pb_temp,1));
-        pb_temp->seq=rightclicked_songlist_seq+1;
+        pb_temp->setSeq(rightclicked_songlist_seq+1);
         connect(pb_temp,SIGNAL(clicked(int)),this,SLOT(songlist_buttons_clicked(int)));
         pb_temp->setContextMenuPolicy(Qt::CustomContextMenu);
         connect(pb_temp,&QListPushButton::customContextMenuRequested,[=]{songlists_rightclicked(rightclicked_songlist_seq+1);});
@@ -2722,7 +2723,7 @@ void MainWindow::clone_songlist(){
         pb_temp->show();
         for(int i=rightclicked_songlist_seq+2;i<songlist_buttons.count();++i){
             songlist_buttons.at(i)->move(songlist_buttons.at(i)->x(),songlist_buttons.at(i)->y()+50,0);
-            songlist_buttons.at(i)->seq++;
+            songlist_buttons.at(i)->setSeq(songlist_buttons.at(i)->Seq()+1);
         }
 
         ui->scrollAreaWidgetContents_songlists->setMinimumSize(300,songlist_buttons.count()*50+200);
@@ -2771,7 +2772,7 @@ void MainWindow::del_songlist(){
 
             for(int i=rightclicked_songlist_seq+1;i<songlist_buttons.count();++i){
                 songlist_buttons.at(i)->move(songlist_buttons.at(i)->x(),songlist_buttons.at(i)->y()-50,0);
-                songlist_buttons.at(i)->seq--;
+                songlist_buttons.at(i)->setSeq(songlist_buttons.at(i)->Seq()-1);
             }
             songlist_buttons.at(rightclicked_songlist_seq)->close();
             songlist_buttons.at(rightclicked_songlist_seq)->deleteLater();
@@ -2871,9 +2872,9 @@ void MainWindow::addSongToSonglist(int songseq){
         for(int i=0;i<songlist.count();++i){
             QListPushButton* pb=new QListPushButton(sc_content);
             pb->setGeometry(0,i*70,480,70);
-            pb->setStyleSheet("border-color:rgba(255,255,255,0);background-color:rgba(255,255,255,0);text-align:left;padding-left:20px;padding-right:20px;");
+            pb->setStyleSheet("border-color:rgba(255,255,255,0);text-align:left;padding-left:20px;padding-right:20px;");
             pb->setText(adjust_text_overlength(songlist.at(i).left(songlist.at(i).count()-6),pb,1));
-            pb->seq=i;
+            pb->setSeq(i);
             pb->show();
 
             connect(pb,&QListPushButton::clicked,[=](int songlist_seq,int song_seq=toBeAddedSongSeqInCurrentSonglist){
@@ -2959,7 +2960,7 @@ void MainWindow::delSongInSonglist(int songseq){
         QPushButton* pb_yes=new QPushButton(mainbox);
         pb_yes->setGeometry(200,190,100,40);
         pb_yes->setText("确定");
-        pb_yes->setStyleSheet("background-color:"+conf.theme_color+";\nborder-radius:5px;");
+        pb_yes->setStyleSheet("background-color:"+conf.theme_color+";border-radius:5px;");
         pb_yes->setDefault(false);
         pb_yes->show();
         QLabel* la=new QLabel(mainbox);
@@ -3009,8 +3010,8 @@ void MainWindow::delSongInSonglist(int songseq){
             current_songlist_labels2.removeAt(toBeDeletedSongSeqInCurrentSonglist);
             current_songlist_labels3.removeAt(toBeDeletedSongSeqInCurrentSonglist);
             for(int i=toBeDeletedSongSeqInCurrentSonglist;i<current_songlist_buttons.count();++i){
-                current_songlist_buttons.at(i)->seq=i;
-                hearts.at(i)->seq=i;
+                current_songlist_buttons.at(i)->setSeq(i);
+                hearts.at(i)->setSeq(i);
                 current_songlist_buttons.at(i)->move(current_songlist_buttons.at(i)->x(),current_songlist_buttons.at(i)->y()-50,(i-toBeDeletedSongSeqInCurrentSonglist)*50);
             }
 
@@ -3097,8 +3098,8 @@ void MainWindow::addSongToMyLike(int songseq){
             current_songlist_labels3.removeAt(songseq);
             //ui->scrollArea_songlist_detail->takeItem(songseq);
             for(int i=songseq;i<current_songlist_buttons.count();++i){
-                current_songlist_buttons.at(i)->seq=i;
-                hearts.at(i)->seq=i;
+                current_songlist_buttons.at(i)->setSeq(i);
+                hearts.at(i)->setSeq(i);
                 //songlist_detail_containers.at(i)->move(songlist_detail_containers.at(i)->x(),songlist_detail_containers.at(i)->y()-50);
             }
         }
@@ -3232,12 +3233,15 @@ void MainWindow::swapSongsInSonglist(int a, int b){
     songlist_detail.swap(a,b);
     current_songlist_buttons.at(a)->move(15,b*50+2,0);
     current_songlist_buttons.at(b)->move(15,a*50+2,0);
-    current_songlist_buttons.at(a)->seq=b;
-    current_songlist_buttons.at(b)->seq=a;
+    current_songlist_buttons.at(a)->setSeq(b);
+    current_songlist_buttons.at(b)->setSeq(a);
+    hearts.at(a)->setSeq(b);
+    hearts.at(b)->setSeq(a);
     current_songlist_buttons.swap(a,b);
     current_songlist_labels.swap(a,b);
     current_songlist_labels2.swap(a,b);
     current_songlist_labels3.swap(a,b);
+    hearts.swap(a,b);
 
     seqTemp.swap(a,b);
 
